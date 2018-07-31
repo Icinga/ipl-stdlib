@@ -1,0 +1,21 @@
+{
+    "name": "ipl/stdlib",
+    "description": "ipl Standard Library",
+    "type": "library",
+    "license": "MIT",
+    "require": {},
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^2.9.1",
+        "phpunit/phpunit": "^5.7 || ^4.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "ipl\\Stdlib\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ipl\\Tests\\Stdlib\\": "tests/php"
+        }
+    }
+}
