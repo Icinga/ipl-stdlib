@@ -2,7 +2,9 @@
 
 set -ex
 
-composer install --no-dev
+# Hint: we usually composer install --no-dev
+#       However, unless we have dependencies, this is faster:
+composer dump-autoload
 
 PHPCS_VERSION=${PHPCS_VERSION:=3.3.1}
 
@@ -18,10 +20,10 @@ PHPUNIT_PATH="vendor/phpunit-${PHPUNIT_VERSION}.phar"
 test -e "${PHPUNIT_PATH}" || wget -q -O "${PHPUNIT_PATH}" \
     https://phar.phpunit.de/phpunit-${PHPUNIT_VERSION}.phar
 chmod +x "${PHPUNIT_PATH}"
-ln -svf "${PHPUNIT_PATH}".phar vendor/phpunit
+ln -svf "phpunit-${PHPUNIT_VERSION}.phar" vendor/phpunit
 
-PHPCS_PATH="phpcs-${PHPCS_VERSION}.phar"
+PHPCS_PATH="vendor/phpcs-${PHPCS_VERSION}.phar"
 test -e "${PHPCS_PATH}" || wget -q -O "${PHPCS_PATH}" \
     https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${PHPCS_VERSION}/phpcs.phar
 chmod +x "$PHPCS_PATH"
-ln -svf "$PHPCS_PATH" vendor/phpcs
+ln -svf "phpcs-${PHPCS_VERSION}.phar" vendor/phpcs
