@@ -20,8 +20,8 @@ matrix:
     - php: nightly
 
 before_script:
-  - composer install
+  - tests/prepare
 
 script:
-  - vendor/bin/phpcs
-  - vendor/bin/phpunit --testdox || vendor/bin/phpunit --verbose
+  - vendor/phpcs
+  - vendor/phpunit --testdox || vendor/phpunit --verbose
