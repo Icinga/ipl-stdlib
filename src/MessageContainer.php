@@ -60,6 +60,8 @@ trait MessageContainer
      */
     public function clearMessages()
     {
-        return $this->setMessages([]);
+        $this->messages = [];
+
+        return $this;
     }
 }
