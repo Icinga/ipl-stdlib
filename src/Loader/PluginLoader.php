@@ -4,7 +4,7 @@ namespace ipl\Stdlib\Loader;
 
 use InvalidArgumentException;
 
-trait PluginLoadingHelper
+trait PluginLoader
 {
     /** @var array  */
     protected $pluginLoaders = [];
