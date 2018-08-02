@@ -4,7 +4,7 @@ namespace ipl\Stdlib\Loader;
 
 use InvalidArgumentException;
 
-class AutoLoadingPluginLoader
+class AutoLoadingPluginLoader implements PluginLoaderInterface
 {
     protected $namespace;
 

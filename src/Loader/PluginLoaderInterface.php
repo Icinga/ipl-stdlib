@@ -4,7 +4,7 @@ namespace ipl\Stdlib\Loader;
 
 use InvalidArgumentException;
 
-interface PluginLoader
+interface PluginLoaderInterface
 {
     /**
      *
