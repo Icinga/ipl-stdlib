@@ -3,7 +3,6 @@
     "description": "ipl Standard Library",
     "type": "library",
     "license": "MIT",
-    "require": {},
     "autoload": {
         "psr-4": {
             "ipl\\Stdlib\\": "src"

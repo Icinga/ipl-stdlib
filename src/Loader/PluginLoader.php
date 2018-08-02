@@ -15,7 +15,7 @@ interface PluginLoader
     public function eventuallyGetClassByName($name);
 
     /**
-     * @param $name
+     * @param string $name
      * @return object|null
      */
     public function eventuallyLoad($name);
