@@ -2,10 +2,6 @@
 
 namespace ipl\Stdlib;
 
-use InvalidArgumentException;
-use Traversable;
-use stdClass;
-
 /**
  * Detect and return the PHP type of the given subject
  *
@@ -27,11 +23,11 @@ function get_php_type($subject)
 /**
  * Get the array value of the given subject
  *
- * @param   array|object|Traversable   $subject
+ * @param   array|object|\Traversable   $subject
  *
  * @return  array
  *
- * @throws  InvalidArgumentException   If subject type is invalid
+ * @throws  \InvalidArgumentException   If subject type is invalid
  */
 function arrayval($subject)
 {
@@ -39,16 +35,16 @@ function arrayval($subject)
         return $subject;
     }
 
-    if ($subject instanceof stdClass) {
+    if ($subject instanceof \stdClass) {
         return (array) $subject;
     }
 
-    if ($subject instanceof Traversable) {
+    if ($subject instanceof \Traversable) {
         // Works for generators too
         return \iterator_to_array($subject);
     }
 
-    throw new InvalidArgumentException(\sprintf(
+    throw new \InvalidArgumentException(\sprintf(
         'arrayval expects arrays, objects or instances of Traversable. Got %s instead.',
         get_php_type($subject)
     ));

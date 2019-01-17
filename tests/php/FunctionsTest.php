@@ -2,8 +2,6 @@
 
 namespace ipl\Tests\Stdlib;
 
-use ArrayIterator;
-use stdClass;
 use ipl\Stdlib;
 
 class FunctionsTest extends TestCase
@@ -17,7 +15,7 @@ class FunctionsTest extends TestCase
 
     public function testGetPhpTypeWithInstance()
     {
-        $instance = new stdClass();
+        $instance = new \stdClass();
 
         $this->assertSame('stdClass', Stdlib\get_php_type($instance));
     }
@@ -49,7 +47,7 @@ class FunctionsTest extends TestCase
     {
         $array = ['key' => 'value'];
 
-        $traversable = new ArrayIterator($array);
+        $traversable = new \ArrayIterator($array);
 
         $this->assertSame($array, Stdlib\arrayval($traversable));
     }

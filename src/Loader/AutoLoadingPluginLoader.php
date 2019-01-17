@@ -2,8 +2,6 @@
 
 namespace ipl\Stdlib\Loader;
 
-use InvalidArgumentException;
-
 class AutoLoadingPluginLoader implements PluginLoaderInterface
 {
     protected $namespace;
@@ -28,7 +26,7 @@ class AutoLoadingPluginLoader implements PluginLoaderInterface
         $instance = $this->eventuallyLoad($name);
 
         if ($instance === null) {
-            throw new InvalidArgumentException(\sprintf(
+            throw new \InvalidArgumentException(\sprintf(
                 'Unable to load %s (%s)',
                 $name,
                 $this->getFullClassByName($name)

@@ -2,8 +2,6 @@
 
 namespace ipl\Stdlib\Loader;
 
-use InvalidArgumentException;
-
 interface PluginLoaderInterface
 {
     /**
@@ -22,7 +20,7 @@ interface PluginLoaderInterface
 
     /**
      * @param $name
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return object
      */
     public function load($name);

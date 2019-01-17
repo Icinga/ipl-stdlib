@@ -2,8 +2,6 @@
 
 namespace ipl\Stdlib\Loader;
 
-use InvalidArgumentException;
-
 trait PluginLoader
 {
     /** @var array  */
@@ -19,7 +17,7 @@ trait PluginLoader
         $plugin = $this->eventuallyLoadPlugin($type, $name);
 
         if ($plugin === null) {
-            throw new InvalidArgumentException(\sprintf(
+            throw new \InvalidArgumentException(\sprintf(
                 'Could not load %s "%s"',
                 $type,
                 $name
