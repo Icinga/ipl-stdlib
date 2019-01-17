@@ -8,6 +8,16 @@ trait MessageContainer
     protected $messages = [];
 
     /**
+     * Get whether there are any messages
+     *
+     * @return  bool
+     */
+    public function hasMessages()
+    {
+        return ! empty($this->messages);
+    }
+
+    /**
      * Get all messages
      *
      * @return array
