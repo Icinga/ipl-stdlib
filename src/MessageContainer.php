@@ -4,7 +4,7 @@ namespace ipl\Stdlib;
 
 trait MessageContainer
 {
-    /** @var array Current messages */
+    /** @var array */
     protected $messages = [];
 
     /**
@@ -20,7 +20,7 @@ trait MessageContainer
     /**
      * Get all messages
      *
-     * @return array
+     * @return  array
      */
     public function getMessages()
     {
@@ -28,10 +28,11 @@ trait MessageContainer
     }
 
     /**
-     * Set given messages, overrides existing ones
+     * Set the given messages overriding existing ones
      *
-     * @param string[] $messages
-     * @return $this
+     * @param   string[]    $messages
+     *
+     * @return  $this
      */
     public function setMessages(array $messages)
     {
@@ -46,8 +47,9 @@ trait MessageContainer
     /**
      * Add a single message
      *
-     * @param string $message
-     * @param mixed ... Other optional parameters for sprintf-style messages
+     * @param   string  $message
+     * @param   mixed   ...$args    Other optional parameters for sprintf-style messages
+     *
      * @return $this
      */
     public function addMessage($message)
@@ -66,7 +68,7 @@ trait MessageContainer
     /**
      * Drop eventually existing messages
      *
-     * @return MessageContainer
+     * @return  $this
      */
     public function clearMessages()
     {
