@@ -61,4 +61,31 @@ class FunctionsTest extends TestCase
     {
         Stdlib\arrayval(null);
     }
+
+    public function testStrPutcsv()
+    {
+        $data = [
+            [
+                'Name' => 'John Doe',
+                'Age'  => 45
+            ],
+            [
+                'Name' => 'Richard Roe',
+                'Age'  => 38
+            ],
+            [
+                'Name' => 'Jane Roe',
+                'Age'  => 27
+            ]
+        ];
+
+        $csv = <<<'CSV'
+Name,Age
+"John Doe",45
+"Richard Roe",38
+"Jane Roe",27
+CSV;
+
+        $this->assertSame($csv, Stdlib\str_putcsv($data));
+    }
 }
