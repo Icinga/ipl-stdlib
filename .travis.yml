@@ -13,6 +13,11 @@ cache:
   directories:
     - vendor
 
+env:
+  matrix:
+    - PREFER=""
+    - PREFER="--prefer-lowest --prefer-stable"
+
 matrix:
   fast_finish: true
   allow_failures:
