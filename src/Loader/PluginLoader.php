@@ -19,7 +19,7 @@ trait PluginLoader
         $plugin = $this->eventuallyLoadPlugin($type, $name);
 
         if ($plugin === null) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'Could not load %s "%s"',
                 $type,
                 $name
@@ -78,7 +78,7 @@ trait PluginLoader
             $this->pluginLoaders[$type] = [];
         }
 
-        array_unshift($this->pluginLoaders[$type], $loader);
+        \array_unshift($this->pluginLoaders[$type], $loader);
 
         return $this;
     }

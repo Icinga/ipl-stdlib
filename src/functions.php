@@ -17,10 +17,10 @@ use stdClass;
  */
 function get_php_type($subject)
 {
-    if (is_object($subject)) {
-        return get_class($subject);
+    if (\is_object($subject)) {
+        return \get_class($subject);
     } else {
-        return gettype($subject);
+        return \gettype($subject);
     }
 }
 
@@ -35,7 +35,7 @@ function get_php_type($subject)
  */
 function arrayval($subject)
 {
-    if (is_array($subject)) {
+    if (\is_array($subject)) {
         return $subject;
     }
 
@@ -45,10 +45,10 @@ function arrayval($subject)
 
     if ($subject instanceof Traversable) {
         // Works for generators too
-        return iterator_to_array($subject);
+        return \iterator_to_array($subject);
     }
 
-    throw new InvalidArgumentException(sprintf(
+    throw new InvalidArgumentException(\sprintf(
         'arrayval expects arrays, objects or instances of Traversable. Got %s instead.',
         get_php_type($subject)
     ));

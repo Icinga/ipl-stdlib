@@ -26,12 +26,12 @@ trait MessageContainer
      */
     public function addMessage($message)
     {
-        $args = func_get_args();
-        array_shift($args);
+        $args = \func_get_args();
+        \array_shift($args);
         if (empty($args)) {
             $this->messages[] = $message;
         } else {
-            $this->messages[] = vsprintf($message, $args);
+            $this->messages[] = \vsprintf($message, $args);
         }
 
         return $this;

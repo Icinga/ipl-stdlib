@@ -28,7 +28,7 @@ class AutoLoadingPluginLoader implements PluginLoaderInterface
         $instance = $this->eventuallyLoad($name);
 
         if ($instance === null) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'Unable to load %s (%s)',
                 $name,
                 $this->getFullClassByName($name)
@@ -51,7 +51,7 @@ class AutoLoadingPluginLoader implements PluginLoaderInterface
     public function eventuallyGetClassByName($name)
     {
         $class = $this->getFullClassByName($name);
-        if (class_exists($class)) {
+        if (\class_exists($class)) {
             return $class;
         } else {
             return null;
@@ -76,7 +76,7 @@ class AutoLoadingPluginLoader implements PluginLoaderInterface
     public function getFullClassByName($name)
     {
         if ($this->uppercaseFirst) {
-            $name = ucfirst($name);
+            $name = \ucfirst($name);
         }
 
         return $this->namespace . '\\' . $name . $this->postfix;
