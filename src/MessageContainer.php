@@ -37,6 +37,7 @@ trait MessageContainer
     public function setMessages(array $messages)
     {
         $this->clearMessages();
+
         foreach ($messages as $message) {
             $this->addMessage($message);
         }
@@ -56,6 +57,7 @@ trait MessageContainer
     {
         $args = func_get_args();
         array_shift($args);
+
         if (empty($args)) {
             $this->messages[] = $message;
         } else {
