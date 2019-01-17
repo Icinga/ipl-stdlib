@@ -28,6 +28,22 @@ trait MessageContainer
     }
 
     /**
+     * Set given messages, overrides existing ones
+     *
+     * @param string[] $messages
+     * @return $this
+     */
+    public function setMessages(array $messages)
+    {
+        $this->clearMessages();
+        foreach ($messages as $message) {
+            $this->addMessage($message);
+        }
+
+        return $this;
+    }
+
+    /**
      * Add a single message
      *
      * @param string $message
@@ -42,22 +58,6 @@ trait MessageContainer
             $this->messages[] = $message;
         } else {
             $this->messages[] = vsprintf($message, $args);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set given messages, overrides existing ones
-     *
-     * @param string[] $messages
-     * @return $this
-     */
-    public function setMessages(array $messages)
-    {
-        $this->clearMessages();
-        foreach ($messages as $message) {
-            $this->addMessage($message);
         }
 
         return $this;
