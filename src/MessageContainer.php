@@ -4,13 +4,23 @@ namespace ipl\Stdlib;
 
 trait MessageContainer
 {
-    /** @var array Current messages */
+    /** @var array */
     protected $messages = [];
+
+    /**
+     * Get whether there are any messages
+     *
+     * @return  bool
+     */
+    public function hasMessages()
+    {
+        return ! empty($this->messages);
+    }
 
     /**
      * Get all messages
      *
-     * @return array
+     * @return  array
      */
     public function getMessages()
     {
@@ -18,16 +28,36 @@ trait MessageContainer
     }
 
     /**
+     * Set the given messages overriding existing ones
+     *
+     * @param   string[]    $messages
+     *
+     * @return  $this
+     */
+    public function setMessages(array $messages)
+    {
+        $this->clearMessages();
+
+        foreach ($messages as $message) {
+            $this->addMessage($message);
+        }
+
+        return $this;
+    }
+
+    /**
      * Add a single message
      *
-     * @param string $message
-     * @param mixed ... Other optional parameters for sprintf-style messages
+     * @param   string  $message
+     * @param   mixed   ...$args    Other optional parameters for sprintf-style messages
+     *
      * @return $this
      */
     public function addMessage($message)
     {
         $args = func_get_args();
         array_shift($args);
+
         if (empty($args)) {
             $this->messages[] = $message;
         } else {
@@ -38,25 +68,9 @@ trait MessageContainer
     }
 
     /**
-     * Set given messages, overrides existing ones
-     *
-     * @param string[] $messages
-     * @return $this
-     */
-    public function setMessages(array $messages)
-    {
-        $this->clearMessages();
-        foreach ($messages as $message) {
-            $this->addMessage($message);
-        }
-
-        return $this;
-    }
-
-    /**
      * Drop eventually existing messages
      *
-     * @return MessageContainer
+     * @return  $this
      */
     public function clearMessages()
     {
