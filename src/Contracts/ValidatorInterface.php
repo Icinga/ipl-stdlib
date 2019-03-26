@@ -2,18 +2,9 @@
 
 namespace ipl\Stdlib\Contracts;
 
-interface ValidatorInterface
+/**
+ * @deprecated Use {@link \ipl\Stdlib\Contract\ValidatorInterface} instead. We use the singular form for namespaces
+ */
+interface ValidatorInterface extends \ipl\Stdlib\Contract\ValidatorInterface
 {
-    /**
-     * Whether the given value is valid
-     *
-     * @param mixed $value
-     * @return bool
-     */
-    public function isValid($value);
-
-    /**
-     * @return array
-     */
-    public function getMessages();
 }
