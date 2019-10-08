@@ -26,7 +26,7 @@ interface PaginationInterface extends \Countable
      *
      * @return $this
      */
-    public function setLimit($limit);
+    public function limit($limit);
 
     /**
      * Get whether an offset is set
@@ -50,5 +50,5 @@ interface PaginationInterface extends \Countable
      *
      * @return $this
      */
-    public function setOffset($offset);
+    public function offset($offset);
 }
