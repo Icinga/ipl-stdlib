@@ -11,7 +11,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "ipl\\Tests\\Stdlib\\": "tests/php"
+            "ipl\\Tests\\Stdlib\\": "tests"
         }
     },
   "require": {
