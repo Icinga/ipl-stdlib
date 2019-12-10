@@ -22,4 +22,24 @@ class Str
 
         return lcfirst(str_replace(' ', '', ucwords(strtolower($normalized))));
     }
+
+    /**
+     * Split string into an array and trim spaces
+     *
+     * @param string $subject
+     * @param string $delimiter
+     * @param int    $limit
+     *
+     * @return array
+     */
+    public static function trimSplit($subject, $delimiter = ',', $limit = null)
+    {
+        if ($limit !== null) {
+            $exploded = explode($delimiter, $subject, $limit);
+        } else {
+            $exploded = explode($delimiter, $subject);
+        }
+
+        return array_map('trim', $exploded);
+    }
 }
