@@ -41,6 +41,22 @@ class Str
         return substr($subject, 0, strlen($start)) === $start;
     }
 
+    /**
+     * Split string into an array padded to the size specified by limit
+     *
+     * This method is a perfect fit if you need default values for symmetric array destructuring.
+     *
+     * @param string $subject
+     * @param string $delimiter
+     * @param int    $limit
+     * @param mixed  $default
+     *
+     * @return array
+     */
+    public static function symmetricSplit($subject, $delimiter, $limit, $default = null)
+    {
+        return array_pad(explode($delimiter, $subject, $limit), $limit, $default);
+    }
 
     /**
      * Split string into an array and trim spaces
