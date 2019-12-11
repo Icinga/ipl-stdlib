@@ -24,6 +24,25 @@ class Str
     }
 
     /**
+     * Check if the given string starts with the specified substring
+     *
+     * @param string $subject
+     * @param string $start
+     * @param bool   $caseSensitive
+     *
+     * @return bool
+     */
+    public static function startsWith($subject, $start, $caseSensitive = true)
+    {
+        if (! $caseSensitive) {
+            return strncasecmp($subject, $start, strlen($start)) === 0;
+        }
+
+        return substr($subject, 0, strlen($start)) === $start;
+    }
+
+
+    /**
      * Split string into an array and trim spaces
      *
      * @param string $subject
