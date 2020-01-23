@@ -39,7 +39,7 @@ trait PluginLoader
         $class = $this->eventuallyGetPluginClass($type, $name);
 
         if ($class !== null) {
-            return new $class;
+            return new $class();
         }
 
         return null;
