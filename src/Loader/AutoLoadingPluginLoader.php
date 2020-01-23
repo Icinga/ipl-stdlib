@@ -44,7 +44,7 @@ class AutoLoadingPluginLoader implements PluginLoaderInterface
         if ($class === null) {
             return null;
         } else {
-            return new $class;
+            return new $class();
         }
     }
 
