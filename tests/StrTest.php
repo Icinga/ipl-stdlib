@@ -74,4 +74,19 @@ class StrTest extends TestCase
         $this->assertSame('root', $user);
         $this->assertNull($password);
     }
+
+    public function testTrimSplitTrimsWhitespacesAndSplitsByCommaByDefault()
+    {
+        $this->assertSame(['foo', 'bar', 'baz'], Str::trimSplit(' foo ,bar  , baz  '));
+    }
+
+    public function testTrimSplitRespectsCustomDelimiter()
+    {
+        $this->assertSame(['foo', 'bar', 'baz'], Str::trimSplit(' foo .bar  . baz  ', '.'));
+    }
+
+    public function testTrimSplitRespectsLimit()
+    {
+        $this->assertSame(['foo', 'bar  , baz'], Str::trimSplit(' foo ,bar  , baz  ', ',', 2));
+    }
 }
