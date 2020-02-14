@@ -26,4 +26,24 @@ class StrTest extends TestCase
     {
         $this->assertSame('spaceDelimited', Str::camel('space delimited'));
     }
+
+    public function testStartsWithReturnsTrueIfStringStartsWithTheSpecifiedSubstring()
+    {
+        $this->assertTrue(Str::startsWith('foobar', 'foo'));
+    }
+
+    public function testStartsWithReturnsFalseIfStringDoesNotStartWithTheSpecifiedSubstring()
+    {
+        $this->assertFalse(Str::startsWith('foobar', 'bar'));
+    }
+
+    public function testStartsWithReturnsTrueIfStringStartsWithTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertTrue(Str::startsWith('FOOBAR', 'FOO', true));
+    }
+
+    public function testStartsWithReturnsFalseIfStringDoesNotStartWithTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertFalse(Str::startsWith('FOOBAR', 'foo', true));
+    }
 }
