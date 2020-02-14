@@ -46,4 +46,32 @@ class StrTest extends TestCase
     {
         $this->assertFalse(Str::startsWith('FOOBAR', 'foo', true));
     }
+
+    public function testSymmetricSplitReturnsArrayPaddedToTheSizeSpecifiedByLimitUsingNullAsValueByDefault()
+    {
+        $this->assertSame(['foo', 'bar', null, null], Str::symmetricSplit('foo,bar', ',', 4));
+    }
+
+    public function testSymmetricSplitReturnsArrayPaddedToTheSizeSpecifiedByLimitUsingCustomValue()
+    {
+        $this->assertSame(['foo', 'bar', false, false], Str::symmetricSplit('foo,bar', ',', 4, false));
+    }
+
+    public function testSymmetricSplitReturnsUnpaddedArrayIfTheSizeOfTheExplodedStringIsLessThanLimit()
+    {
+        $this->assertSame(['foo', 'bar,baz'], Str::symmetricSplit('foo,bar,baz', ',', 2));
+    }
+
+    public function testSymmetricSplitReturnsUnpaddedArrayIfTheSizeOfTheExplodedStringIsEqualToLimit()
+    {
+        $this->assertSame(['foo', 'bar'], Str::symmetricSplit('foo,bar', ',', 2));
+    }
+
+    public function testSymmetricSplitForSymmetricArrayDestructuring()
+    {
+        list($user, $password) = Str::symmetricSplit('root', ':', 2);
+
+        $this->assertSame('root', $user);
+        $this->assertNull($password);
+    }
 }
