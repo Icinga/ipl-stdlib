@@ -53,3 +53,19 @@ function arrayval($subject)
         get_php_type($subject)
     ));
 }
+
+/**
+ * Get the first key of an iterable
+ *
+ * @param iterable $iterable
+ *
+ * @return mixed The first key of the iterable if it is not empty, null otherwise
+ */
+function iterable_key_first($iterable)
+{
+    foreach ($iterable as $key => $_) {
+        return $key;
+    }
+
+    return null;
+}

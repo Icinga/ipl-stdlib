@@ -61,4 +61,41 @@ class FunctionsTest extends TestCase
     {
         Stdlib\arrayval(null);
     }
+
+    public function testIterableKeyFirstReturnsFirstKeyIfIterableImplementsIteratorAndIsNotEmpty()
+    {
+        $this->assertSame('a', Stdlib\iterable_key_first(new ArrayIterator(['a' => 'a', 'b' => 'b'])));
+    }
+
+    public function testIterableKeyFirstReturnsFirstKeyIfIterableIsArrayAndIsNotEmpty()
+    {
+        $this->assertSame('a', Stdlib\iterable_key_first(['a' => 'a', 'b' => 'b']));
+    }
+
+    public function testIterableKeyFirstReturnsFirstKeyIfIterableIsGeneratorAndIsNotEmpty()
+    {
+        $this->assertSame('a', Stdlib\iterable_key_first(call_user_func(function () {
+            yield 'a' => 'a';
+            yield 'b' => 'b';
+        })));
+    }
+
+    public function testIterableKeyFirstReturnsNullIfIterableImplementsIteratorAndIsEmpty()
+    {
+        $this->assertNull(Stdlib\iterable_key_first(new ArrayIterator([])));
+    }
+
+    public function testIterableKeyFirstReturnsNullIfIterableIsArrayAndIsEmpty()
+    {
+        $this->assertNull(Stdlib\iterable_key_first([]));
+    }
+
+    public function testIterableKeyFirstReturnsNullIfIterableIsGeneratorAndIsEmpty()
+    {
+        $this->assertNull(Stdlib\iterable_key_first(call_user_func(function () {
+            return;
+            /** @noinspection PhpUnreachableStatementInspection Empty generator */
+            yield;
+        })));
+    }
 }
