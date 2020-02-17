@@ -11,9 +11,9 @@ use stdClass;
  *
  * If subject is an object, the name of the object's class is returned, otherwise the subject's type.
  *
- * @param   $subject
+ * @param $subject
  *
- * @return  string
+ * @return string
  */
 function get_php_type($subject)
 {
@@ -27,11 +27,11 @@ function get_php_type($subject)
 /**
  * Get the array value of the given subject
  *
- * @param   array|object|Traversable   $subject
+ * @param array|object|Traversable $subject
  *
- * @return  array
+ * @return array
  *
- * @throws  InvalidArgumentException   If subject type is invalid
+ * @throws InvalidArgumentException If subject type is invalid
  */
 function arrayval($subject)
 {
