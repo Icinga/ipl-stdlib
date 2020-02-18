@@ -10,7 +10,7 @@ trait MessageContainer
     /**
      * Get whether there are any messages
      *
-     * @return  bool
+     * @return bool
      */
     public function hasMessages()
     {
@@ -20,7 +20,7 @@ trait MessageContainer
     /**
      * Get all messages
      *
-     * @return  array
+     * @return array
      */
     public function getMessages()
     {
@@ -30,9 +30,9 @@ trait MessageContainer
     /**
      * Set the given messages overriding existing ones
      *
-     * @param   string[]    $messages
+     * @param string[] $messages
      *
-     * @return  $this
+     * @return $this
      */
     public function setMessages(array $messages)
     {
@@ -48,8 +48,8 @@ trait MessageContainer
     /**
      * Add a single message
      *
-     * @param   string  $message
-     * @param   mixed   ...$args    Other optional parameters for sprintf-style messages
+     * @param string $message
+     * @param mixed  ...$args Other optional parameters for sprintf-style messages
      *
      * @return $this
      */
@@ -70,7 +70,7 @@ trait MessageContainer
     /**
      * Drop eventually existing messages
      *
-     * @return  $this
+     * @return $this
      */
     public function clearMessages()
     {
