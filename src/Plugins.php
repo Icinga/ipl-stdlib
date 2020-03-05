@@ -3,7 +3,7 @@
 namespace ipl\Stdlib;
 
 use ipl\Stdlib\Contract\PluginLoader;
-use ipl\Stdlib\Loader\AutoLoadingPluginLoader;
+use ipl\Stdlib\Loader\AutoloadingPluginLoader;
 
 trait Plugins
 {
@@ -23,7 +23,7 @@ trait Plugins
         if ($loaderOrNamespace instanceof PluginLoader) {
             $loader = $loaderOrNamespace;
         } else {
-            $loader = new AutoLoadingPluginLoader($loaderOrNamespace, $postfix);
+            $loader = new AutoloadingPluginLoader($loaderOrNamespace, $postfix);
         }
 
         return $loader;

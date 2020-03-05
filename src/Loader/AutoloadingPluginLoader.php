@@ -7,7 +7,7 @@ use ipl\Stdlib\Contract\PluginLoader;
 /**
  * Plugin loader that makes use of registered PHP autoloaders
  */
-class AutoLoadingPluginLoader implements PluginLoader
+class AutoloadingPluginLoader implements PluginLoader
 {
     /** @var string Namespace of the plugins */
     protected $namespace;
