@@ -2,20 +2,24 @@
 
 namespace ipl\Stdlib\Loader;
 
-use InvalidArgumentException;
+use ipl\Stdlib\Contract\PluginLoader;
 
-class AutoLoadingPluginLoader implements PluginLoaderInterface
+/**
+ * Plugin loader that makes use of registered PHP autoloaders
+ */
+class AutoLoadingPluginLoader implements PluginLoader
 {
+    /** @var string Namespace of the plugins */
     protected $namespace;
 
+    /** @var string Class name postfix */
     protected $postfix;
 
-    protected $uppercaseFirst = true;
-
     /**
-     * AutoloadingPluginLoader constructor.
-     * @param $namespace
-     * @param string $postfix
+     * Create a new autoloading plugin loader
+     *
+     * @param string $namespace Namespace of the plugins
+     * @param string $postfix   Class name postfix
      */
     public function __construct($namespace, $postfix = '')
     {
@@ -23,62 +27,26 @@ class AutoLoadingPluginLoader implements PluginLoaderInterface
         $this->postfix = $postfix;
     }
 
-    public function load($name)
-    {
-        $instance = $this->eventuallyLoad($name);
-
-        if ($instance === null) {
-            throw new InvalidArgumentException(sprintf(
-                'Unable to load %s (%s)',
-                $name,
-                $this->getFullClassByName($name)
-            ));
-        }
-
-        return $instance;
-    }
-
-    public function eventuallyLoad($name)
-    {
-        $class = $this->eventuallyGetClassByName($name);
-        if ($class === null) {
-            return null;
-        } else {
-            return new $class();
-        }
-    }
-
-    public function eventuallyGetClassByName($name)
-    {
-        $class = $this->getFullClassByName($name);
-        if (class_exists($class)) {
-            return $class;
-        } else {
-            return null;
-        }
-    }
-
     /**
-     * @param bool $uppercaseFirst
-     * @return $this
-     */
-    public function setUppercaseFirst($uppercaseFirst = true)
-    {
-        $this->uppercaseFirst = $uppercaseFirst;
-
-        return $this;
-    }
-
-    /**
-     * @param $name
+     * Get the FQN of a plugin
+     *
+     * @param string $name Name of the plugin
+     *
      * @return string
      */
-    public function getFullClassByName($name)
+    protected function getFqn($name)
     {
-        if ($this->uppercaseFirst) {
-            $name = ucfirst($name);
+        return $this->namespace . '\\' . ucfirst($name) . $this->postfix;
+    }
+
+    public function load($name)
+    {
+        $class = $this->getFqn($name);
+
+        if (! class_exists($class)) {
+            return false;
         }
 
-        return $this->namespace . '\\' . $name . $this->postfix;
+        return $class;
     }
 }
