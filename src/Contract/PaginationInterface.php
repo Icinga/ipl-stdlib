@@ -4,6 +4,7 @@ namespace ipl\Stdlib\Contract;
 
 use Countable;
 
+/** @deprecated Use {@link Paginatable} instead */
 interface PaginationInterface extends Countable
 {
     /**
