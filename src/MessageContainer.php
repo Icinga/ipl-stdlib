@@ -49,15 +49,12 @@ trait MessageContainer
      * Add a single message
      *
      * @param string $message
-     * @param mixed  ...$args Other optional parameters for sprintf-style messages
+     * @param mixed  ...$args Optional args for sprintf-style messages
      *
      * @return $this
      */
-    public function addMessage($message)
+    public function addMessage($message, ...$args)
     {
-        $args = func_get_args();
-        array_shift($args);
-
         if (empty($args)) {
             $this->messages[] = $message;
         } else {
