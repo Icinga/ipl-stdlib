@@ -65,7 +65,7 @@ trait MessageContainer
     }
 
     /**
-     * Drop eventually existing messages
+     * Drop any existing message
      *
      * @return $this
      */
