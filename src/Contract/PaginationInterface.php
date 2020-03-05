@@ -2,7 +2,9 @@
 
 namespace ipl\Stdlib\Contract;
 
-interface PaginationInterface extends \Countable
+use Countable;
+
+interface PaginationInterface extends Countable
 {
     /**
      * Get whether a limit is set
