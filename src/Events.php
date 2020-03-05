@@ -5,7 +5,7 @@ namespace ipl\Stdlib;
 use Evenement\EventEmitterTrait;
 use InvalidArgumentException;
 
-trait EventEmitter
+trait Events
 {
     use EventEmitterTrait {
         EventEmitterTrait::on as private evenementUnvalidatedOn;
