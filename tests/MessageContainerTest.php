@@ -2,6 +2,8 @@
 
 namespace ipl\Tests\Stdlib;
 
+use ipl\Stdlib\MessageContainer;
+
 class MessageContainerTest extends TestCase
 {
     public function testGetNoMessagesWhenEmpty()
@@ -34,10 +36,10 @@ class MessageContainerTest extends TestCase
     }
 
     /**
-     * @return \ipl\Stdlib\MessageContainer
+     * @return MessageContainer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContainer()
     {
-        return $this->getMockForTrait('ipl\\Stdlib\\MessageContainer');
+        return $this->getMockForTrait(MessageContainer::class);
     }
 }
