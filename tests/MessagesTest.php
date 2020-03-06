@@ -2,32 +2,32 @@
 
 namespace ipl\Tests\Stdlib;
 
-use ipl\Stdlib\MessageContainer;
+use ipl\Stdlib\Messages;
 
-class MessageContainerTest extends TestCase
+class MessagesTest extends TestCase
 {
     public function testGetNoMessagesWhenEmpty()
     {
-        $this->assertEmpty(
-            $this->getContainer()->getMessages()
-        );
+        $this->assertEmpty($this->getMessagesMock()->getMessages());
     }
 
     public function testMessagesCanBeAdded()
     {
-        $this->assertEquals(
-            $this->getContainer()
+        $this->assertSame(
+            ['Message 1', 'Message 2'],
+            $this
+                ->getMessagesMock()
                 ->addMessage('Message 1')
                 ->addMessage(('Message 2'))
-                ->getMessages(),
-            ['Message 1', 'Message 2']
+                ->getMessages()
         );
     }
 
     public function testMessagesCanBeCleared()
     {
         $this->assertEmpty(
-            $this->getContainer()
+            $this
+                ->getMessagesMock()
                 ->addMessage('Message 1')
                 ->addMessage(('Message 2'))
                 ->clearMessages()
@@ -36,10 +36,10 @@ class MessageContainerTest extends TestCase
     }
 
     /**
-     * @return MessageContainer|\PHPUnit\Framework\MockObject\MockObject
+     * @return Messages|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getContainer()
+    protected function getMessagesMock()
     {
-        return $this->getMockForTrait(MessageContainer::class);
+        return $this->getMockForTrait(Messages::class);
     }
 }

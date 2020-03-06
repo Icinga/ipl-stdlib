@@ -2,7 +2,7 @@
 
 namespace ipl\Stdlib;
 
-trait MessageContainer
+trait Messages
 {
     /** @var array */
     protected $messages = [];
