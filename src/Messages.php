@@ -65,6 +65,20 @@ trait Messages
     }
 
     /**
+     * Add the given messages
+     *
+     * @param array $messages
+     *
+     * @return $this
+     */
+    public function addMessages(array $messages)
+    {
+        $this->messages = array_merge($this->messages, $messages);
+
+        return $this;
+    }
+
+    /**
      * Drop any existing message
      *
      * @return $this
