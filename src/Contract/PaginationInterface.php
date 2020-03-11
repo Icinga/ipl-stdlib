@@ -2,7 +2,10 @@
 
 namespace ipl\Stdlib\Contract;
 
-interface PaginationInterface extends \Countable
+use Countable;
+
+/** @deprecated Use {@link Paginatable} instead */
+interface PaginationInterface extends Countable
 {
     /**
      * Get whether a limit is set
