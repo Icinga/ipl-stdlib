@@ -1,6 +1,6 @@
 <?php
 
-namespace ipl\Stdlib;
+namespace ipl\Stdlib\Contract;
 
 /**
  * Representation of translators
