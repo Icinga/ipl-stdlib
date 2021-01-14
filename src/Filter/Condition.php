@@ -1,0 +1,78 @@
+<?php
+
+namespace ipl\Stdlib\Filter;
+
+use Exception;
+use InvalidArgumentException;
+use ipl\Stdlib\Properties;
+
+abstract class Condition implements Rule
+{
+    use Properties;
+
+    /** @var string */
+    protected $column;
+
+    /** @var mixed */
+    protected $value;
+
+    /**
+     * Create a new Condition
+     *
+     * @param string $column
+     * @param mixed $value
+     */
+    public function __construct($column, $value)
+    {
+        $this->setColumn($column)
+            ->setValue($value);
+    }
+
+    /**
+     * Set this condition's column
+     *
+     * @param string $column
+     *
+     * @return $this
+     */
+    public function setColumn($column)
+    {
+        $this->column = $column;
+
+        return $this;
+    }
+
+    /**
+     * Get this condition's column
+     *
+     * @return string
+     */
+    public function getColumn()
+    {
+        return $this->column;
+    }
+
+    /**
+     * Set this condition's value
+     *
+     * @param mixed $value
+     *
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get this condition's value
+     *
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+}
