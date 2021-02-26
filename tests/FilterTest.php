@@ -398,9 +398,19 @@ class FilterTest extends TestCase
         $this->assertTrue(Filter::match($chain, $this->row(2)));
         $this->assertFalse(Filter::match($chain, $this->row(1)));
 
+        // insertBefore
+        $chain->insertBefore($stateEqualsZero, $stateEqualsOne);
+        $this->assertTrue(Filter::match($chain, $this->row(1)));
+        $this->assertTrue(Filter::match($chain, $this->row(2)));
+
         // remove
         $chain->remove($stateEqualsOne);
         $this->assertFalse(Filter::match($chain, $this->row(2)));
+
+        // insertAfter
+        $hasProblem = Filter::equal('problem', '1');
+        $chain->insertAfter($hasProblem, $stateEqualsZero);
+        $this->assertTrue(Filter::match($chain, $this->row(2)));
     }
 
     public function testChainsCanBeEmpty()

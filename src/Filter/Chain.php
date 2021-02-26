@@ -62,6 +62,48 @@ abstract class Chain implements Rule, IteratorAggregate, Countable
     }
 
     /**
+     * Prepend a rule to an existing rule in this chain
+     *
+     * @param Rule $rule
+     * @param Rule $before
+     *
+     * @throws OutOfBoundsException In case no existing rule is found
+     * @return $this
+     */
+    public function insertBefore(Rule $rule, Rule $before)
+    {
+        $ruleAt = array_search($before, $this->rules, true);
+        if ($ruleAt === false) {
+            throw new OutOfBoundsException('Reference rule not found');
+        }
+
+        array_splice($this->rules, $ruleAt, 0, [$rule]);
+
+        return $this;
+    }
+
+    /**
+     * Append a rule to an existing rule in this chain
+     *
+     * @param Rule $rule
+     * @param Rule $after
+     *
+     * @throws OutOfBoundsException In case no existing rule is found
+     * @return $this
+     */
+    public function insertAfter(Rule $rule, Rule $after)
+    {
+        $ruleAt = array_search($after, $this->rules, true);
+        if ($ruleAt === false) {
+            throw new OutOfBoundsException('Reference rule not found');
+        }
+
+        array_splice($this->rules, $ruleAt + 1, 0, [$rule]);
+
+        return $this;
+    }
+
+    /**
      * Get whether this chain contains the given rule
      *
      * @param Rule $rule
