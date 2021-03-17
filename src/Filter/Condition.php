@@ -2,12 +2,11 @@
 
 namespace ipl\Stdlib\Filter;
 
-use Exception;
-use InvalidArgumentException;
 use ipl\Stdlib\Properties;
 
-abstract class Condition implements Rule
+abstract class Condition implements Rule, MetaDataProvider
 {
+    use MetaData;
     use Properties;
 
     /** @var string */
@@ -26,6 +25,16 @@ abstract class Condition implements Rule
     {
         $this->setColumn($column)
             ->setValue($value);
+    }
+
+    /**
+     * Clone this condition's meta data
+     */
+    public function __clone()
+    {
+        if ($this->metaData !== null) {
+            $this->metaData = clone $this->metaData;
+        }
     }
 
     /**
