@@ -4,13 +4,12 @@ namespace ipl\Stdlib\Filter;
 
 use ArrayIterator;
 use Countable;
-use ipl\Stdlib\Properties;
 use IteratorAggregate;
 use OutOfBoundsException;
 
-abstract class Chain implements Rule, IteratorAggregate, Countable
+abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Countable
 {
-    use Properties;
+    use MetaData;
 
     /** @var Rule[] */
     protected $rules = [];
@@ -28,10 +27,14 @@ abstract class Chain implements Rule, IteratorAggregate, Countable
     }
 
     /**
-     * Clone this chain's rules
+     * Clone this chain's meta data and rules
      */
     public function __clone()
     {
+        if ($this->metaData !== null) {
+            $this->metaData = clone $this->metaData;
+        }
+
         foreach ($this->rules as $i => $rule) {
             $this->rules[$i] = clone $rule;
         }
