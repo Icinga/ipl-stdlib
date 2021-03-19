@@ -4,14 +4,12 @@ namespace ipl\Stdlib\Filter;
 
 use ArrayIterator;
 use Countable;
-use ipl\Stdlib\Properties;
 use IteratorAggregate;
 use OutOfBoundsException;
 
 abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Countable
 {
     use MetaData;
-    use Properties;
 
     /** @var Rule[] */
     protected $rules = [];
