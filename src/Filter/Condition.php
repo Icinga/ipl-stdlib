@@ -2,12 +2,9 @@
 
 namespace ipl\Stdlib\Filter;
 
-use ipl\Stdlib\Properties;
-
 abstract class Condition implements Rule, MetaDataProvider
 {
     use MetaData;
-    use Properties;
 
     /** @var string */
     protected $column;
