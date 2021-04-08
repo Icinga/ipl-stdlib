@@ -8,20 +8,13 @@ use ipl\Tests\Stdlib\FiltersTest\FiltersUser;
 
 class FiltersTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Filterable */
-    protected $filterable;
-
-    public function setUp()
-    {
-        $this->filterable = new FiltersUser();
-    }
-
     public function testFilterKeepsCurrentHierarchy()
     {
-        $this->filterable->filter(Filter::equal('', ''));
-        $this->filterable->filter(Filter::unequal('', ''));
+        $filterable = new FiltersUser();
+        $filterable->filter(Filter::equal('', ''));
+        $filterable->filter(Filter::unequal('', ''));
 
-        $this->assertSameFilterHierarchy(Filter::all(
+        $this->assertSameFilterHierarchy($filterable, Filter::all(
             Filter::equal('', ''),
             Filter::unequal('', '')
         ));
@@ -29,10 +22,11 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
 
     public function testFilterWrapsCurrentHierarchy()
     {
-        $this->filterable->orFilter(Filter::equal('', ''));
-        $this->filterable->filter(Filter::unequal('', ''));
+        $filterable = new FiltersUser();
+        $filterable->orFilter(Filter::equal('', ''));
+        $filterable->filter(Filter::unequal('', ''));
 
-        $this->assertSameFilterHierarchy(Filter::all(
+        $this->assertSameFilterHierarchy($filterable, Filter::all(
             Filter::any(Filter::equal('', '')),
             Filter::unequal('', '')
         ));
@@ -40,10 +34,11 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
 
     public function testOrFilterKeepsCurrentHierarchy()
     {
-        $this->filterable->orFilter(Filter::equal('', ''));
-        $this->filterable->orFilter(Filter::unequal('', ''));
+        $filterable = new FiltersUser();
+        $filterable->orFilter(Filter::equal('', ''));
+        $filterable->orFilter(Filter::unequal('', ''));
 
-        $this->assertSameFilterHierarchy(Filter::any(
+        $this->assertSameFilterHierarchy($filterable, Filter::any(
             Filter::equal('', ''),
             Filter::unequal('', '')
         ));
@@ -51,10 +46,11 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
 
     public function testOrFilterWrapsCurrentHierarchy()
     {
-        $this->filterable->filter(Filter::equal('', ''));
-        $this->filterable->orFilter(Filter::unequal('', ''));
+        $filterable = new FiltersUser();
+        $filterable->filter(Filter::equal('', ''));
+        $filterable->orFilter(Filter::unequal('', ''));
 
-        $this->assertSameFilterHierarchy(Filter::any(
+        $this->assertSameFilterHierarchy($filterable, Filter::any(
             Filter::all(Filter::equal('', '')),
             Filter::unequal('', '')
         ));
@@ -62,10 +58,11 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
 
     public function testNotFilterKeepsCurrentHierarchy()
     {
-        $this->filterable->notFilter(Filter::equal('', ''));
-        $this->filterable->notFilter(Filter::unequal('', ''));
+        $filterable = new FiltersUser();
+        $filterable->notFilter(Filter::equal('', ''));
+        $filterable->notFilter(Filter::unequal('', ''));
 
-        $this->assertSameFilterHierarchy(Filter::all(
+        $this->assertSameFilterHierarchy($filterable, Filter::all(
             Filter::none(Filter::equal('', '')),
             Filter::none(Filter::unequal('', ''))
         ));
@@ -73,10 +70,11 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
 
     public function testNotFilterWrapsCurrentHierarchy()
     {
-        $this->filterable->orFilter(Filter::equal('', ''));
-        $this->filterable->notFilter(Filter::unequal('', ''));
+        $filterable = new FiltersUser();
+        $filterable->orFilter(Filter::equal('', ''));
+        $filterable->notFilter(Filter::unequal('', ''));
 
-        $this->assertSameFilterHierarchy(Filter::all(
+        $this->assertSameFilterHierarchy($filterable, Filter::all(
             Filter::any(Filter::equal('', '')),
             Filter::none(Filter::unequal('', ''))
         ));
@@ -84,10 +82,11 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
 
     public function testOrNotFilterKeepsCurrentHierarchy()
     {
-        $this->filterable->orNotFilter(Filter::equal('', ''));
-        $this->filterable->orNotFilter(Filter::unequal('', ''));
+        $filterable = new FiltersUser();
+        $filterable->orNotFilter(Filter::equal('', ''));
+        $filterable->orNotFilter(Filter::unequal('', ''));
 
-        $this->assertSameFilterHierarchy(Filter::any(
+        $this->assertSameFilterHierarchy($filterable, Filter::any(
             Filter::none(Filter::equal('', '')),
             Filter::none(Filter::unequal('', ''))
         ));
@@ -95,18 +94,19 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
 
     public function testOrNotFilterWrapsCurrentHierarchy()
     {
-        $this->filterable->filter(Filter::equal('', ''));
-        $this->filterable->orNotFilter(Filter::unequal('', ''));
+        $filterable = new FiltersUser();
+        $filterable->filter(Filter::equal('', ''));
+        $filterable->orNotFilter(Filter::unequal('', ''));
 
-        $this->assertSameFilterHierarchy(Filter::any(
+        $this->assertSameFilterHierarchy($filterable, Filter::any(
             Filter::all(Filter::equal('', '')),
             Filter::none(Filter::unequal('', ''))
         ));
     }
 
-    protected function assertSameFilterHierarchy(Filter\Chain $expected)
+    protected function assertSameFilterHierarchy(Filterable $filterable, Filter\Chain $expected)
     {
-        $actual = $this->filterable->getFilter();
+        $actual = $filterable->getFilter();
 
         $checkHierarchy = function ($expected, $actual) use (&$checkHierarchy) {
             $expectedArray = iterator_to_array($expected);
