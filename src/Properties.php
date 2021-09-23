@@ -11,13 +11,23 @@ use OutOfBoundsException;
 trait Properties
 {
     /** @var array */
-    protected $properties = [];
+    private $properties = [];
 
     /** @var array */
-    protected $mutatedProperties = [];
+    private $mutatedProperties = [];
 
     /** @var bool Whether accessors and mutators are enabled */
     protected $accessorsAndMutatorsEnabled = false;
+
+    /**
+     * Get whether this class has any properties
+     *
+     * @return bool
+     */
+    public function hasProperties()
+    {
+        return ! empty($this->properties);
+    }
 
     /**
      * Get whether a property with the given key exists
@@ -97,10 +107,6 @@ trait Properties
     {
         $this->properties[$key] = $value;
 
-        if ($this->accessorsAndMutatorsEnabled) {
-            $this->mutateProperty($key);
-        }
-
         return $this;
     }
 
@@ -119,7 +125,7 @@ trait Properties
         $value = array_key_exists($key, $this->properties)
             ? $this->properties[$key]
             : null;
-        $this->mutatedProperties[$key] = $value; // Prevents repeated checks
+        $this->mutatedProperties[$key] = true; // Prevents repeated checks
 
         $mutator = Str::camel('mutate_' . $key) . 'Property';
         if (method_exists($this, $mutator)) {
