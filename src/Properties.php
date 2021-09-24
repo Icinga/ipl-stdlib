@@ -68,17 +68,15 @@ trait Properties
      */
     protected function getProperty($key)
     {
+        if (isset($this->properties[$key]) && $this->properties[$key] instanceof Closure) {
+            $this->setProperty($key, $this->properties[$key]($this));
+        }
+
         if ($this->accessorsAndMutatorsEnabled) {
             $this->mutateProperty($key);
         }
 
         if (array_key_exists($key, $this->properties)) {
-            if ($this->properties[$key] instanceof Closure) {
-                $value = $this->properties[$key]($this);
-                $this->setProperty($key, $value);
-                return $value;
-            }
-
             return $this->properties[$key];
         }
 
