@@ -6,22 +6,20 @@ use OutOfBoundsException;
 
 class PropertiesTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @expectedException OutOfBoundsException
-     */
     public function testGetPropertyThrowsOutOfBoundsExceptionIfUnset()
     {
         $subject = new TestClassUsingThePropertiesTrait();
 
+        $this->expectException(OutOfBoundsException::class);
+
         $subject->foo;
     }
 
-    /**
-     * @expectedException OutOfBoundsException
-     */
     public function testArrayAccessThrowsOutOfBoundsExceptionIfUnset()
     {
         $subject = new TestClassUsingThePropertiesTrait();
+
+        $this->expectException(OutOfBoundsException::class);
 
         $subject['foo'];
     }

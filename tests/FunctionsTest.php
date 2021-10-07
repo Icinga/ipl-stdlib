@@ -3,6 +3,7 @@
 namespace ipl\Tests\Stdlib;
 
 use ArrayIterator;
+use InvalidArgumentException;
 use stdClass;
 use ipl\Stdlib;
 
@@ -54,11 +55,10 @@ class FunctionsTest extends TestCase
         $this->assertSame($array, Stdlib\arrayval($traversable));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testArrayvalException()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         Stdlib\arrayval(null);
     }
 
