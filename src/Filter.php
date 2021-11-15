@@ -185,6 +185,36 @@ class Filter
     }
 
     /**
+     * Create a rule that applies rows where a column has no values, i.e. to all
+     * rows where this column hasn't been set.
+     *
+     * Value is optional, as it is not used anyway when executing the query, rather
+     * it is only being populated in the FilterEditor.
+     *
+     * @param string      $column
+     * @param string|null $value
+     *
+     * @return HasNotValue
+     */
+    public static function hasNotValue($column, $value = '')
+    {
+        return new HasNotValue($column, $value);
+    }
+
+    /**
+     * Get whether the given rule's column is null|doesn't contain any values
+     *
+     * @param  HasNotValue $rule
+     * @param  object $row
+     *
+     * @return bool
+     */
+    public function matchHasNotValue(HasNotValue $rule, $row)
+    {
+        return ! $this->matchHasValue($rule, $row);
+    }
+
+    /**
      * Create a rule that matches rows with a column that **equals** the given value
      *
      * Performs a wildcard search if the value contains asterisks.
@@ -451,6 +481,8 @@ class Filter
                 return $this->matchUnequal($rule, $row);
             case $rule instanceof HasValue:
                 return $this->matchHasValue($rule, $row);
+            case $rule instanceof HasNotValue:
+                return $this->matchHasNotValue($rule, $row);
             default:
                 throw new InvalidArgumentException(sprintf(
                     'Unable to match filter. Rule type %s is unknown',
