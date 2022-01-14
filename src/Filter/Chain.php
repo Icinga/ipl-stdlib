@@ -6,6 +6,7 @@ use ArrayIterator;
 use Countable;
 use IteratorAggregate;
 use OutOfBoundsException;
+use Traversable;
 
 abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Countable
 {
@@ -45,7 +46,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      *
      * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->rules);
     }
@@ -171,7 +172,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->rules);
     }

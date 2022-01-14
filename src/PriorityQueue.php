@@ -17,7 +17,7 @@ class PriorityQueue extends SplPriorityQueue
      *
      * Maintains insertion order for items with the same priority.
      */
-    public function insert($value, $priority)
+    public function insert($value, $priority): bool
     {
         return parent::insert($value, [$priority, $this->serial--]);
     }
