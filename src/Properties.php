@@ -138,7 +138,7 @@ trait Properties
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         if ($this->accessorsAndMutatorsEnabled) {
             $this->mutateProperty($offset);
@@ -154,6 +154,7 @@ trait Properties
      *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->getProperty($offset);
@@ -165,7 +166,7 @@ trait Properties
      * @param mixed $offset
      * @param mixed $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->setProperty($offset, $value);
     }
@@ -175,7 +176,7 @@ trait Properties
      *
      * @param mixed $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->properties[$offset]);
         unset($this->mutatedProperties[$offset]);
