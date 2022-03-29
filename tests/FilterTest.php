@@ -12,21 +12,24 @@ class FilterTest extends TestCase
             'problem' => '1',
             'service' => 'ping',
             'state'   => 2,
-            'handled' => '1'
+            'handled' => '1',
+            'host_id' => 1
         ],
         [
             'host'    => 'localhost',
             'problem' => '1',
             'service' => 'www.icinga.com',
             'state'   => 0,
-            'handled' => '0'
+            'handled' => '0',
+            'host_id' => null
         ],
         [
             'host'    => 'localhost',
             'problem' => '1',
             'service' => 'www.icinga.com',
             'state'   => 1,
-            'handled' => '0'
+            'handled' => '0',
+            'host_id' => 1
         ]
     ];
 
@@ -181,6 +184,34 @@ class FilterTest extends TestCase
         $this->assertFalse(Filter::match(Filter::unequal('foo', ['bar', 'boar']), [
             'foo' => ['foo', 'bar']
         ]));
+    }
+
+    public function testHasValueMatches()
+    {
+        $hasValue = Filter::hasValue('host_id');
+
+        $this->assertTrue(Filter::match($hasValue, $this->row(0)));
+    }
+
+    public function testHasValueMismatches()
+    {
+        $hasValue = Filter::hasValue('host_id');
+
+        $this->assertFalse(Filter::match($hasValue, $this->row(1)));
+    }
+
+    public function testHasNotValueMatches()
+    {
+        $hasNotValue = Filter::hasNotValue('host_id');
+
+        $this->assertTrue(Filter::match($hasNotValue, $this->row(1)));
+    }
+
+    public function testHasNotValueMismatches()
+    {
+        $hasNotValue = Filter::hasNotValue('host_id');
+
+        $this->assertFalse(Filter::match($hasNotValue, $this->row(0)));
     }
 
     public function testGreaterThanMatches()

@@ -11,6 +11,8 @@ use ipl\Stdlib\Filter\Condition;
 use ipl\Stdlib\Filter\Equal;
 use ipl\Stdlib\Filter\GreaterThan;
 use ipl\Stdlib\Filter\GreaterThanOrEqual;
+use ipl\Stdlib\Filter\HasNotValue;
+use ipl\Stdlib\Filter\HasValue;
 use ipl\Stdlib\Filter\LessThan;
 use ipl\Stdlib\Filter\LessThanOrEqual;
 use ipl\Stdlib\Filter\None;
@@ -141,6 +143,75 @@ class Filter
         }
 
         return true;
+    }
+
+    /**
+     * Create a rule that applies rows with a column having any values, i.e. matches
+     * all rows where this column has been set
+     *
+     * Value is optional, as it is not used anyway when executing the query, rather
+     * it is only being populated in the FilterEditor.
+     *
+     * @param string      $column
+     * @param string|null $value
+     *
+     * @return HasValue
+     */
+    public static function hasValue($column, $value = '')
+    {
+        return new HasValue($column, $value);
+    }
+
+    /**
+     * Get whether the given rule's column contains any values
+     *
+     * @param HasValue|HasNotValue $rule
+     * @param object $row
+     *
+     * @return bool
+     */
+    protected function matchHasValue($rule, $row)
+    {
+        if (! $rule instanceof HasValue && ! $rule instanceof HasNotValue) {
+            throw new InvalidArgumentException(sprintf(
+                'Rule must be of type %s or %s, got %s instead',
+                HasValue::class,
+                HasNotValue::class,
+                get_php_type($rule)
+            ));
+        }
+
+        return ! empty($this->extractValue($rule->getColumn(), $row));
+    }
+
+    /**
+     * Create a rule that applies rows where a column has no values, i.e. to all
+     * rows where this column hasn't been set.
+     *
+     * Value is optional, as it is not used anyway when executing the query, rather
+     * it is only being populated in the FilterEditor.
+     *
+     * @param string      $column
+     * @param string|null $value
+     *
+     * @return HasNotValue
+     */
+    public static function hasNotValue($column, $value = '')
+    {
+        return new HasNotValue($column, $value);
+    }
+
+    /**
+     * Get whether the given rule's column is null|doesn't contain any values
+     *
+     * @param  HasNotValue $rule
+     * @param  object $row
+     *
+     * @return bool
+     */
+    public function matchHasNotValue(HasNotValue $rule, $row)
+    {
+        return ! $this->matchHasValue($rule, $row);
     }
 
     /**
@@ -408,6 +479,10 @@ class Filter
                 return $this->matchNone($rule, $row);
             case $rule instanceof Unequal:
                 return $this->matchUnequal($rule, $row);
+            case $rule instanceof HasValue:
+                return $this->matchHasValue($rule, $row);
+            case $rule instanceof HasNotValue:
+                return $this->matchHasNotValue($rule, $row);
             default:
                 throw new InvalidArgumentException(sprintf(
                     'Unable to match filter. Rule type %s is unknown',
