@@ -3,6 +3,7 @@
 namespace ipl\Stdlib;
 
 use OutOfBoundsException;
+use Traversable;
 
 /**
  * Trait for property access, mutation and array access.
@@ -81,6 +82,18 @@ trait Properties
         $this->properties[$key] = $value;
 
         return $this;
+    }
+
+    /**
+     * Iterate over all existing properties
+     *
+     * @return Traversable
+     */
+    public function getIterator(): Traversable
+    {
+        foreach ($this->properties as $key => $value) {
+            yield $key => $value;
+        }
     }
 
     /**
