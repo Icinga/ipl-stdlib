@@ -96,21 +96,6 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
         $subject->foo;
     }
 
-    public function testGetMutatorGetsCalled()
-    {
-        $subject = new TestClassUsingThePropertiesTrait();
-
-        $this->assertSame('foobar', $subject->foobar);
-    }
-
-    public function testSetMutatorGetsCalled()
-    {
-        $subject = new TestClassUsingThePropertiesTrait();
-        $subject->special = 'foobar';
-
-        $this->assertSame('FOOBAR', $subject->special);
-    }
-
     public function testGetPropertiesReturnsEmptyArrayIfUnset()
     {
         $this->markTestSkipped('Properties::getProperties() not yet implemented');
