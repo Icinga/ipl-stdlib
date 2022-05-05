@@ -96,6 +96,28 @@ class PropertiesTest extends \PHPUnit\Framework\TestCase
         $subject->foo;
     }
 
+    public function testPropertyIterationWorks()
+    {
+        $subject = new TestClassUsingThePropertiesTrait();
+        $subject->foo = 'bar';
+        $subject->bar = 'foo';
+
+        $i = 0;
+        foreach ($subject as $name => $value) {
+            if ($i === 0) {
+                $this->assertEquals($name, 'foo');
+                $this->assertEquals($value, 'bar');
+            } elseif ($i === 1) {
+                $this->assertEquals($name, 'bar');
+                $this->assertEquals($value, 'foo');
+            } else {
+                $this->fail('There are more properties iterable than defined');
+            }
+
+            $i++;
+        }
+    }
+
     public function testGetPropertiesReturnsEmptyArrayIfUnset()
     {
         $this->markTestSkipped('Properties::getProperties() not yet implemented');
