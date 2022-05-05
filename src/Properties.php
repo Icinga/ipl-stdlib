@@ -2,7 +2,6 @@
 
 namespace ipl\Stdlib;
 
-use Closure;
 use OutOfBoundsException;
 
 /**
@@ -12,12 +11,6 @@ trait Properties
 {
     /** @var array */
     private $properties = [];
-
-    /** @var array */
-    private $mutatedProperties = [];
-
-    /** @var bool Whether accessors and mutators are enabled */
-    protected $accessorsAndMutatorsEnabled = false;
 
     /**
      * Get whether this class has any properties
@@ -38,17 +31,7 @@ trait Properties
      */
     public function hasProperty($key)
     {
-        if (array_key_exists($key, $this->properties)) {
-            return true;
-        } elseif ($this->accessorsAndMutatorsEnabled) {
-            $mutator = 'mutate' . Str::camel($key) . 'Property';
-
-            if (method_exists($this, $mutator)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_key_exists($key, $this->properties);
     }
 
     /**
@@ -78,14 +61,6 @@ trait Properties
      */
     protected function getProperty($key)
     {
-        if (isset($this->properties[$key]) && $this->properties[$key] instanceof Closure) {
-            $this->setProperty($key, $this->properties[$key]($this));
-        }
-
-        if ($this->accessorsAndMutatorsEnabled) {
-            $this->mutateProperty($key);
-        }
-
         if (array_key_exists($key, $this->properties)) {
             return $this->properties[$key];
         }
@@ -109,29 +84,6 @@ trait Properties
     }
 
     /**
-     * Try to mutate the given key
-     *
-     * @param string $key
-     * @todo Support for generators, if needed
-     */
-    protected function mutateProperty($key)
-    {
-        if (array_key_exists($key, $this->mutatedProperties)) {
-            return;
-        }
-
-        $value = array_key_exists($key, $this->properties)
-            ? $this->properties[$key]
-            : null;
-        $this->mutatedProperties[$key] = true; // Prevents repeated checks
-
-        $mutator = Str::camel('mutate_' . $key) . 'Property';
-        if (method_exists($this, $mutator)) {
-            $this->properties[$key] = $this->$mutator($value);
-        }
-    }
-
-    /**
      * Check whether an offset exists
      *
      * @param mixed $offset
@@ -140,10 +92,6 @@ trait Properties
      */
     public function offsetExists($offset): bool
     {
-        if ($this->accessorsAndMutatorsEnabled) {
-            $this->mutateProperty($offset);
-        }
-
         return isset($this->properties[$offset]);
     }
 
@@ -179,7 +127,6 @@ trait Properties
     public function offsetUnset($offset): void
     {
         unset($this->properties[$offset]);
-        unset($this->mutatedProperties[$offset]);
     }
 
     /**
