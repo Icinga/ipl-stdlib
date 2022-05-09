@@ -13,9 +13,11 @@ use ipl\Stdlib\Filter\GreaterThan;
 use ipl\Stdlib\Filter\GreaterThanOrEqual;
 use ipl\Stdlib\Filter\LessThan;
 use ipl\Stdlib\Filter\LessThanOrEqual;
+use ipl\Stdlib\Filter\Similar;
 use ipl\Stdlib\Filter\None;
 use ipl\Stdlib\Filter\Rule;
 use ipl\Stdlib\Filter\Unequal;
+use ipl\Stdlib\Filter\Unlike;
 
 class Filter
 {
@@ -146,8 +148,6 @@ class Filter
     /**
      * Create a rule that matches rows with a column that **equals** the given value
      *
-     * Performs a wildcard search if the value contains asterisks.
-     *
      * @param string $column
      * @param array|bool|float|int|string $value
      *
@@ -195,6 +195,57 @@ class Filter
     }
 
     /**
+     * Create a rule that matches rows with a column that is **similar** to the given value
+     *
+     * Performs a wildcard search if the value contains asterisks.
+     *
+     * @param string $column
+     * @param string|string[] $value
+     *
+     * @return Condition
+     */
+    public static function similar($column, $value)
+    {
+        return new Similar($column, $value);
+    }
+
+    /**
+     * Return whether the given rule's value is similar to the given item's value
+     *
+     * @param Similar|Unlike $rule
+     * @param object $row
+     *
+     * @return bool
+     */
+    protected function matchSimilar($rule, $row)
+    {
+        if (! $rule instanceof Similar && ! $rule instanceof Unlike) {
+            throw new InvalidArgumentException(sprintf(
+                'Rule must be of type %s or %s, got %s instead',
+                Similar::class,
+                Unlike::class,
+                get_php_type($rule)
+            ));
+        }
+
+        $rowValue = $this->extractValue($rule->getColumn(), $row);
+        $value = $rule->getValue();
+        $this->normalizeTypes($rowValue, $value);
+
+        if (! is_array($rowValue)) {
+            $rowValue = [$rowValue];
+        }
+
+        foreach ($rowValue as $rowVal) {
+            if ($this->performSimilarityMatch($value, $rowVal, $rule->ignoresCase())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Apply equality matching rules on the given row value
      *
      * @param mixed $value
@@ -217,9 +268,32 @@ class Filter
         } elseif (! is_string($value)) {
             if (is_string($rowValue)) {
                 $value = (string) $value;
-            } else {
-                return $rowValue === $value;
             }
+        }
+
+        return $rowValue === $value;
+    }
+
+    /**
+     * Apply similarity matching rules on the given row value
+     *
+     * @param string|string[] $value
+     * @param string $rowValue
+     * @param bool $ignoreCase
+     *
+     * @return bool
+     */
+    protected function performSimilarityMatch($value, $rowValue, $ignoreCase = false)
+    {
+        if ($ignoreCase) {
+            $rowValue = strtolower($rowValue);
+            $value = is_array($value)
+                ? array_map('strtolower', $value)
+                : strtolower($value);
+        }
+
+        if (is_array($value)) {
+            return in_array($rowValue, $value, true);
         }
 
         $wildcardSubSegments = preg_split('~\*~', $value);
@@ -239,8 +313,6 @@ class Filter
 
     /**
      * Create a rule that matches rows with a column that is **unequal** with the given value
-     *
-     * Performs a wildcard search if the value contains asterisks.
      *
      * @param string $column
      * @param array|bool|float|int|string $value
@@ -263,6 +335,34 @@ class Filter
     protected function matchUnequal(Unequal $rule, $row)
     {
         return ! $this->matchEqual($rule, $row);
+    }
+
+    /**
+     * Create a rule that matches rows with a column that is **unlike** with the given value
+     *
+     * Performs a wildcard search if the value contains asterisks.
+     *
+     * @param string $column
+     * @param string|string[] $value
+     *
+     * @return Condition
+     */
+    public static function unlike($column, $value)
+    {
+        return new Unlike($column, $value);
+    }
+
+    /**
+     * Return whether the given rule's value is unlike the given item's value
+     *
+     * @param Unlike $rule
+     * @param object $row
+     *
+     * @return bool
+     */
+    protected function matchUnlike(Unlike $rule, $row)
+    {
+        return ! $this->matchSimilar($rule, $row);
     }
 
     /**
@@ -394,6 +494,8 @@ class Filter
                 return $this->matchAll($rule, $row);
             case $rule instanceof Any:
                 return $this->matchAny($rule, $row);
+            case $rule instanceof Similar:
+                return $this->matchSimilar($rule, $row);
             case $rule instanceof Equal:
                 return $this->matchEqual($rule, $row);
             case $rule instanceof GreaterThan:
@@ -408,6 +510,8 @@ class Filter
                 return $this->matchNone($rule, $row);
             case $rule instanceof Unequal:
                 return $this->matchUnequal($rule, $row);
+            case $rule instanceof Unlike:
+                return $this->matchUnlike($rule, $row);
             default:
                 throw new InvalidArgumentException(sprintf(
                     'Unable to match filter. Rule type %s is unknown',
