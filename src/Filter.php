@@ -13,7 +13,7 @@ use ipl\Stdlib\Filter\GreaterThan;
 use ipl\Stdlib\Filter\GreaterThanOrEqual;
 use ipl\Stdlib\Filter\LessThan;
 use ipl\Stdlib\Filter\LessThanOrEqual;
-use ipl\Stdlib\Filter\Similar;
+use ipl\Stdlib\Filter\Like;
 use ipl\Stdlib\Filter\None;
 use ipl\Stdlib\Filter\Rule;
 use ipl\Stdlib\Filter\Unequal;
@@ -204,25 +204,25 @@ class Filter
      *
      * @return Condition
      */
-    public static function similar($column, $value)
+    public static function like($column, $value)
     {
-        return new Similar($column, $value);
+        return new Like($column, $value);
     }
 
     /**
      * Return whether the given rule's value is similar to the given item's value
      *
-     * @param Similar|Unlike $rule
+     * @param Like|Unlike $rule
      * @param object $row
      *
      * @return bool
      */
     protected function matchSimilar($rule, $row)
     {
-        if (! $rule instanceof Similar && ! $rule instanceof Unlike) {
+        if (! $rule instanceof Like && ! $rule instanceof Unlike) {
             throw new InvalidArgumentException(sprintf(
                 'Rule must be of type %s or %s, got %s instead',
-                Similar::class,
+                Like::class,
                 Unlike::class,
                 get_php_type($rule)
             ));
@@ -494,7 +494,7 @@ class Filter
                 return $this->matchAll($rule, $row);
             case $rule instanceof Any:
                 return $this->matchAny($rule, $row);
-            case $rule instanceof Similar:
+            case $rule instanceof Like:
                 return $this->matchSimilar($rule, $row);
             case $rule instanceof Equal:
                 return $this->matchEqual($rule, $row);

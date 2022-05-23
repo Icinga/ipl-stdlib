@@ -2,7 +2,7 @@
 
 namespace ipl\Stdlib\Filter;
 
-class Similar extends Condition
+class Like extends Condition
 {
     /** @var bool */
     protected $ignoreCase = false;
