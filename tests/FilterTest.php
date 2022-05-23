@@ -123,32 +123,32 @@ class FilterTest extends TestCase
         $this->assertTrue(Filter::match($equal, $this->row(0)));
     }
 
-    public function testSimilarMatches()
+    public function testLikeMatches()
     {
-        $similar = Filter::similar('problem', '1');
+        $like = Filter::like('problem', '1');
 
-        $this->assertTrue(Filter::match($similar, $this->row(0)));
+        $this->assertTrue(Filter::match($like, $this->row(0)));
     }
 
-    public function testSimilarMismatches()
+    public function testLikeMismatches()
     {
-        $similar = Filter::similar('handled', '1');
+        $like = Filter::like('handled', '1');
 
-        $this->assertFalse(Filter::match($similar, $this->row(1)));
+        $this->assertFalse(Filter::match($like, $this->row(1)));
     }
 
-    public function testSimilarIgnoresCase()
+    public function testLikeIgnoresCase()
     {
         // single string
-        $similar = Filter::similar('host', '*LOCAL*')
+        $like = Filter::like('host', '*LOCAL*')
             ->ignoreCase();
 
-        $this->assertTrue(Filter::match($similar, $this->row(0)));
+        $this->assertTrue(Filter::match($like, $this->row(0)));
 
         // string array
-        $similar->setValue(['LoCaLhOsT', '127.0.0.1']);
+        $like->setValue(['LoCaLhOsT', '127.0.0.1']);
 
-        $this->assertTrue(Filter::match($similar, $this->row(0)));
+        $this->assertTrue(Filter::match($like, $this->row(0)));
     }
 
     public function testEqualMatchesMultiValuedColumns()
@@ -164,18 +164,18 @@ class FilterTest extends TestCase
         ]));
     }
 
-    public function testSimilarMatchesMultiValuedColumns()
+    public function testLikeMatchesMultiValuedColumns()
     {
-        $this->assertTrue(Filter::match(Filter::similar('foo', 'bar'), [
+        $this->assertTrue(Filter::match(Filter::like('foo', 'bar'), [
             'foo' => ['foo', 'bar']
         ]));
-        $this->assertTrue(Filter::match(Filter::similar('foo', 'ba*'), [
+        $this->assertTrue(Filter::match(Filter::like('foo', 'ba*'), [
             'foo' => ['foo', 'bar']
         ]));
-        $this->assertTrue(Filter::match(Filter::similar('foo', 'BAR')->ignoreCase(), [
+        $this->assertTrue(Filter::match(Filter::like('foo', 'BAR')->ignoreCase(), [
             'foo' => ['FoO', 'bAr']
         ]));
-        $this->assertTrue(Filter::match(Filter::similar('foo', ['bar', 'boar']), [
+        $this->assertTrue(Filter::match(Filter::like('foo', ['bar', 'boar']), [
             'foo' => ['foo', 'bar']
         ]));
     }
@@ -225,15 +225,15 @@ class FilterTest extends TestCase
     public function testUnlikeIgnoresCase()
     {
         // single string
-        $similar = Filter::unlike('host', '*LOCAL*')
+        $unlike = Filter::unlike('host', '*LOCAL*')
             ->ignoreCase();
 
-        $this->assertFalse(Filter::match($similar, $this->row(0)));
+        $this->assertFalse(Filter::match($unlike, $this->row(0)));
 
         // string array
-        $similar->setValue(['LoCaLhOsT', '127.0.0.1']);
+        $unlike->setValue(['LoCaLhOsT', '127.0.0.1']);
 
-        $this->assertFalse(Filter::match($similar, $this->row(0)));
+        $this->assertFalse(Filter::match($unlike, $this->row(0)));
     }
 
     public function testUnequalMatchesMultiValuedColumns()
@@ -332,18 +332,18 @@ class FilterTest extends TestCase
         $this->assertFalse(Filter::match($equal, $this->row(1)));
     }
 
-    public function testSimilarWithWildcardMatches()
+    public function testLikeWithWildcardMatches()
     {
-        $similar = Filter::similar('service', '*icinga*');
+        $like = Filter::like('service', '*icinga*');
 
-        $this->assertTrue(Filter::match($similar, $this->row(1)));
+        $this->assertTrue(Filter::match($like, $this->row(1)));
     }
 
-    public function testSimilarWithWildcardMismatches()
+    public function testLikeWithWildcardMismatches()
     {
-        $similar = Filter::similar('service', '*nagios*');
+        $like = Filter::like('service', '*nagios*');
 
-        $this->assertFalse(Filter::match($similar, $this->row(1)));
+        $this->assertFalse(Filter::match($like, $this->row(1)));
     }
 
     public function testUnequalWithWildcardMatches()
@@ -381,18 +381,18 @@ class FilterTest extends TestCase
         $this->assertFalse(Filter::match($equal, $this->row(0)));
     }
 
-    public function testSimilarWithArrayMatches()
+    public function testLikeWithArrayMatches()
     {
-        $equal = Filter::similar('host', ['127.0.0.1', 'localhost']);
+        $like = Filter::like('host', ['127.0.0.1', 'localhost']);
 
-        $this->assertTrue(Filter::match($equal, $this->row(0)));
+        $this->assertTrue(Filter::match($like, $this->row(0)));
     }
 
-    public function testSimilarWithArrayMismatches()
+    public function testLikeWithArrayMismatches()
     {
-        $equal = Filter::similar('host', ['10.0.10.20', '10.0.10.21']);
+        $like = Filter::like('host', ['10.0.10.20', '10.0.10.21']);
 
-        $this->assertFalse(Filter::match($equal, $this->row(0)));
+        $this->assertFalse(Filter::match($like, $this->row(0)));
     }
 
     public function testUnequalWithArrayMatches()
@@ -546,7 +546,7 @@ class FilterTest extends TestCase
     public function testConditionsHandleMissingColumnsProperly()
     {
         $this->assertFalse(Filter::match(Filter::equal('foo', 'bar'), []));
-        $this->assertFalse(Filter::match(Filter::similar('foo', 'bar'), []));
+        $this->assertFalse(Filter::match(Filter::like('foo', 'bar'), []));
         $this->assertTrue(Filter::match(Filter::unequal('bar', 'foo'), []));
         $this->assertTrue(Filter::match(Filter::unlike('bar', 'foo'), []));
         $this->assertFalse(Filter::match(Filter::greaterThan('foo', 123), []));
