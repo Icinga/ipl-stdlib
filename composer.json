@@ -17,6 +17,6 @@
     "require": {
         "php": ">=7.2",
         "ext-openssl": "*",
-        "evenement/evenement": "^2"
+        "evenement/evenement": "^3"
     }
 }
