@@ -15,6 +15,9 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
     /** @var Rule[] */
     protected $rules = [];
 
+    /** @var ArrayIterator */
+    protected $iterator;
+
     /**
      * Create a new Chain
      *
@@ -46,9 +49,13 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      *
      * @return ArrayIterator
      */
-    public function getIterator(): Traversable
+    public function getIterator(bool $fromCache = false): Traversable
     {
-        return new ArrayIterator($this->rules);
+        if (! $this->iterator || ! $this->iterator->valid() || ! $fromCache) {
+            $this->iterator = new ArrayIterator($this->rules);
+        }
+
+        return $this->iterator;
     }
 
     /**
@@ -61,6 +68,9 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
     public function add(Rule $rule)
     {
         $this->rules[] = $rule;
+        if ($rule instanceof Condition) {
+            $rule->setChain($this);
+        }
 
         return $this;
     }
