@@ -18,6 +18,10 @@ class Str
      */
     public static function camel($subject)
     {
+        if ($subject === null) {
+            return '';
+        }
+
         $normalized = str_replace(['-', '_'], ' ', $subject);
 
         return lcfirst(str_replace(' ', '', ucwords(strtolower($normalized))));
@@ -32,8 +36,9 @@ class Str
      *
      * @return bool
      */
-    public static function startsWith($subject, $start, $caseSensitive = true)
+    public static function startsWith($subject, string $start, bool $caseSensitive = true)
     {
+        $subject = $subject ?? '';
         if (! $caseSensitive) {
             return strncasecmp($subject, $start, strlen($start)) === 0;
         }
@@ -53,8 +58,12 @@ class Str
      *
      * @return array
      */
-    public static function symmetricSplit($subject, $delimiter, $limit, $default = null)
+    public static function symmetricSplit($subject, string $delimiter, int $limit, $default = null)
     {
+        if ($subject === null) {
+            return [];
+        }
+
         return array_pad(explode($delimiter, $subject, $limit), $limit, $default);
     }
 
@@ -67,8 +76,12 @@ class Str
      *
      * @return array
      */
-    public static function trimSplit($subject, $delimiter = ',', $limit = null)
+    public static function trimSplit($subject, string $delimiter = ',', int $limit = null)
     {
+        if ($subject === null) {
+            return [];
+        }
+
         if ($limit !== null) {
             $exploded = explode($delimiter, $subject, $limit);
         } else {
