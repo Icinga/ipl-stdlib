@@ -2,6 +2,8 @@
 
 namespace ipl\Stdlib;
 
+use Closure;
+
 /**
  * Collection of utilities for traversables
  */
@@ -32,7 +34,7 @@ class Seq
      */
     public static function find($traversable, $needle, $caseSensitive = true)
     {
-        $usesCallback = is_callable($needle);
+        $usesCallback = $needle instanceof Closure;
         if (! $usesCallback && $caseSensitive && is_array($traversable)) {
             return [array_search($needle, $traversable, true), $needle];
         }
@@ -82,7 +84,7 @@ class Seq
      */
     public static function findValue($traversable, $needle, $caseSensitive = true)
     {
-        $usesCallback = is_callable($needle);
+        $usesCallback = $needle instanceof Closure;
         if (! $usesCallback && $caseSensitive && is_array($traversable)) {
             return isset($traversable[$needle]) ? $traversable[$needle] : null;
         }
