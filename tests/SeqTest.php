@@ -87,4 +87,46 @@ class SeqTest extends TestCase
             Seq::findValue(new ArrayIterator(['foo' => 'bar', 'FOO' => 'BAR']), 'FOO', false)
         );
     }
+
+    public function testFindWithCallback()
+    {
+        $this->assertEquals(
+            [1, 'foo'],
+            Seq::find(
+                ['bar', 'foo'],
+                function ($value) {
+                    return $value !== 'bar';
+                },
+                false // Should have no effect
+            )
+        );
+        $this->assertEquals(
+            'foo',
+            Seq::findValue(
+                ['bar', 'foo'],
+                function ($value) {
+                    return $value !== 0;
+                },
+                false // Should have no effect
+            )
+        );
+    }
+
+    public function testFindWithFunctionName()
+    {
+        $this->assertEquals(
+            [1, 'sleep'],
+            Seq::find(
+                ['awake', 'sleep'],
+                'sleep'
+            )
+        );
+        $this->assertEquals(
+            'sleep',
+            Seq::findValue(
+                ['awake', 'sleep' => 'sleep'],
+                'sleep'
+            )
+        );
+    }
 }
