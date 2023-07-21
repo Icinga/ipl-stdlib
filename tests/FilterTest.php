@@ -151,35 +151,6 @@ class FilterTest extends TestCase
         $this->assertTrue(Filter::match($like, $this->row(0)));
     }
 
-    public function testEqualMatchesMultiValuedColumns()
-    {
-        $this->assertTrue(Filter::match(Filter::equal('foo', 'bar'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertTrue(Filter::match(Filter::equal('foo', 'BAR')->ignoreCase(), [
-            'foo' => ['FoO', 'bAr']
-        ]));
-        $this->assertTrue(Filter::match(Filter::equal('foo', ['bar', 'boar']), [
-            'foo' => ['foo', 'bar']
-        ]));
-    }
-
-    public function testLikeMatchesMultiValuedColumns()
-    {
-        $this->assertTrue(Filter::match(Filter::like('foo', 'bar'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertTrue(Filter::match(Filter::like('foo', 'ba*'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertTrue(Filter::match(Filter::like('foo', 'BAR')->ignoreCase(), [
-            'foo' => ['FoO', 'bAr']
-        ]));
-        $this->assertTrue(Filter::match(Filter::like('foo', ['bar', 'boar']), [
-            'foo' => ['foo', 'bar']
-        ]));
-    }
-
     public function testUnequalMatches()
     {
         $unequal = Filter::unequal('problem', '0');
@@ -234,35 +205,6 @@ class FilterTest extends TestCase
         $unlike->setValue(['LoCaLhOsT', '127.0.0.1']);
 
         $this->assertFalse(Filter::match($unlike, $this->row(0)));
-    }
-
-    public function testUnequalMatchesMultiValuedColumns()
-    {
-        $this->assertFalse(Filter::match(Filter::unequal('foo', 'bar'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unequal('foo', 'BAR')->ignoreCase(), [
-            'foo' => ['FoO', 'bAr']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unequal('foo', ['bar', 'boar']), [
-            'foo' => ['foo', 'bar']
-        ]));
-    }
-
-    public function testUnlikeMatchesMultiValuedColumns()
-    {
-        $this->assertFalse(Filter::match(Filter::unlike('foo', 'bar'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unlike('foo', 'ba*'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unlike('foo', 'BAR')->ignoreCase(), [
-            'foo' => ['FoO', 'bAr']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unlike('foo', ['bar', 'boar']), [
-            'foo' => ['foo', 'bar']
-        ]));
     }
 
     public function testGreaterThanMatches()

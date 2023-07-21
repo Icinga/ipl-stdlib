@@ -181,17 +181,7 @@ class Filter
         $value = $rule->getValue();
         $this->normalizeTypes($rowValue, $value);
 
-        if (! is_array($rowValue)) {
-            $rowValue = [$rowValue];
-        }
-
-        foreach ($rowValue as $rowVal) {
-            if ($this->performEqualityMatch($value, $rowVal, $rule->ignoresCase())) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->performEqualityMatch($value, $rowValue, $rule->ignoresCase());
     }
 
     /**
@@ -232,17 +222,7 @@ class Filter
         $value = $rule->getValue();
         $this->normalizeTypes($rowValue, $value);
 
-        if (! is_array($rowValue)) {
-            $rowValue = [$rowValue];
-        }
-
-        foreach ($rowValue as $rowVal) {
-            if ($this->performSimilarityMatch($value, $rowVal, $rule->ignoresCase())) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->performSimilarityMatch($value, $rowValue, $rule->ignoresCase());
     }
 
     /**
