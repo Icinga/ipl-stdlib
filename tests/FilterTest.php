@@ -139,14 +139,8 @@ class FilterTest extends TestCase
 
     public function testLikeIgnoresCase()
     {
-        // single string
         $like = Filter::like('host', '*LOCAL*')
             ->ignoreCase();
-
-        $this->assertTrue(Filter::match($like, $this->row(0)));
-
-        // string array
-        $like->setValue(['LoCaLhOsT', '127.0.0.1']);
 
         $this->assertTrue(Filter::match($like, $this->row(0)));
     }
@@ -195,14 +189,8 @@ class FilterTest extends TestCase
 
     public function testUnlikeIgnoresCase()
     {
-        // single string
         $unlike = Filter::unlike('host', '*LOCAL*')
             ->ignoreCase();
-
-        $this->assertFalse(Filter::match($unlike, $this->row(0)));
-
-        // string array
-        $unlike->setValue(['LoCaLhOsT', '127.0.0.1']);
 
         $this->assertFalse(Filter::match($unlike, $this->row(0)));
     }
@@ -323,18 +311,14 @@ class FilterTest extends TestCase
         $this->assertFalse(Filter::match($equal, $this->row(0)));
     }
 
-    public function testLikeWithArrayMatches()
+    public function testLikeWithArrayThrows()
     {
-        $like = Filter::like('host', ['127.0.0.1', 'localhost']);
+        $like = Filter::like('host', ['127.0.0.*', 'local*']);
 
-        $this->assertTrue(Filter::match($like, $this->row(0)));
-    }
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot perform a similarity match if the expression is an array');
 
-    public function testLikeWithArrayMismatches()
-    {
-        $like = Filter::like('host', ['10.0.10.20', '10.0.10.21']);
-
-        $this->assertFalse(Filter::match($like, $this->row(0)));
+        Filter::match($like, $this->row(0));
     }
 
     public function testUnequalWithArrayMatches()
@@ -344,13 +328,6 @@ class FilterTest extends TestCase
         $this->assertTrue(Filter::match($unequal, $this->row(0)));
     }
 
-    public function testUnlikeWithArrayMatches()
-    {
-        $unlike = Filter::unlike('host', ['10.0.20.10', '10.0.20.11']);
-
-        $this->assertTrue(Filter::match($unlike, $this->row(0)));
-    }
-
     public function testUnequalWithArrayMismatches()
     {
         $unequal = Filter::unequal('host', ['127.0.0.1', 'localhost']);
@@ -358,11 +335,14 @@ class FilterTest extends TestCase
         $this->assertFalse(Filter::match($unequal, $this->row(0)));
     }
 
-    public function testUnlikeWithArrayMismatches()
+    public function testUnlikeWithArrayThrows()
     {
-        $unlike = Filter::unlike('host', ['127.0.0.1', 'localhost']);
+        $unlike = Filter::unlike('host', ['127.0.0.*', 'local*']);
 
-        $this->assertFalse(Filter::match($unlike, $this->row(0)));
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot perform a similarity match if the expression is an array');
+
+        Filter::match($unlike, $this->row(0));
     }
 
     public function testConditionsAreValueTypeAgnostic()

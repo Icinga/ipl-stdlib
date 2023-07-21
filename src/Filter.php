@@ -218,11 +218,17 @@ class Filter
             ));
         }
 
-        $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
+        if (is_array($value)) {
+            throw new InvalidArgumentException(
+                'Cannot perform a similarity match if the expression is an array'
+            );
+        }
+
+        $rowValue = $this->extractValue($rule->getColumn(), $row);
         $this->normalizeTypes($rowValue, $value);
 
-        return $this->performSimilarityMatch($value, $rowValue, $rule->ignoresCase());
+        return $this->performSimilarityMatch((string) $value, (string) $rowValue, $rule->ignoresCase());
     }
 
     /**
@@ -257,23 +263,17 @@ class Filter
     /**
      * Apply similarity matching rules on the given row value
      *
-     * @param string|string[] $value
+     * @param string $value
      * @param string $rowValue
      * @param bool $ignoreCase
      *
      * @return bool
      */
-    protected function performSimilarityMatch($value, $rowValue, $ignoreCase = false)
+    protected function performSimilarityMatch(string $value, string $rowValue, bool $ignoreCase = false): bool
     {
         if ($ignoreCase) {
             $rowValue = strtolower($rowValue);
-            $value = is_array($value)
-                ? array_map('strtolower', $value)
-                : strtolower($value);
-        }
-
-        if (is_array($value)) {
-            return in_array($rowValue, $value, true);
+            $value = strtolower($value);
         }
 
         $wildcardSubSegments = preg_split('~\*~', $value);
