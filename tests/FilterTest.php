@@ -27,6 +27,13 @@ class FilterTest extends TestCase
             'service' => 'www.icinga.com',
             'state'   => 1,
             'handled' => '0'
+        ],
+        [
+            'host'    => 'LocalHost',
+            'problem' => '1',
+            'service' => 'Ping',
+            'state'   => 3,
+            'handled' => '1'
         ]
     ];
 
@@ -309,6 +316,34 @@ class FilterTest extends TestCase
         $equal = Filter::equal('host', ['10.0.10.20', '10.0.10.21']);
 
         $this->assertFalse(Filter::match($equal, $this->row(0)));
+    }
+
+    public function testEqualWithArrayComparisonMatches()
+    {
+        $equal = Filter::equal(['host', 'service'], ['localhost', 'ping']);
+
+        $this->assertTrue(Filter::match($equal, $this->row(0)));
+    }
+
+    public function testEqualWithCaseInsensitiveArrayComparisonMatches()
+    {
+        $equal = Filter::equal(['host', 'service'], ['lOcAlHost', 'PiNg'])->ignoreCase();
+
+        $this->assertTrue(Filter::match($equal, $this->row(3)));
+    }
+
+    public function testUnequalWithArrayComparisonMatches()
+    {
+        $unequal = Filter::unequal(['host', 'service'], ['ping', 'localhost']);
+
+        $this->assertTrue(Filter::match($unequal, $this->row(0)));
+    }
+
+    public function testUnequalWithCaseInsensitiveArrayComparisonMatches()
+    {
+        $unequal = Filter::unequal(['host', 'service'], ['PiNg', 'lOcAlHost'])->ignoreCase();
+
+        $this->assertTrue(Filter::match($unequal, $this->row(3)));
     }
 
     public function testLikeWithArrayThrows()

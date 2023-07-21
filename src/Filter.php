@@ -242,14 +242,16 @@ class Filter
      */
     protected function performEqualityMatch($value, $rowValue, $ignoreCase = false)
     {
-        if ($ignoreCase && is_string($rowValue)) {
-            $rowValue = strtolower($rowValue);
+        if ($ignoreCase) {
+            $rowValue = is_array($rowValue)
+                ? array_map('strtolower', $rowValue)
+                : strtolower($rowValue);
             $value = is_array($value)
                 ? array_map('strtolower', $value)
                 : strtolower($value);
         }
 
-        if (is_array($value)) {
+        if (is_array($value) && ! is_array($rowValue)) {
             return in_array($rowValue, $value, true);
         } elseif (! is_string($value)) {
             if (is_string($rowValue)) {
@@ -510,6 +512,15 @@ class Filter
      */
     protected function extractValue($column, $row)
     {
+        if (is_array($column)) {
+            $value = [];
+            foreach ($column as $name) {
+                $value[] = $this->extractValue($name, $row);
+            }
+
+            return $value;
+        }
+
         try {
             return $row->{$column};
         } catch (Exception $_) {
