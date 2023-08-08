@@ -61,7 +61,7 @@ class Str
     public static function symmetricSplit(?string $subject, string $delimiter, int $limit, $default = null)
     {
         if ($subject === null) {
-            return [];
+            return array_pad([], $limit, $default);
         }
 
         return array_pad(explode($delimiter, $subject, $limit), $limit, $default);
