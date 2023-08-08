@@ -75,6 +75,11 @@ class StrTest extends TestCase
         $this->assertNull($password);
     }
 
+    public function testSymmetricSplitWithEmptySubjectStillReturnsAnArrayPaddedToTheDesiredSize()
+    {
+        $this->assertSame([null, null], Str::symmetricSplit(null, ',', 2));
+    }
+
     public function testTrimSplitTrimsWhitespacesAndSplitsByCommaByDefault()
     {
         $this->assertSame(['foo', 'bar', 'baz'], Str::trimSplit(' foo ,bar  , baz  '));
