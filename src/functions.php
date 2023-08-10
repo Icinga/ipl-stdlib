@@ -2,7 +2,9 @@
 
 namespace ipl\Stdlib;
 
+use Generator;
 use InvalidArgumentException;
+use IteratorIterator;
 use Traversable;
 use stdClass;
 
@@ -68,4 +70,43 @@ function iterable_key_first($iterable)
     }
 
     return null;
+}
+
+/**
+ * Yield sets of items from a sorted traversable grouped by a specific criterion gathered from a callback
+ *
+ * The traversable must be sorted by the criterion. The callback must return at least the criterion,
+ * but can also return value and key in addition.
+ *
+ * @param Traversable<mixed, mixed> $traversable
+ * @param callable(mixed $value, mixed $key): array{0: mixed, 1?: mixed, 2?: mixed} $groupBy
+ *
+ * @return Generator
+ */
+function yield_groups(Traversable $traversable, callable $groupBy): Generator
+{
+    $iterator = new IteratorIterator($traversable);
+    $iterator->rewind();
+
+    if (! $iterator->valid()) {
+        return;
+    }
+
+    list($criterion, $v, $k) = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
+    $group = [$k ?? $iterator->key() => $v ?? $iterator->current()];
+
+    $iterator->next();
+    for (; $iterator->valid(); $iterator->next()) {
+        list($c, $v, $k) = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
+        if ($c !== $criterion) {
+            yield $criterion => $group;
+
+            $group = [];
+            $criterion = $c;
+        }
+
+        $group[$k ?? $iterator->key()] = $v ?? $iterator->current();
+    }
+
+    yield $criterion => $group;
 }
