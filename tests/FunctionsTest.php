@@ -3,12 +3,44 @@
 namespace ipl\Tests\Stdlib;
 
 use ArrayIterator;
+use EmptyIterator;
 use InvalidArgumentException;
-use stdClass;
 use ipl\Stdlib;
+use stdClass;
 
 class FunctionsTest extends TestCase
 {
+    protected const YIELD_GROUPS_DATA = [
+        'one'   => [
+            'group' => 1,
+            'id'    => 1
+        ],
+        'two'   => [
+            'group' => 1,
+            'id'    => 2
+        ],
+        'three' => [
+            'group' => 1,
+            'id'    => 3
+        ],
+        'four'  => [
+            'group' => 2,
+            'id'    => 4
+        ],
+        'five'  => [
+            'group' => 3,
+            'id'    => 5
+        ],
+        'six'   => [
+            'group' => 3,
+            'id'    => 6
+        ],
+        'seven' => [
+            'group' => 3,
+            'id'    => 7
+        ]
+    ];
+
     public function testGetPhpTypeWithObject()
     {
         $object = (object) [];
@@ -97,5 +129,121 @@ class FunctionsTest extends TestCase
             /** @noinspection PhpUnreachableStatementInspection Empty generator */
             yield;
         })));
+    }
+
+    public function testYieldGroupsWithEmptyIterator()
+    {
+        $this->assertEquals([], iterator_to_array(Stdlib\yield_groups(new EmptyIterator(), function () {
+        })));
+    }
+
+    public function testYieldGroupsCallbackArguments()
+    {
+        iterator_to_array(
+            Stdlib\yield_groups(new ArrayIterator(static::YIELD_GROUPS_DATA), function (array $v, string $k): int {
+                $this->assertSame(static::YIELD_GROUPS_DATA[$k], $v);
+
+                return $v['group'];
+            })
+        );
+    }
+
+    public function testYieldGroupsWithCallbackReturningCriterion()
+    {
+        $this->assertEquals(
+            [
+                1 => [
+                    'one'   => [
+                        'group' => 1,
+                        'id'    => 1
+                    ],
+                    'two'   => [
+                        'group' => 1,
+                        'id'    => 2
+                    ],
+                    'three' => [
+                        'group' => 1,
+                        'id'    => 3
+                    ]
+                ],
+                2 => [
+                    'four' => [
+                        'group' => 2,
+                        'id'    => 4
+                    ]
+                ],
+                3 => [
+                    'five'  => [
+                        'group' => 3,
+                        'id'    => 5
+                    ],
+                    'six'   => [
+                        'group' => 3,
+                        'id'    => 6
+                    ],
+                    'seven' => [
+                        'group' => 3,
+                        'id'    => 7
+                    ]
+                ]
+            ],
+            iterator_to_array(
+                Stdlib\yield_groups(new ArrayIterator(static::YIELD_GROUPS_DATA), function (array $v): int {
+                    return $v['group'];
+                })
+            )
+        );
+    }
+
+    public function testYieldGroupsWithCallbackReturningCriterionAndValue()
+    {
+        $this->assertEquals(
+            [
+                1 => [
+                    'one'   => 1,
+                    'two'   => 2,
+                    'three' => 3
+                ],
+                2 => [
+                    'four' => 4,
+                ],
+                3 => [
+                    'five'  => 5,
+                    'six'   => 6,
+                    'seven' => 7
+                ]
+            ],
+            iterator_to_array(
+                Stdlib\yield_groups(new ArrayIterator(static::YIELD_GROUPS_DATA), function (array $v): array {
+                    return [$v['group'], $v['id']];
+                })
+            )
+        );
+    }
+
+    public function testYieldGroupsWithCallbackReturningCriterionValueAndKey()
+    {
+        $this->assertEquals(
+            [
+                1 => [
+                    1 => 1,
+                    2 => 2,
+                    3 => 3
+                ],
+                2 => [
+                    4 => 4
+                ],
+                3 => [
+                    5 => 5,
+                    6 => 6,
+                    7 => 7
+                ]
+            ],
+            iterator_to_array(
+                Stdlib\yield_groups(new ArrayIterator(static::YIELD_GROUPS_DATA), function (array $v): array {
+                    return [$v['group'], $v['id'], $v['id']];
+                })
+            )
+        );
     }
 }
