@@ -16,7 +16,7 @@ interface Validator
     /**
      * Get the validation error messages
      *
-     * @return array
+     * @return array<string>
      */
     public function getMessages();
 }

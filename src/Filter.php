@@ -32,7 +32,7 @@ class Filter
      * Return whether the given rule matches the given item
      *
      * @param Rule $rule
-     * @param array|object $row
+     * @param array<mixed>|object $row
      *
      * @return bool
      */
@@ -149,7 +149,7 @@ class Filter
      * Create a rule that matches rows with a column that **equals** the given value
      *
      * @param string $column
-     * @param array|bool|float|int|string $value
+     * @param array<mixed>|bool|float|int|string $value
      *
      * @return Condition
      */
@@ -259,8 +259,10 @@ class Filter
         if ($ignoreCase && is_string($rowValue)) {
             $rowValue = strtolower($rowValue);
             $value = is_array($value)
-                ? array_map('strtolower', $value)
-                : strtolower($value);
+                ? array_map(function ($val) {
+                    return strtolower((string) $val);
+                }, $value)
+                : strtolower((string) $value);
         }
 
         if (is_array($value)) {
@@ -315,7 +317,7 @@ class Filter
      * Create a rule that matches rows with a column that is **unequal** with the given value
      *
      * @param string $column
-     * @param array|bool|float|int|string $value
+     * @param array<mixed>|bool|float|int|string $value
      *
      * @return Condition
      */
