@@ -299,6 +299,10 @@ class Filter
         }
 
         $wildcardSubSegments = preg_split('~\*~', $value);
+        if (! $wildcardSubSegments) {
+            $wildcardSubSegments = [];
+        }
+
         if (count($wildcardSubSegments) === 1) {
             return $rowValue === $value;
         }
