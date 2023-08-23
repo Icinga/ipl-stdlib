@@ -12,7 +12,7 @@ class Seq
     /**
      * Check if the traversable contains the given needle
      *
-     * @param array|iterable $traversable
+     * @param array<mixed>|iterable<mixed> $traversable
      * @param mixed $needle Might also be a closure
      * @param bool $caseSensitive Whether strings should be compared case-sensitive
      *
@@ -26,11 +26,12 @@ class Seq
     /**
      * Search in the traversable for the given needle and return its key and value
      *
-     * @param array|iterable $traversable
+     * @param array<mixed>|iterable<mixed> $traversable
      * @param mixed $needle Might also be a closure
      * @param bool $caseSensitive Whether strings should be compared case-sensitive
      *
-     * @return array An array with two entries, the first is the key, then the value. Both are null if nothing is found.
+     * @return array<mixed> An array with two entries, the first is the key, then the value.
+     *                      Both are null if nothing is found.
      */
     public static function find($traversable, $needle, $caseSensitive = true)
     {
@@ -62,7 +63,7 @@ class Seq
     /**
      * Search in the traversable for the given needle and return its key
      *
-     * @param array|iterable $traversable
+     * @param array<mixed>|iterable<mixed> $traversable
      * @param mixed $needle Might also be a closure
      * @param bool $caseSensitive Whether strings should be compared case-sensitive
      *
@@ -76,7 +77,7 @@ class Seq
     /**
      * Search in the traversable for the given needle and return its value
      *
-     * @param array|iterable $traversable
+     * @param array<mixed>|iterable<mixed> $traversable
      * @param mixed $needle Might also be a closure
      * @param bool $caseSensitive Whether strings should be compared case-sensitive
      *

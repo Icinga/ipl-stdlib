@@ -10,6 +10,7 @@ use SplPriorityQueue;
  */
 class PriorityQueue extends SplPriorityQueue
 {
+    /** @var int */
     protected $serial = PHP_INT_MAX;
 
     /**

@@ -4,7 +4,7 @@ namespace ipl\Stdlib;
 
 class Data
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     protected $data = [];
 
     /**

@@ -11,7 +11,7 @@ use stdClass;
  *
  * If subject is an object, the name of the object's class is returned, otherwise the subject's type.
  *
- * @param $subject
+ * @param mixed $subject
  *
  * @return string
  */
@@ -27,9 +27,9 @@ function get_php_type($subject)
 /**
  * Get the array value of the given subject
  *
- * @param array|object|Traversable $subject
+ * @param array<mixed>|object|Traversable $subject
  *
- * @return array
+ * @return array<mixed>
  *
  * @throws InvalidArgumentException If subject type is invalid
  */
@@ -57,7 +57,7 @@ function arrayval($subject)
 /**
  * Get the first key of an iterable
  *
- * @param iterable $iterable
+ * @param iterable<mixed> $iterable
  *
  * @return mixed The first key of the iterable if it is not empty, null otherwise
  */

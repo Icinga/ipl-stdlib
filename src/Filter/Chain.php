@@ -12,7 +12,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
 {
     use MetaData;
 
-    /** @var Rule[] */
+    /** @var array<int, Rule> */
     protected $rules = [];
 
     /**
@@ -44,7 +44,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
     /**
      * Get an iterator this chain's rules
      *
-     * @return ArrayIterator
+     * @return ArrayIterator<int, Rule>
      */
     public function getIterator(): Traversable
     {

@@ -12,11 +12,11 @@ class Str
      *
      * The given string may be delimited by the following characters: '_' (underscore), '-' (dash), ' ' (space).
      *
-     * @param string $subject
+     * @param ?string $subject
      *
      * @return string
      */
-    public static function camel($subject)
+    public static function camel(?string $subject)
     {
         if ($subject === null) {
             return '';
@@ -30,13 +30,13 @@ class Str
     /**
      * Check if the given string starts with the specified substring
      *
-     * @param string $subject
+     * @param ?string $subject
      * @param string $start
      * @param bool   $caseSensitive
      *
      * @return bool
      */
-    public static function startsWith($subject, string $start, bool $caseSensitive = true)
+    public static function startsWith(?string $subject, string $start, bool $caseSensitive = true)
     {
         $subject = $subject ?? '';
         if (! $caseSensitive) {
@@ -51,14 +51,14 @@ class Str
      *
      * This method is a perfect fit if you need default values for symmetric array destructuring.
      *
-     * @param string $subject
+     * @param ?string $subject
      * @param string $delimiter
      * @param int    $limit
      * @param mixed  $default
      *
-     * @return array
+     * @return array<int, mixed>
      */
-    public static function symmetricSplit($subject, string $delimiter, int $limit, $default = null)
+    public static function symmetricSplit(?string $subject, string $delimiter, int $limit, $default = null)
     {
         if ($subject === null) {
             return [];
@@ -70,13 +70,13 @@ class Str
     /**
      * Split string into an array and trim spaces
      *
-     * @param string $subject
+     * @param ?string $subject
      * @param string $delimiter
-     * @param int    $limit
+     * @param ?int    $limit
      *
-     * @return array
+     * @return array<string>
      */
-    public static function trimSplit($subject, string $delimiter = ',', int $limit = null)
+    public static function trimSplit(?string $subject, string $delimiter = ',', int $limit = null)
     {
         if ($subject === null) {
             return [];
