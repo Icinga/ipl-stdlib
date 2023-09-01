@@ -73,6 +73,22 @@ function iterable_key_first($iterable)
 }
 
 /**
+ * Get the first value of an iterable
+ *
+ * @param iterable<mixed> $iterable
+ *
+ * @return ?mixed
+ */
+function iterable_value_first($iterable)
+{
+    foreach ($iterable as $_ => $value) {
+        return $value;
+    }
+
+    return null;
+}
+
+/**
  * Yield sets of items from a sorted traversable grouped by a specific criterion gathered from a callback
  *
  * The traversable must be sorted by the criterion. The callback must return at least the criterion,
