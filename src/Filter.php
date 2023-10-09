@@ -181,17 +181,7 @@ class Filter
         $value = $rule->getValue();
         $this->normalizeTypes($rowValue, $value);
 
-        if (! is_array($rowValue)) {
-            $rowValue = [$rowValue];
-        }
-
-        foreach ($rowValue as $rowVal) {
-            if ($this->performEqualityMatch($value, $rowVal, $rule->ignoresCase())) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->performEqualityMatch($value, $rowValue, $rule->ignoresCase());
     }
 
     /**
@@ -228,21 +218,17 @@ class Filter
             ));
         }
 
-        $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
+        if (is_array($value)) {
+            throw new InvalidArgumentException(
+                'Cannot perform a similarity match if the expression is an array'
+            );
+        }
+
+        $rowValue = $this->extractValue($rule->getColumn(), $row);
         $this->normalizeTypes($rowValue, $value);
 
-        if (! is_array($rowValue)) {
-            $rowValue = [$rowValue];
-        }
-
-        foreach ($rowValue as $rowVal) {
-            if ($this->performSimilarityMatch($value, $rowVal, $rule->ignoresCase())) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->performSimilarityMatch((string) $value, (string) $rowValue, $rule->ignoresCase());
     }
 
     /**
@@ -256,8 +242,10 @@ class Filter
      */
     protected function performEqualityMatch($value, $rowValue, $ignoreCase = false)
     {
-        if ($ignoreCase && is_string($rowValue)) {
-            $rowValue = strtolower($rowValue);
+        if ($ignoreCase) {
+            $rowValue = is_array($rowValue)
+                ? array_map('strtolower', $rowValue)
+                : strtolower($rowValue);
             $value = is_array($value)
                 ? array_map(function ($val) {
                     return strtolower((string) $val);
@@ -265,7 +253,7 @@ class Filter
                 : strtolower((string) $value);
         }
 
-        if (is_array($value)) {
+        if (is_array($value) && ! is_array($rowValue)) {
             return in_array($rowValue, $value, true);
         } elseif (! is_string($value)) {
             if (is_string($rowValue)) {
@@ -279,23 +267,17 @@ class Filter
     /**
      * Apply similarity matching rules on the given row value
      *
-     * @param string|string[] $value
+     * @param string $value
      * @param string $rowValue
      * @param bool $ignoreCase
      *
      * @return bool
      */
-    protected function performSimilarityMatch($value, $rowValue, $ignoreCase = false)
+    protected function performSimilarityMatch(string $value, string $rowValue, bool $ignoreCase = false): bool
     {
         if ($ignoreCase) {
             $rowValue = strtolower($rowValue);
-            $value = is_array($value)
-                ? array_map('strtolower', $value)
-                : strtolower($value);
-        }
-
-        if (is_array($value)) {
-            return in_array($rowValue, $value, true);
+            $value = strtolower($value);
         }
 
         $wildcardSubSegments = preg_split('~\*~', $value);
@@ -536,6 +518,15 @@ class Filter
      */
     protected function extractValue($column, $row)
     {
+        if (is_array($column)) {
+            $value = [];
+            foreach ($column as $name) {
+                $value[] = $this->extractValue($name, $row);
+            }
+
+            return $value;
+        }
+
         try {
             return $row->{$column};
         } catch (Exception $_) {

@@ -27,6 +27,13 @@ class FilterTest extends TestCase
             'service' => 'www.icinga.com',
             'state'   => 1,
             'handled' => '0'
+        ],
+        [
+            'host'    => 'LocalHost',
+            'problem' => '1',
+            'service' => 'Ping',
+            'state'   => 3,
+            'handled' => '1'
         ]
     ];
 
@@ -139,45 +146,10 @@ class FilterTest extends TestCase
 
     public function testLikeIgnoresCase()
     {
-        // single string
         $like = Filter::like('host', '*LOCAL*')
             ->ignoreCase();
 
         $this->assertTrue(Filter::match($like, $this->row(0)));
-
-        // string array
-        $like->setValue(['LoCaLhOsT', '127.0.0.1']);
-
-        $this->assertTrue(Filter::match($like, $this->row(0)));
-    }
-
-    public function testEqualMatchesMultiValuedColumns()
-    {
-        $this->assertTrue(Filter::match(Filter::equal('foo', 'bar'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertTrue(Filter::match(Filter::equal('foo', 'BAR')->ignoreCase(), [
-            'foo' => ['FoO', 'bAr']
-        ]));
-        $this->assertTrue(Filter::match(Filter::equal('foo', ['bar', 'boar']), [
-            'foo' => ['foo', 'bar']
-        ]));
-    }
-
-    public function testLikeMatchesMultiValuedColumns()
-    {
-        $this->assertTrue(Filter::match(Filter::like('foo', 'bar'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertTrue(Filter::match(Filter::like('foo', 'ba*'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertTrue(Filter::match(Filter::like('foo', 'BAR')->ignoreCase(), [
-            'foo' => ['FoO', 'bAr']
-        ]));
-        $this->assertTrue(Filter::match(Filter::like('foo', ['bar', 'boar']), [
-            'foo' => ['foo', 'bar']
-        ]));
     }
 
     public function testUnequalMatches()
@@ -224,45 +196,10 @@ class FilterTest extends TestCase
 
     public function testUnlikeIgnoresCase()
     {
-        // single string
         $unlike = Filter::unlike('host', '*LOCAL*')
             ->ignoreCase();
 
         $this->assertFalse(Filter::match($unlike, $this->row(0)));
-
-        // string array
-        $unlike->setValue(['LoCaLhOsT', '127.0.0.1']);
-
-        $this->assertFalse(Filter::match($unlike, $this->row(0)));
-    }
-
-    public function testUnequalMatchesMultiValuedColumns()
-    {
-        $this->assertFalse(Filter::match(Filter::unequal('foo', 'bar'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unequal('foo', 'BAR')->ignoreCase(), [
-            'foo' => ['FoO', 'bAr']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unequal('foo', ['bar', 'boar']), [
-            'foo' => ['foo', 'bar']
-        ]));
-    }
-
-    public function testUnlikeMatchesMultiValuedColumns()
-    {
-        $this->assertFalse(Filter::match(Filter::unlike('foo', 'bar'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unlike('foo', 'ba*'), [
-            'foo' => ['foo', 'bar']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unlike('foo', 'BAR')->ignoreCase(), [
-            'foo' => ['FoO', 'bAr']
-        ]));
-        $this->assertFalse(Filter::match(Filter::unlike('foo', ['bar', 'boar']), [
-            'foo' => ['foo', 'bar']
-        ]));
     }
 
     public function testGreaterThanMatches()
@@ -381,18 +318,42 @@ class FilterTest extends TestCase
         $this->assertFalse(Filter::match($equal, $this->row(0)));
     }
 
-    public function testLikeWithArrayMatches()
+    public function testEqualWithArrayComparisonMatches()
     {
-        $like = Filter::like('host', ['127.0.0.1', 'localhost']);
+        $equal = Filter::equal(['host', 'service'], ['localhost', 'ping']);
 
-        $this->assertTrue(Filter::match($like, $this->row(0)));
+        $this->assertTrue(Filter::match($equal, $this->row(0)));
     }
 
-    public function testLikeWithArrayMismatches()
+    public function testEqualWithCaseInsensitiveArrayComparisonMatches()
     {
-        $like = Filter::like('host', ['10.0.10.20', '10.0.10.21']);
+        $equal = Filter::equal(['host', 'service'], ['lOcAlHost', 'PiNg'])->ignoreCase();
 
-        $this->assertFalse(Filter::match($like, $this->row(0)));
+        $this->assertTrue(Filter::match($equal, $this->row(3)));
+    }
+
+    public function testUnequalWithArrayComparisonMatches()
+    {
+        $unequal = Filter::unequal(['host', 'service'], ['ping', 'localhost']);
+
+        $this->assertTrue(Filter::match($unequal, $this->row(0)));
+    }
+
+    public function testUnequalWithCaseInsensitiveArrayComparisonMatches()
+    {
+        $unequal = Filter::unequal(['host', 'service'], ['PiNg', 'lOcAlHost'])->ignoreCase();
+
+        $this->assertTrue(Filter::match($unequal, $this->row(3)));
+    }
+
+    public function testLikeWithArrayThrows()
+    {
+        $like = Filter::like('host', ['127.0.0.*', 'local*']);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot perform a similarity match if the expression is an array');
+
+        Filter::match($like, $this->row(0));
     }
 
     public function testUnequalWithArrayMatches()
@@ -402,13 +363,6 @@ class FilterTest extends TestCase
         $this->assertTrue(Filter::match($unequal, $this->row(0)));
     }
 
-    public function testUnlikeWithArrayMatches()
-    {
-        $unlike = Filter::unlike('host', ['10.0.20.10', '10.0.20.11']);
-
-        $this->assertTrue(Filter::match($unlike, $this->row(0)));
-    }
-
     public function testUnequalWithArrayMismatches()
     {
         $unequal = Filter::unequal('host', ['127.0.0.1', 'localhost']);
@@ -416,11 +370,14 @@ class FilterTest extends TestCase
         $this->assertFalse(Filter::match($unequal, $this->row(0)));
     }
 
-    public function testUnlikeWithArrayMismatches()
+    public function testUnlikeWithArrayThrows()
     {
-        $unlike = Filter::unlike('host', ['127.0.0.1', 'localhost']);
+        $unlike = Filter::unlike('host', ['127.0.0.*', 'local*']);
 
-        $this->assertFalse(Filter::match($unlike, $this->row(0)));
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot perform a similarity match if the expression is an array');
+
+        Filter::match($unlike, $this->row(0));
     }
 
     public function testConditionsAreValueTypeAgnostic()
