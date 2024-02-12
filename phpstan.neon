@@ -7,7 +7,6 @@ parameters:
     checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: true
     treatPhpDocTypesAsCertain: false
-    checkGenericClassInNonGenericObjectType: false
 
     paths:
         - src
