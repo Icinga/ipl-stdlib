@@ -457,10 +457,6 @@ class FilterTest extends TestCase
             Filter::match(Filter::equal('some_id', null), ['some_id' => null]),
             "Filter\Equal fails to match NULL"
         );
-        $this->assertFalse(
-            Filter::match(Filter::equal('some_id', 0), ['some_id' => null]),
-            "Filter\Equal doesn't compare NULL strictly"
-        );
         $this->assertTrue(
             Filter::match(Filter::greaterThan('length', '21'), ['length' => 22]),
             "Filter\GreaterThan fails to match strings with integers"
@@ -468,6 +464,88 @@ class FilterTest extends TestCase
         $this->assertTrue(
             Filter::match(Filter::lessThan('length', '22'), ['length' => 21]),
             "Filter\LessThan fails to match strings with integers"
+        );
+    }
+
+    public function testConditionsNeverEvaluateToTrueForNullValues()
+    {
+        $this->assertFalse(
+            Filter::match(Filter::equal('some_id', 0), ['some_id' => null]),
+            "Filter\Equal doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::equal('some_id', null), ['some_id' => 0]),
+            "Filter\Equal doesn't compare NULL always to FALSE"
+        );
+
+        $this->assertFalse(
+            Filter::match(Filter::equal('some_id', null), ['some_id' => '']),
+            "Filter\Equal doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::equal('some_id', ''), ['some_id' => null]),
+            "Filter\Equal doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::equal('some_col', null)->ignoreCase(), ['some_col' => '']),
+            "Filter\Equal doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::equal('some_col', '')->ignoreCase(), ['some_col' => null]),
+            "Filter\Equal doesn't compare NULL always to FALSE"
+        );
+
+        $this->assertFalse(
+            Filter::match(Filter::like('some_id', null), ['some_id' => '']),
+            "Filter\Like doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::like('some_id', ''), ['some_id' => null]),
+            "Filter\Like doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::like('some_col', null)->ignoreCase(), ['some_col' => '']),
+            "Filter\Like doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::like('some_col', '')->ignoreCase(), ['some_col' => null]),
+            "Filter\Like doesn't compare NULL always to FALSE"
+        );
+
+        $this->assertFalse(
+            Filter::match(Filter::greaterThan('some_id', 1), ['some_id' => null]),
+            "Filter\GreaterThan doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::greaterThan('some_id', null), ['some_id' => -1]),
+            "Filter\GreaterThan doesn't compare NULL always to FALSE"
+        );
+
+        $this->assertFalse(
+            Filter::match(Filter::greaterThanOrEqual('some_id', 1), ['some_id' => null]),
+            "Filter\GreaterThanOrEqual doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::greaterThanOrEqual('some_id', null), ['some_id' => -1]),
+            "Filter\GreaterThanOrEqual doesn't compare NULL always to FALSE"
+        );
+
+        $this->assertFalse(
+            Filter::match(Filter::lessThan('some_id', -1), ['some_id' => null]),
+            "Filter\GreaterThan doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::lessThan('some_id', null), ['some_id' => 1]),
+            "Filter\GreaterThan doesn't compare NULL always to FALSE"
+        );
+
+        $this->assertFalse(
+            Filter::match(Filter::lessThanOrEqual('some_id', -1), ['some_id' => null]),
+            "Filter\GreaterThanOrEqual doesn't compare NULL always to FALSE"
+        );
+        $this->assertFalse(
+            Filter::match(Filter::lessThanOrEqual('some_id', null), ['some_id' => 1]),
+            "Filter\GreaterThanOrEqual doesn't compare NULL always to FALSE"
         );
     }
 

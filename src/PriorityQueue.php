@@ -36,6 +36,7 @@ class PriorityQueue extends SplPriorityQueue
         $queue->setExtractFlags(static::EXTR_BOTH);
 
         foreach ($queue as $item) {
+            /** @var array{priority: array{0: mixed, 1: int}, data: mixed} $item */
             yield $item['priority'][0] => $item['data'];
         }
     }
