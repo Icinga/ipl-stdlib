@@ -42,6 +42,35 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
         }
     }
 
+    public function sameAs(Rule $rule): bool
+    {
+        if (! $rule instanceof static) {
+            return false;
+        }
+
+        if (count($rule) !== count($this->rules)) {
+            return false;
+        }
+
+        $theirRules = iterator_to_array($rule);
+        foreach ($this->rules as $myRule) {
+            $found = false;
+            foreach ($theirRules as $i => $theirRule) {
+                if ($myRule->sameAs($theirRule)) {
+                    unset($theirRules[$i]);
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (! $found) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Get an iterator this chain's rules
      *
