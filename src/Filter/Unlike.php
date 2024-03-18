@@ -28,4 +28,21 @@ class Unlike extends Condition
     {
         return $this->ignoreCase;
     }
+
+    public function sameAs(Rule $rule): bool
+    {
+        if (! $rule instanceof static) {
+            return false;
+        }
+
+        if ($rule->ignoresCase() !== $this->ignoresCase()) {
+            return false;
+        }
+
+        if (is_array($this->value)) {
+            return array_diff($this->value, (array) $rule->getValue()) === [];
+        }
+
+        return parent::sameAs($rule);
+    }
 }
