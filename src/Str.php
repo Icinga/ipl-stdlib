@@ -54,11 +54,11 @@ class Str
      * @param ?string $subject
      * @param string $delimiter
      * @param int    $limit
-     * @param mixed  $default
+     * @param ?string $default
      *
-     * @return array<int, mixed>
+     * @return array<int, ?string>
      */
-    public static function symmetricSplit(?string $subject, string $delimiter, int $limit, $default = null)
+    public static function symmetricSplit(?string $subject, string $delimiter, int $limit, ?string $default = null)
     {
         if ($subject === null || empty($delimiter)) {
             return array_pad([], $limit, $default);

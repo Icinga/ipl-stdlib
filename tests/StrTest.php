@@ -54,7 +54,7 @@ class StrTest extends TestCase
 
     public function testSymmetricSplitReturnsArrayPaddedToTheSizeSpecifiedByLimitUsingCustomValue()
     {
-        $this->assertSame(['foo', 'bar', false, false], Str::symmetricSplit('foo,bar', ',', 4, false));
+        $this->assertSame(['foo', 'bar', 'default', 'default'], Str::symmetricSplit('foo,bar', ',', 4, 'default'));
     }
 
     public function testSymmetricSplitReturnsUnpaddedArrayIfTheSizeOfTheExplodedStringIsLessThanLimit()
