@@ -34,6 +34,13 @@ abstract class Condition implements Rule, MetaDataProvider
         }
     }
 
+    public function sameAs(Rule $rule): bool
+    {
+        return $rule instanceof static
+            && $rule->getColumn() === $this->getColumn()
+            && $rule->getValue() === $this->getValue();
+    }
+
     /**
      * Set this condition's column
      *
