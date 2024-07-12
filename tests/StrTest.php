@@ -103,11 +103,17 @@ class StrTest extends TestCase
 
     public function testLimitWithLongerStringAndSpecificLimit()
     {
-        $this->assertSame('Lorem ipsu...', Str::limit('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 10));
+        $this->assertSame(
+            'Lorem ipsu...',
+            Str::limit('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 10)
+        );
     }
 
     public function testLimitWithLongerStringAndSpecificEnd()
     {
-        $this->assertSame('L (...)', Str::limit('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 1, ' (...)'));
+        $this->assertSame(
+            'L (...)',
+            Str::limit('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 1, ' (...)')
+        );
     }
 }
