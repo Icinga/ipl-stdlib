@@ -94,4 +94,20 @@ class StrTest extends TestCase
     {
         $this->assertSame(['foo', 'bar  , baz'], Str::trimSplit(' foo ,bar  , baz  ', ',', 2));
     }
+
+    public function testLimitWithSmallerString()
+    {
+        $this->assertSame('', Str::limit(''));
+        $this->assertSame('noop', Str::limit('noop'));
+    }
+
+    public function testLimitWithLongerStringAndSpecificLimit()
+    {
+        $this->assertSame('Lorem ipsu...', Str::limit('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 10));
+    }
+
+    public function testLimitWithLongerStringAndSpecificEnd()
+    {
+        $this->assertSame('L (...)', Str::limit('Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 1, ' (...)'));
+    }
 }

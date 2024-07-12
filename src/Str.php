@@ -90,4 +90,27 @@ class Str
 
         return array_map('trim', $exploded);
     }
+
+    /**
+     * Str::limit method truncates the given string to the specified length.
+     *
+     * This method will replace the truncated part with an ellipsis.
+     *
+     * @param   string  $subject
+     * @param   ?int    $limit Length of the string that will be returned
+     * @param   ?string $end Ellipsis that will be added to the truncated string
+     *
+     * @return  string
+     */
+    public static function limit(string $subject, ?int $limit = 50, ?string $end = '...'): string
+    {
+        // If the string is smaller or equal to the limit we simply return it
+        if (mb_strwidth($subject, 'UTF-8') <= $limit) {
+            return $subject;
+        }
+
+        // If the string is longer than the limit we truncate it
+        // and add the given end to it.
+        return mb_strimwidth($subject, 0, $limit, '', 'UTF-8') . $end;
+    }
 }
