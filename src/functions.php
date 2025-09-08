@@ -10,6 +10,8 @@ use ipl\Stdlib\Contract\PropertyAttribute;
 use IteratorIterator;
 use ReflectionAttribute;
 use ReflectionClass;
+use ReflectionMethod;
+use ReflectionProperty;
 use Traversable;
 use stdClass;
 
@@ -156,17 +158,21 @@ function yield_groups(Traversable $traversable, callable $groupBy): Generator
  */
 function resolve_attribute(string $attributeClass, object $object, mixed &...$args): void
 {
-    $attrRef = new ReflectionClass($attributeClass);
-    $attrAttributes = $attrRef->getAttributes(Attribute::class);
-    if (empty($attrAttributes)) {
-        throw new InvalidArgumentException(sprintf('Class %s is not an attribute', $attributeClass));
-    }
+    static $cache = [];
+    if (! isset($cache[$attributeClass])) {
+        $attrRef = new ReflectionClass($attributeClass);
+        $attrAttributes = $attrRef->getAttributes(Attribute::class);
+        if (empty($attrAttributes)) {
+            throw new InvalidArgumentException(sprintf('Class %s is not an attribute', $attributeClass));
+        }
 
-    $attr = $attrAttributes[0]->newInstance();
-    $objectRef = new ReflectionClass($object);
+        $attr = $attrAttributes[0]->newInstance();
+        $supportedFlags = [
+            $attr->flags & Attribute::TARGET_PROPERTY,
+            $attr->flags & Attribute::TARGET_METHOD
+        ];
 
-    if ($attr->flags & Attribute::TARGET_PROPERTY) {
-        if (! $attrRef->implementsInterface(PropertyAttribute::class)) {
+        if ($supportedFlags[0] && ! $attrRef->implementsInterface(PropertyAttribute::class)) {
             throw new InvalidArgumentException(sprintf(
                 'Class %s does not implement %s',
                 $attributeClass,
@@ -174,16 +180,7 @@ function resolve_attribute(string $attributeClass, object $object, mixed &...$ar
             ));
         }
 
-        foreach ($objectRef->getProperties() as $property) {
-            $attributes = $property->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
-            foreach ($attributes as $attribute) {
-                $attribute->newInstance()->applyToProperty($property, $object, ...$args);
-            }
-        }
-    }
-
-    if ($attr->flags & Attribute::TARGET_METHOD) {
-        if (! $attrRef->implementsInterface(MethodAttribute::class)) {
+        if ($supportedFlags[1] && ! $attrRef->implementsInterface(MethodAttribute::class)) {
             throw new InvalidArgumentException(sprintf(
                 'Class %s does not implement %s',
                 $attributeClass,
@@ -191,11 +188,52 @@ function resolve_attribute(string $attributeClass, object $object, mixed &...$ar
             ));
         }
 
-        foreach ($objectRef->getMethods() as $method) {
-            $attributes = $method->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
-            foreach ($attributes as $attribute) {
-                $attribute->newInstance()->applyToMethod($method, $object, ...$args);
+        $cache[$attributeClass] = $supportedFlags;
+    } else {
+        $supportedFlags = $cache[$attributeClass];
+    }
+
+    if (! isset($cache[$object::class])) {
+        $objectRef = new ReflectionClass($object);
+        $annotations = [
+            'properties' => [],
+            'methods' => []
+        ];
+
+        if ($supportedFlags[0]) {
+            foreach ($objectRef->getProperties() as $property) {
+                $attributes = $property->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
+                foreach ($attributes as $attribute) {
+                    $annotations['properties'][$property->getName()][] = $attribute->newInstance();
+                }
             }
+        }
+
+        if ($supportedFlags[1]) {
+            foreach ($objectRef->getMethods() as $method) {
+                $attributes = $method->getAttributes($attributeClass, ReflectionAttribute::IS_INSTANCEOF);
+                foreach ($attributes as $attribute) {
+                    $annotations['methods'][$method->getName()][] = $attribute->newInstance();
+                }
+            }
+        }
+
+        $cache[$object::class] = $annotations;
+    } else {
+        $annotations = $cache[$object::class];
+    }
+
+    foreach ($annotations['properties'] as $name => $attributes) {
+        $property = new ReflectionProperty($object, $name);
+        foreach ($attributes as $attribute) {
+            $attribute->applyToProperty($property, $object, ...$args);
+        }
+    }
+
+    foreach ($annotations['methods'] as $name => $attributes) {
+        $method = new ReflectionMethod($object, $name);
+        foreach ($attributes as $attribute) {
+            $attribute->applyToMethod($method, $object, ...$args);
         }
     }
 }
