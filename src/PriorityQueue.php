@@ -15,7 +15,7 @@ use SplPriorityQueue;
 class PriorityQueue extends SplPriorityQueue
 {
     /** @var int */
-    protected $serial = PHP_INT_MAX;
+    protected int $serial = PHP_INT_MAX;
 
     /**
      * Inserts an element in the queue by sifting it up.
@@ -37,7 +37,7 @@ class PriorityQueue extends SplPriorityQueue
      *
      * @return Generator
      */
-    public function yieldAll()
+    public function yieldAll(): Generator
     {
         // Clone queue because the SplPriorityQueue acts as a heap and thus items are removed upon iteration
         $queue = clone $this;
