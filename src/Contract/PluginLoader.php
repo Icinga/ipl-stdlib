@@ -17,5 +17,5 @@ interface PluginLoader
      *
      * @return string|false FQN of the plugin's class if found, false otherwise
      */
-    public function load($name);
+    public function load(string $name): false|string;
 }
