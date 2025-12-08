@@ -11,5 +11,5 @@ interface MetaDataProvider
      *
      * @return Data
      */
-    public function metaData();
+    public function metaData(): Data;
 }
