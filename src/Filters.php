@@ -4,15 +4,15 @@ namespace ipl\Stdlib;
 
 trait Filters
 {
-    /** @var Filter\Chain */
-    protected $filter;
+    /** @var ?Filter\Chain */
+    protected ?Filter\Chain $filter;
 
-    public function getFilter()
+    public function getFilter(): Filter\Chain
     {
         return $this->filter ?: Filter::all();
     }
 
-    public function filter(Filter\Rule $filter)
+    public function filter(Filter\Rule $filter): static
     {
         $currentFilter = $this->getFilter();
         if ($currentFilter instanceof Filter\All) {
@@ -27,7 +27,7 @@ trait Filters
         return $this;
     }
 
-    public function orFilter(Filter\Rule $filter)
+    public function orFilter(Filter\Rule $filter): static
     {
         $currentFilter = $this->getFilter();
         if ($currentFilter instanceof Filter\Any) {
@@ -42,14 +42,14 @@ trait Filters
         return $this;
     }
 
-    public function notFilter(Filter\Rule $filter)
+    public function notFilter(Filter\Rule $filter): static
     {
         $this->filter(Filter::none($filter));
 
         return $this;
     }
 
-    public function orNotFilter(Filter\Rule $filter)
+    public function orNotFilter(Filter\Rule $filter): static
     {
         $this->orFilter(Filter::none($filter));
 
