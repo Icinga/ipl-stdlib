@@ -14,7 +14,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
     use MetaData;
 
     /** @var array<int, Rule> */
-    protected $rules = [];
+    protected array $rules = [];
 
     /**
      * Create a new Chain
@@ -59,7 +59,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      *
      * @return $this
      */
-    public function add(Rule $rule)
+    public function add(Rule $rule): static
     {
         $this->rules[] = $rule;
 
@@ -75,7 +75,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      * @throws OutOfBoundsException In case no existing rule is found
      * @return $this
      */
-    public function insertBefore(Rule $rule, Rule $before)
+    public function insertBefore(Rule $rule, Rule $before): static
     {
         $ruleAt = array_search($before, $this->rules, true);
         if ($ruleAt === false) {
@@ -96,7 +96,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      * @throws OutOfBoundsException In case no existing rule is found
      * @return $this
      */
-    public function insertAfter(Rule $rule, Rule $after)
+    public function insertAfter(Rule $rule, Rule $after): static
     {
         $ruleAt = array_search($after, $this->rules, true);
         if ($ruleAt === false) {
@@ -115,7 +115,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      *
      * @return bool
      */
-    public function has(Rule $rule)
+    public function has(Rule $rule): bool
     {
         return array_search($rule, $this->rules, true) !== false;
     }
@@ -129,7 +129,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      * @throws OutOfBoundsException In case no existing rule is found
      * @return $this
      */
-    public function replace(Rule $rule, Rule $replacement)
+    public function replace(Rule $rule, Rule $replacement): static
     {
         $ruleAt = array_search($rule, $this->rules, true);
         if ($ruleAt === false) {
@@ -148,7 +148,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      *
      * @return $this
      */
-    public function remove(Rule $rule)
+    public function remove(Rule $rule): static
     {
         $ruleAt = array_search($rule, $this->rules, true);
         if ($ruleAt !== false) {
@@ -163,7 +163,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      *
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return empty($this->rules);
     }
