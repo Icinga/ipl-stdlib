@@ -17,7 +17,7 @@ use stdClass;
  *
  * @return string
  */
-function get_php_type($subject)
+function get_php_type(mixed $subject): string
 {
     if (is_object($subject)) {
         return get_class($subject);
@@ -35,7 +35,7 @@ function get_php_type($subject)
  *
  * @throws InvalidArgumentException If subject type is invalid
  */
-function arrayval($subject)
+function arrayval($subject): array
 {
     if (is_array($subject)) {
         return $subject;
@@ -63,7 +63,7 @@ function arrayval($subject)
  *
  * @return mixed The first key of the iterable if it is not empty, null otherwise
  */
-function iterable_key_first($iterable)
+function iterable_key_first(array $iterable): mixed
 {
     foreach ($iterable as $key => $_) {
         return $key;
@@ -79,7 +79,7 @@ function iterable_key_first($iterable)
  *
  * @return ?mixed
  */
-function iterable_value_first($iterable)
+function iterable_value_first(array $iterable): mixed
 {
     foreach ($iterable as $_ => $value) {
         return $value;

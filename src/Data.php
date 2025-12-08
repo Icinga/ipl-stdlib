@@ -5,14 +5,14 @@ namespace ipl\Stdlib;
 class Data
 {
     /** @var array<string, mixed> */
-    protected $data = [];
+    protected array $data = [];
 
     /**
      * Check whether there's any data
      *
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return empty($this->data);
     }
@@ -24,7 +24,7 @@ class Data
      *
      * @return bool
      */
-    public function has($name)
+    public function has(string $name): bool
     {
         return array_key_exists($name, $this->data);
     }
@@ -37,7 +37,7 @@ class Data
      *
      * @return mixed
      */
-    public function get($name, $default = null)
+    public function get(string $name, mixed $default = null): mixed
     {
         if ($this->has($name)) {
             return $this->data[$name];
@@ -54,7 +54,7 @@ class Data
      *
      * @return $this
      */
-    public function set($name, $value)
+    public function set(string $name, mixed $value): static
     {
         $this->data[$name] = $value;
 
@@ -68,7 +68,7 @@ class Data
      *
      * @return $this
      */
-    public function merge(self $with)
+    public function merge(self $with): static
     {
         $this->data = array_merge($this->data, $with->data);
 
@@ -80,7 +80,7 @@ class Data
      *
      * @return $this
      */
-    public function clear()
+    public function clear(): static
     {
         $this->data = [];
 

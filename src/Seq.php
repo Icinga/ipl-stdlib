@@ -18,7 +18,7 @@ class Seq
      *
      * @return bool
      */
-    public static function contains($traversable, $needle, $caseSensitive = true)
+    public static function contains($traversable, mixed $needle, bool $caseSensitive = true): bool
     {
         return self::find($traversable, $needle, $caseSensitive)[0] !== null;
     }
@@ -33,7 +33,7 @@ class Seq
      * @return array<mixed> An array with two entries, the first is the key, then the value.
      *                      Both are null if nothing is found.
      */
-    public static function find($traversable, $needle, $caseSensitive = true)
+    public static function find($traversable, mixed $needle, bool $caseSensitive = true): array
     {
         $usesCallback = $needle instanceof Closure;
         if (! $usesCallback && $caseSensitive && is_array($traversable)) {
@@ -72,7 +72,7 @@ class Seq
      *
      * @return mixed|null Null if nothing is found
      */
-    public static function findKey($traversable, $needle, $caseSensitive = true)
+    public static function findKey($traversable, mixed $needle, bool $caseSensitive = true): mixed
     {
         return self::find($traversable, $needle, $caseSensitive)[0];
     }
@@ -86,7 +86,7 @@ class Seq
      *
      * @return mixed|null Null if nothing is found
      */
-    public static function findValue($traversable, $needle, $caseSensitive = true)
+    public static function findValue($traversable, mixed $needle, bool $caseSensitive = true): mixed
     {
         $usesCallback = $needle instanceof Closure;
         if (! $usesCallback && $caseSensitive && is_array($traversable)) {

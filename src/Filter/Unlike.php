@@ -5,14 +5,14 @@ namespace ipl\Stdlib\Filter;
 class Unlike extends Condition
 {
     /** @var bool */
-    protected $ignoreCase = false;
+    protected bool $ignoreCase = false;
 
     /**
      * Ignore case on both sides of the equation
      *
      * @return $this
      */
-    public function ignoreCase()
+    public function ignoreCase(): static
     {
         $this->ignoreCase = true;
 
@@ -24,7 +24,7 @@ class Unlike extends Condition
     *
     * @return bool
     */
-    public function ignoresCase()
+    public function ignoresCase(): bool
     {
         return $this->ignoreCase;
     }
