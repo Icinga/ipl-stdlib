@@ -7,9 +7,9 @@ use ipl\Stdlib\Data;
 trait MetaData
 {
     /** @var Data */
-    protected $metaData;
+    protected Data $metaData;
 
-    public function metaData()
+    public function metaData(): Data
     {
         if ($this->metaData === null) {
             $this->metaData = new Data();
