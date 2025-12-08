@@ -39,7 +39,7 @@ class AutoloadingPluginLoader implements PluginLoader
         return $this->namespace . '\\' . ucfirst($name) . $this->postfix;
     }
 
-    public function load($name): false|string
+    public function load(string $name): false|string
     {
         $class = $this->getFqn($name);
 
