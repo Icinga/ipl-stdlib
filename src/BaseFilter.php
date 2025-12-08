@@ -7,7 +7,7 @@ use ipl\Stdlib\Filter\Rule;
 trait BaseFilter
 {
     /** @var Rule Base filter */
-    private $baseFilter;
+    private Rule $baseFilter;
 
     /**
      * Get whether a base filter has been set
@@ -24,7 +24,7 @@ trait BaseFilter
      *
      * @return ?Rule
      */
-    public function getBaseFilter()
+    public function getBaseFilter(): ?Rule
     {
         return $this->baseFilter;
     }
