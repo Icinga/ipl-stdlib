@@ -2,6 +2,7 @@
 
 namespace ipl\Stdlib;
 
+use DateTime;
 use InvalidArgumentException;
 use ipl\Stdlib\Filter\All;
 use ipl\Stdlib\Filter\Any;
@@ -373,11 +374,11 @@ class Filter
      * Create a rule that matches rows with a column that is **greater** than the given value
      *
      * @param string $column
-     * @param float|int|string $value
+     * @param float|int|string|DateTime $value
      *
      * @return Condition
      */
-    public static function greaterThan(string $column, float|int|string $value): Condition
+    public static function greaterThan(string $column, float|int|string|DateTime $value): Condition
     {
         return new GreaterThan($column, $value);
     }
@@ -431,11 +432,11 @@ class Filter
      * Create a rule that matches rows with a column that is **greater** than or **equal** to the given value
      *
      * @param string $column
-     * @param float|int|string $value
+     * @param float|int|string|DateTime $value
      *
      * @return Condition
      */
-    public static function greaterThanOrEqual(string $column, float|int|string $value): Condition
+    public static function greaterThanOrEqual(string $column, float|int|string|DateTime $value): Condition
     {
         return new GreaterThanOrEqual($column, $value);
     }
