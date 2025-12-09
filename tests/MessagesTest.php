@@ -3,6 +3,7 @@
 namespace ipl\Tests\Stdlib;
 
 use ipl\Stdlib\Messages;
+use stdClass;
 
 class MessagesTest extends TestCase
 {
@@ -36,10 +37,16 @@ class MessagesTest extends TestCase
     }
 
     /**
-     * @return Messages|\PHPUnit\Framework\MockObject\MockObject
+     * @template T of Messages
+     * @return T
      */
     protected function getMessagesMock()
     {
-        return $this->getMockForTrait(Messages::class);
+        /** @var T $mock */
+        $mock = new class {
+            use Messages;
+        };
+
+        return $mock;
     }
 }

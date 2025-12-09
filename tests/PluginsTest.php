@@ -63,10 +63,16 @@ class PluginsTest extends TestCase
     }
 
     /**
-     * @return Plugins|\PHPUnit\Framework\MockObject\MockObject
+     * @template T of Plugins
+     * @return T
      */
     protected function getPluginsMock()
     {
-        return $this->getMockForTrait(Plugins::class);
+        /** @var T $mock */
+        $mock = new class {
+            use Plugins;
+        };
+
+        return $mock;
     }
 }
