@@ -5,7 +5,7 @@ namespace ipl\Stdlib;
 trait Filters
 {
     /** @var ?Filter\Chain */
-    protected ?Filter\Chain $filter;
+    protected ?Filter\Chain $filter = null;
 
     public function getFilter(): Filter\Chain
     {
