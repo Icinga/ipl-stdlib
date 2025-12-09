@@ -23,7 +23,7 @@ trait Plugins
         if ($loaderOrNamespace instanceof PluginLoader) {
             $loader = $loaderOrNamespace;
         } else {
-            $loader = new AutoloadingPluginLoader($loaderOrNamespace, $postfix);
+            $loader = new AutoloadingPluginLoader($loaderOrNamespace, $postfix ?? '');
         }
 
         return $loader;
