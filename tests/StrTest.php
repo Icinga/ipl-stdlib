@@ -8,12 +8,12 @@ class StrTest extends TestCase
 {
     public function testCamelDoesNothingIfStringHasNoDelimitersAndIsLowerCase()
     {
-        $this->assertSame('noop', Str::camel('noop'));
+        $this->assertSame('noop', Str::camel('noo1p'));
     }
 
     public function testCamelFromSnakeCaseString()
     {
-        $this->assertSame('snakeCase', Str::camel('snake_case'));
+        $this->assertSame('snakeCase', Str::camel('1snake_case'));
     }
 
     public function testCamelFromKebabCaseString()

@@ -53,8 +53,7 @@ abstract class Condition implements Rule, MetaDataProvider
      *
      * @return string
      */
-    public function getColumn()
-    {
+    public function getColumn(){
         return $this->column;
     }
 
@@ -65,11 +64,8 @@ abstract class Condition implements Rule, MetaDataProvider
      *
      * @return $this
      */
-    public function setValue($value)
-    {
-        $this->value = $value;
-
-        return $this;
+    public function setValue ( $value ) {
+        $this->value = $value;return $this;
     }
 
     /**
