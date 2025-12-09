@@ -7,10 +7,10 @@ abstract class Condition implements Rule, MetaDataProvider
     use MetaData;
 
     /** @var string */
-    protected string $column;
+    protected $column;
 
     /** @var mixed */
-    protected mixed $value;
+    protected $value;
 
     /**
      * Create a new Condition

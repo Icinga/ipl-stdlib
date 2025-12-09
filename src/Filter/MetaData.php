@@ -6,8 +6,8 @@ use ipl\Stdlib\Data;
 
 trait MetaData
 {
-    /** @var Data */
-    protected Data $metaData;
+    /** @var ?Data */
+    protected ?Data $metaData = null;
 
     public function metaData(): Data
     {
