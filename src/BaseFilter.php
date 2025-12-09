@@ -6,8 +6,8 @@ use ipl\Stdlib\Filter\Rule;
 
 trait BaseFilter
 {
-    /** @var Rule Base filter */
-    private Rule $baseFilter;
+    /** @var ?Rule Base filter */
+    private ?Rule $baseFilter = null;
 
     /**
      * Get whether a base filter has been set
