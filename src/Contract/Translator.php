@@ -15,7 +15,7 @@ interface Translator
      *
      * @return string Translated message or original message if no translation is found
      */
-    public function translate(string $message, string $context = null): string;
+    public function translate(string $message, ?string $context = null): string;
 
     /**
      * Translate a message in the given domain
