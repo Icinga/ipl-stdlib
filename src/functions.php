@@ -63,7 +63,7 @@ function arrayval($subject): array
  *
  * @return mixed The first key of the iterable if it is not empty, null otherwise
  */
-function iterable_key_first(array $iterable): mixed
+function iterable_key_first(iterable $iterable): mixed
 {
     foreach ($iterable as $key => $_) {
         return $key;
@@ -79,7 +79,7 @@ function iterable_key_first(array $iterable): mixed
  *
  * @return ?mixed
  */
-function iterable_value_first(array $iterable): mixed
+function iterable_value_first(iterable $iterable): mixed
 {
     foreach ($iterable as $_ => $value) {
         return $value;
