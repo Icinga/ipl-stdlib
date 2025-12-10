@@ -16,7 +16,7 @@ class TestPluginLoader implements PluginLoader
         $this->canLoad = $canLoad;
     }
 
-    public function load(string $name)
+    public function load(string $name): false|string
     {
         if (! $this->canLoad) {
             return false;
