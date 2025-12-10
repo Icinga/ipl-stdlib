@@ -36,7 +36,7 @@ trait BaseFilter
      *
      * @return $this
      */
-    public function setBaseFilter(?Rule $baseFilter = null): self
+    public function setBaseFilter(?Rule $baseFilter = null): static
     {
         $this->baseFilter = $baseFilter;
 
