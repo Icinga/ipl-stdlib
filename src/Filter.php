@@ -150,11 +150,11 @@ class Filter
      * Create a rule that matches rows with a column that **equals** the given value
      *
      * @param string $column
-     * @param array<mixed>|bool|float|int|string $value
+     * @param array<mixed>|bool|float|int|string|DateTime $value
      *
      * @return Condition
      */
-    public static function equal(string $column, array|bool|float|int|string $value): Condition
+    public static function equal(string $column, array|bool|float|int|string|DateTime $value): Condition
     {
         return new Equal($column, $value);
     }
@@ -320,11 +320,11 @@ class Filter
      * Create a rule that matches rows with a column that is **unequal** with the given value
      *
      * @param string $column
-     * @param array<mixed>|bool|float|int|string $value
+     * @param array<mixed>|bool|float|int|string|DateTime $value
      *
      * @return Condition
      */
-    public static function unequal(string $column, array|bool|float|int|string $value): Condition
+    public static function unequal(string $column, array|bool|float|int|string|DateTime $value): Condition
     {
         return new Unequal($column, $value);
     }
@@ -403,11 +403,11 @@ class Filter
      * Create a rule that matches rows with a column that is **less** than the given value
      *
      * @param string $column
-     * @param float|int|string $value
+     * @param float|int|string|DateTime $value
      *
      * @return Condition
      */
-    public static function lessThan(string $column, float|int|string $value): Condition
+    public static function lessThan(string $column, float|int|string|DateTime $value): Condition
     {
         return new LessThan($column, $value);
     }
@@ -461,11 +461,11 @@ class Filter
      * Create a rule that matches rows with a column that is **less** than or **equal** to the given value
      *
      * @param string $column
-     * @param float|int|string $value
+     * @param float|int|string|DateTime $value
      *
      * @return Condition
      */
-    public static function lessThanOrEqual(string $column, float|int|string $value): Condition
+    public static function lessThanOrEqual(string $column, float|int|string|DateTime $value): Condition
     {
         return new LessThanOrEqual($column, $value);
     }
