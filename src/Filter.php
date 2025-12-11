@@ -2,7 +2,6 @@
 
 namespace ipl\Stdlib;
 
-use DateTime;
 use InvalidArgumentException;
 use ipl\Stdlib\Filter\All;
 use ipl\Stdlib\Filter\Any;
@@ -150,11 +149,11 @@ class Filter
      * Create a rule that matches rows with a column that **equals** the given value
      *
      * @param string $column
-     * @param array<mixed>|bool|float|int|string|DateTime|null $value
+     * @param array<mixed>|bool|float|int|string $value
      *
      * @return Condition
      */
-    public static function equal(string $column, array|bool|float|int|string|DateTime|null $value): Condition
+    public static function equal(string $column, $value): Condition
     {
         return new Equal($column, $value);
     }
@@ -169,15 +168,6 @@ class Filter
      */
     protected function matchEqual(Equal|Unequal $rule, object $row): bool
     {
-        if (! $rule instanceof Equal && ! $rule instanceof Unequal) {
-            throw new InvalidArgumentException(sprintf(
-                'Rule must be of type %s or %s, got %s instead',
-                Equal::class,
-                Unequal::class,
-                get_php_type($rule)
-            ));
-        }
-
         $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
         $this->normalizeTypes($rowValue, $value);
@@ -220,15 +210,6 @@ class Filter
      */
     protected function matchSimilar(Like|Unlike $rule, object $row): bool
     {
-        if (! $rule instanceof Like && ! $rule instanceof Unlike) {
-            throw new InvalidArgumentException(sprintf(
-                'Rule must be of type %s or %s, got %s instead',
-                Like::class,
-                Unlike::class,
-                get_php_type($rule)
-            ));
-        }
-
         $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
         $this->normalizeTypes($rowValue, $value);
@@ -320,11 +301,11 @@ class Filter
      * Create a rule that matches rows with a column that is **unequal** with the given value
      *
      * @param string $column
-     * @param array<mixed>|bool|float|int|string|DateTime|null $value
+     * @param array<mixed>|bool|float|int|string $value
      *
      * @return Condition
      */
-    public static function unequal(string $column, array|bool|float|int|string|DateTime|null $value): Condition
+    public static function unequal(string $column, $value): Condition
     {
         return new Unequal($column, $value);
     }
@@ -374,11 +355,11 @@ class Filter
      * Create a rule that matches rows with a column that is **greater** than the given value
      *
      * @param string $column
-     * @param float|int|string|DateTime|null $value
+     * @param float|int|string $value
      *
      * @return Condition
      */
-    public static function greaterThan(string $column, float|int|string|DateTime|null $value): Condition
+    public static function greaterThan(string $column, $value): Condition
     {
         return new GreaterThan($column, $value);
     }
@@ -403,11 +384,11 @@ class Filter
      * Create a rule that matches rows with a column that is **less** than the given value
      *
      * @param string $column
-     * @param float|int|string|DateTime|null $value
+     * @param float|int|string $value
      *
      * @return Condition
      */
-    public static function lessThan(string $column, float|int|string|DateTime|null $value): Condition
+    public static function lessThan(string $column, $value): Condition
     {
         return new LessThan($column, $value);
     }
@@ -432,11 +413,11 @@ class Filter
      * Create a rule that matches rows with a column that is **greater** than or **equal** to the given value
      *
      * @param string $column
-     * @param float|int|string|DateTime|null $value
+     * @param float|int|string $value
      *
      * @return Condition
      */
-    public static function greaterThanOrEqual(string $column, float|int|string|DateTime|null $value): Condition
+    public static function greaterThanOrEqual(string $column, $value): Condition
     {
         return new GreaterThanOrEqual($column, $value);
     }
@@ -461,11 +442,11 @@ class Filter
      * Create a rule that matches rows with a column that is **less** than or **equal** to the given value
      *
      * @param string $column
-     * @param float|int|string|DateTime|null $value
+     * @param float|int|string $value
      *
      * @return Condition
      */
-    public static function lessThanOrEqual(string $column, float|int|string|DateTime|null $value): Condition
+    public static function lessThanOrEqual(string $column, $value): Condition
     {
         return new LessThanOrEqual($column, $value);
     }
@@ -496,35 +477,25 @@ class Filter
      */
     protected function performMatch(Rule $rule, object $row): bool
     {
-        switch (true) {
-            case $rule instanceof All:
-                return $this->matchAll($rule, $row);
-            case $rule instanceof Any:
-                return $this->matchAny($rule, $row);
-            case $rule instanceof Like:
-                return $this->matchSimilar($rule, $row);
-            case $rule instanceof Equal:
-                return $this->matchEqual($rule, $row);
-            case $rule instanceof GreaterThan:
-                return $this->matchGreaterThan($rule, $row);
-            case $rule instanceof GreaterThanOrEqual:
-                return $this->matchGreaterThanOrEqual($rule, $row);
-            case $rule instanceof LessThan:
-                return $this->matchLessThan($rule, $row);
-            case $rule instanceof LessThanOrEqual:
-                return $this->matchLessThanOrEqual($rule, $row);
-            case $rule instanceof None:
-                return $this->matchNone($rule, $row);
-            case $rule instanceof Unequal:
-                return $this->matchUnequal($rule, $row);
-            case $rule instanceof Unlike:
-                return $this->matchUnlike($rule, $row);
-            default:
-                throw new InvalidArgumentException(sprintf(
+        return match (true) {
+            $rule instanceof All                => $this->matchAll($rule, $row),
+            $rule instanceof Any                => $this->matchAny($rule, $row),
+            $rule instanceof Like               => $this->matchSimilar($rule, $row),
+            $rule instanceof Equal              => $this->matchEqual($rule, $row),
+            $rule instanceof GreaterThan        => $this->matchGreaterThan($rule, $row),
+            $rule instanceof GreaterThanOrEqual => $this->matchGreaterThanOrEqual($rule, $row),
+            $rule instanceof LessThan           => $this->matchLessThan($rule, $row),
+            $rule instanceof LessThanOrEqual    => $this->matchLessThanOrEqual($rule, $row),
+            $rule instanceof None               => $this->matchNone($rule, $row),
+            $rule instanceof Unequal            => $this->matchUnequal($rule, $row),
+            $rule instanceof Unlike             => $this->matchUnlike($rule, $row),
+            default                             => throw new InvalidArgumentException(
+                sprintf(
                     'Unable to match filter. Rule type %s is unknown',
                     get_class($rule)
-                ));
-        }
+                )
+            ),
+        };
     }
 
     /**
