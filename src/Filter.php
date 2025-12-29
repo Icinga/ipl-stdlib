@@ -53,7 +53,9 @@ class Filter
     }
 
     /**
-     * Create a rule that matches if **all** of the given rules do
+     * Create a rule that matches if **all** of the given rules do.
+     * If $rules is empty, the resulting Rule will always match.
+     * 
      *
      * @param Rule ...$rules
      *
@@ -65,7 +67,8 @@ class Filter
     }
 
     /**
-     * Return whether the given rules all match the given item
+     * Return true if all rules match the given item
+     * Returns true if $rules is empty
      *
      * @param All $rules
      * @param object $row
@@ -84,7 +87,8 @@ class Filter
     }
 
     /**
-     * Create a rule that matches if **any** of the given rules do
+     * Create a rule that matches if **any** of the given rules do.
+     * If $rules is empty, the resulting Rule will never match.
      *
      * @param Rule ...$rules
      *
@@ -96,7 +100,8 @@ class Filter
     }
 
     /**
-     * Return whether any of the given rules match the given item
+     * Return whether any rule matches the given item
+     * Returns false if $rules is empty
      *
      * @param Any $rules
      * @param object $row
@@ -116,6 +121,7 @@ class Filter
 
     /**
      * Create a rule that matches if **none** of the given rules do
+     * If $rules is empty, the resulting Rule will always match. 
      *
      * @param Rule ...$rules
      *
@@ -127,7 +133,8 @@ class Filter
     }
 
     /**
-     * Return whether none of the given rules match the given item
+     * Return whether no rules match the given item
+     * Returns true if $rules is empty
      *
      * @param None $rules
      * @param object $row
