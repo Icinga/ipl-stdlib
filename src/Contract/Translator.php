@@ -61,5 +61,11 @@ interface Translator
      *
      * @return string Translated message or original message if no translation is found
      */
-    public function translatePluralInDomain(string $domain, string $singular, string $plural, int $number, ?string $context = null): string;
+    public function translatePluralInDomain(
+        string $domain,
+        string $singular,
+        string $plural,
+        int $number,
+        ?string $context = null
+    ): string;
 }

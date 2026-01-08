@@ -58,8 +58,12 @@ class Str
      *
      * @return array<int, ?string>
      */
-    public static function symmetricSplit(?string $subject, string $delimiter, int $limit, ?string $default = null): array
-    {
+    public static function symmetricSplit(
+        ?string $subject,
+        string $delimiter,
+        int $limit,
+        ?string $default = null
+    ): array {
         if ($subject === null || empty($delimiter)) {
             return array_pad([], $limit, $default);
         }
