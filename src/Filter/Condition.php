@@ -6,19 +6,19 @@ abstract class Condition implements Rule, MetaDataProvider
 {
     use MetaData;
 
-    /** @var string */
-    protected $column;
+    /** @var string|string[] */
+    protected string|array $column = [];
 
     /** @var mixed */
-    protected $value;
+    protected mixed $value = null;
 
     /**
      * Create a new Condition
      *
-     * @param string $column
+     * @param string|string[] $column
      * @param mixed $value
      */
-    public function __construct($column, $value)
+    public function __construct(string|array $column, mixed $value)
     {
         $this->setColumn($column)
             ->setValue($value);
@@ -37,11 +37,11 @@ abstract class Condition implements Rule, MetaDataProvider
     /**
      * Set this condition's column
      *
-     * @param string $column
+     * @param string|string[] $column
      *
      * @return $this
      */
-    public function setColumn($column)
+    public function setColumn(string|array $column): static
     {
         $this->column = $column;
 
@@ -51,9 +51,9 @@ abstract class Condition implements Rule, MetaDataProvider
     /**
      * Get this condition's column
      *
-     * @return string
+     * @return string|string[]
      */
-    public function getColumn()
+    public function getColumn(): string|array
     {
         return $this->column;
     }
@@ -65,7 +65,7 @@ abstract class Condition implements Rule, MetaDataProvider
      *
      * @return $this
      */
-    public function setValue($value)
+    public function setValue(mixed $value): static
     {
         $this->value = $value;
 
@@ -77,7 +77,7 @@ abstract class Condition implements Rule, MetaDataProvider
      *
      * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }

@@ -10,10 +10,10 @@ use ipl\Stdlib\Contract\PluginLoader;
 class AutoloadingPluginLoader implements PluginLoader
 {
     /** @var string Namespace of the plugins */
-    protected $namespace;
+    protected string $namespace;
 
     /** @var string Class name postfix */
-    protected $postfix;
+    protected string $postfix;
 
     /**
      * Create a new autoloading plugin loader
@@ -21,7 +21,7 @@ class AutoloadingPluginLoader implements PluginLoader
      * @param string $namespace Namespace of the plugins
      * @param string $postfix   Class name postfix
      */
-    public function __construct($namespace, $postfix = '')
+    public function __construct(string $namespace, string $postfix = '')
     {
         $this->namespace = $namespace;
         $this->postfix = $postfix;
@@ -34,12 +34,12 @@ class AutoloadingPluginLoader implements PluginLoader
      *
      * @return string
      */
-    protected function getFqn($name)
+    protected function getFqn(string $name): string
     {
         return $this->namespace . '\\' . ucfirst($name) . $this->postfix;
     }
 
-    public function load($name)
+    public function load(string $name): false|string
     {
         $class = $this->getFqn($name);
 
