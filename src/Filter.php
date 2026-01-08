@@ -39,14 +39,7 @@ class Filter
     public static function match(Rule $rule, array|object $row): bool
     {
         if (! is_object($row)) {
-            if (is_array($row)) {
-                $row = (object) $row;
-            } else {
-                throw new InvalidArgumentException(sprintf(
-                    'Object or array expected, got %s instead',
-                    get_php_type($row)
-                ));
-            }
+            $row = (object) $row;
         }
 
         return (new self())->performMatch($rule, $row);
