@@ -2,6 +2,8 @@
 
 namespace ipl\Stdlib\Filter;
 
+use ipl\Stdlib\Filter;
+
 abstract class Condition implements Rule, MetaDataProvider
 {
     use MetaData;
@@ -11,6 +13,9 @@ abstract class Condition implements Rule, MetaDataProvider
 
     /** @var mixed */
     protected $value;
+
+    /** @var Chain */
+    protected $chain;
 
     /**
      * Create a new Condition
@@ -80,5 +85,23 @@ abstract class Condition implements Rule, MetaDataProvider
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @param Filter\Chain $chain
+     */
+    public function setChain(Filter\Chain $chain)
+    {
+        $this->chain = $chain;
+
+        return $this;
+    }
+
+    /**
+     * @return Filter\Chain
+     */
+    public function getChain()
+    {
+        return $this->chain;
     }
 }
