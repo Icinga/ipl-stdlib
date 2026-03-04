@@ -108,12 +108,12 @@ function yield_groups(Traversable $traversable, callable $groupBy): Generator
         return;
     }
 
-    list($criterion, $v, $k) = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
+    [$criterion, $v, $k] = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
     $group = [$k ?? $iterator->key() => $v ?? $iterator->current()];
 
     $iterator->next();
     for (; $iterator->valid(); $iterator->next()) {
-        list($c, $v, $k) = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
+        [$c, $v, $k] = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
         if ($c !== $criterion) {
             yield $criterion => $group;
 
