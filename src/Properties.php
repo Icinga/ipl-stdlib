@@ -60,7 +60,7 @@ trait Properties
      *
      * @throws OutOfBoundsException If the property by the given key does not exist
      */
-    protected function getProperty($key)
+    protected function getProperty(string $key): mixed
     {
         if (array_key_exists($key, $this->properties)) {
             return $this->properties[$key];
