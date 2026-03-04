@@ -27,7 +27,7 @@ class PriorityQueue extends SplPriorityQueue
      *
      * @return true
      */
-    public function insert(mixed $value, mixed $priority): bool
+    public function insert(mixed $value, mixed $priority): true
     {
         return parent::insert($value, [$priority, $this->serial--]);
     }
