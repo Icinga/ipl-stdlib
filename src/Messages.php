@@ -49,11 +49,11 @@ trait Messages
      * Add a single message
      *
      * @param string $message
-     * @param mixed  ...$args Optional args for sprintf-style messages
+     * @param mixed ...$args Optional args for sprintf-style messages
      *
      * @return $this
      */
-    public function addMessage($message, ...$args)
+    public function addMessage(string $message, mixed ...$args): static
     {
         if (empty($args)) {
             $this->messages[] = $message;
