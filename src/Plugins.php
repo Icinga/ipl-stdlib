@@ -8,18 +8,20 @@ use ipl\Stdlib\Loader\AutoloadingPluginLoader;
 trait Plugins
 {
     /** @var array Registered plugin loaders by type */
-    protected $pluginLoaders = [];
+    protected array $pluginLoaders = [];
 
     /**
      * Factory for plugin loaders
      *
      * @param PluginLoader|string $loaderOrNamespace
-     * @param string              $postfix
+     * @param ?string $postfix
      *
      * @return PluginLoader
      */
-    public static function wantPluginLoader($loaderOrNamespace, $postfix = '')
-    {
+    public static function wantPluginLoader(
+        PluginLoader|string $loaderOrNamespace,
+        ?string $postfix = null
+    ): PluginLoader {
         if ($loaderOrNamespace instanceof PluginLoader) {
             $loader = $loaderOrNamespace;
         } else {
@@ -36,7 +38,7 @@ trait Plugins
      *
      * @return bool
      */
-    public function hasPluginLoader($type)
+    public function hasPluginLoader(string $type): bool
     {
         return isset($this->pluginLoaders[$type]);
     }
@@ -44,14 +46,17 @@ trait Plugins
     /**
      * Add a plugin loader for the given type
      *
-     * @param string              $type
+     * @param string $type
      * @param PluginLoader|string $loaderOrNamespace
-     * @param string              $postfix
+     * @param ?string $postfix
      *
      * @return $this
      */
-    public function addPluginLoader($type, $loaderOrNamespace, $postfix = '')
-    {
+    public function addPluginLoader(
+        string $type,
+        PluginLoader|string $loaderOrNamespace,
+        ?string $postfix = null
+    ): static {
         $loader = static::wantPluginLoader($loaderOrNamespace, $postfix);
 
         if (! isset($this->pluginLoaders[$type])) {
@@ -71,7 +76,7 @@ trait Plugins
      *
      * @return string|false
      */
-    public function loadPlugin($type, $name)
+    public function loadPlugin(string $type, string $name): string|false
     {
         if ($this->hasPluginLoader($type)) {
             /** @var PluginLoader $loader */
@@ -86,8 +91,11 @@ trait Plugins
         return false;
     }
 
-    protected function addDefaultPluginLoader($type, $loaderOrNamespace, $postfix)
-    {
+    protected function addDefaultPluginLoader(
+        string $type,
+        PluginLoader|string $loaderOrNamespace,
+        string $postfix
+    ): static {
         $this->pluginLoaders[$type][] = static::wantPluginLoader($loaderOrNamespace, $postfix);
 
         return $this;

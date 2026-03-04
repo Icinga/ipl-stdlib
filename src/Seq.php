@@ -12,13 +12,13 @@ class Seq
     /**
      * Check if the traversable contains the given needle
      *
-     * @param array<mixed>|iterable<mixed> $traversable
+     * @param iterable<mixed> $traversable
      * @param mixed $needle Might also be a closure
      * @param bool $caseSensitive Whether strings should be compared case-sensitive
      *
      * @return bool
      */
-    public static function contains($traversable, $needle, $caseSensitive = true)
+    public static function contains(iterable $traversable, mixed $needle, bool $caseSensitive = true): bool
     {
         return self::find($traversable, $needle, $caseSensitive)[0] !== null;
     }
@@ -26,14 +26,14 @@ class Seq
     /**
      * Search in the traversable for the given needle and return its key and value
      *
-     * @param array<mixed>|iterable<mixed> $traversable
+     * @param iterable<mixed> $traversable
      * @param mixed $needle Might also be a closure
      * @param bool $caseSensitive Whether strings should be compared case-sensitive
      *
      * @return array<mixed> An array with two entries, the first is the key, then the value.
      *                      Both are null if nothing is found.
      */
-    public static function find($traversable, $needle, $caseSensitive = true)
+    public static function find(iterable $traversable, mixed $needle, bool $caseSensitive = true): array
     {
         $usesCallback = $needle instanceof Closure;
         if (! $usesCallback && $caseSensitive && is_array($traversable)) {
@@ -66,13 +66,13 @@ class Seq
     /**
      * Search in the traversable for the given needle and return its key
      *
-     * @param array<mixed>|iterable<mixed> $traversable
+     * @param iterable<mixed> $traversable
      * @param mixed $needle Might also be a closure
      * @param bool $caseSensitive Whether strings should be compared case-sensitive
      *
      * @return mixed|null Null if nothing is found
      */
-    public static function findKey($traversable, $needle, $caseSensitive = true)
+    public static function findKey(iterable $traversable, mixed $needle, bool $caseSensitive = true): mixed
     {
         return self::find($traversable, $needle, $caseSensitive)[0];
     }
@@ -80,13 +80,13 @@ class Seq
     /**
      * Search in the traversable for the given needle and return its value
      *
-     * @param array<mixed>|iterable<mixed> $traversable
+     * @param iterable<mixed> $traversable
      * @param mixed $needle Might also be a closure
      * @param bool $caseSensitive Whether strings should be compared case-sensitive
      *
      * @return mixed|null Null if nothing is found
      */
-    public static function findValue($traversable, $needle, $caseSensitive = true)
+    public static function findValue(iterable $traversable, mixed $needle, bool $caseSensitive = true): mixed
     {
         $usesCallback = $needle instanceof Closure;
         if (! $usesCallback && $caseSensitive && is_array($traversable)) {

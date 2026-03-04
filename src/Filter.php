@@ -2,7 +2,6 @@
 
 namespace ipl\Stdlib;
 
-use InvalidArgumentException;
 use ipl\Stdlib\Filter\All;
 use ipl\Stdlib\Filter\Any;
 use ipl\Stdlib\Filter\Chain;
@@ -17,7 +16,6 @@ use ipl\Stdlib\Filter\None;
 use ipl\Stdlib\Filter\Rule;
 use ipl\Stdlib\Filter\Unequal;
 use ipl\Stdlib\Filter\Unlike;
-use Throwable;
 
 class Filter
 {
@@ -32,21 +30,14 @@ class Filter
      * Return whether the given rule matches the given item
      *
      * @param Rule $rule
-     * @param array<mixed>|object $row
+     * @param object|array<mixed> $row
      *
      * @return bool
      */
-    public static function match(Rule $rule, $row)
+    public static function match(Rule $rule, array|object $row): bool
     {
         if (! is_object($row)) {
-            if (is_array($row)) {
-                $row = (object) $row;
-            } else {
-                throw new InvalidArgumentException(sprintf(
-                    'Object or array expected, got %s instead',
-                    get_php_type($row)
-                ));
-            }
+            $row = (object) $row;
         }
 
         return (new self())->performMatch($rule, $row);
@@ -59,7 +50,7 @@ class Filter
      *
      * @return Chain
      */
-    public static function all(Rule ...$rules)
+    public static function all(Rule ...$rules): Chain
     {
         return new All(...$rules);
     }
@@ -72,7 +63,7 @@ class Filter
      *
      * @return bool
      */
-    protected function matchAll(All $rules, $row)
+    protected function matchAll(All $rules, object $row): bool
     {
         foreach ($rules as $rule) {
             if (! $this->performMatch($rule, $row)) {
@@ -90,7 +81,7 @@ class Filter
      *
      * @return Chain
      */
-    public static function any(Rule ...$rules)
+    public static function any(Rule ...$rules): Chain
     {
         return new Any(...$rules);
     }
@@ -103,7 +94,7 @@ class Filter
      *
      * @return bool
      */
-    protected function matchAny(Any $rules, $row)
+    protected function matchAny(Any $rules, object $row): bool
     {
         foreach ($rules as $rule) {
             if ($this->performMatch($rule, $row)) {
@@ -121,7 +112,7 @@ class Filter
      *
      * @return Chain
      */
-    public static function none(Rule ...$rules)
+    public static function none(Rule ...$rules): Chain
     {
         return new None(...$rules);
     }
@@ -134,7 +125,7 @@ class Filter
      *
      * @return bool
      */
-    protected function matchNone(None $rules, $row)
+    protected function matchNone(None $rules, object $row): bool
     {
         foreach ($rules as $rule) {
             if ($this->performMatch($rule, $row)) {
@@ -149,11 +140,11 @@ class Filter
      * Create a rule that matches rows with a column that **equals** the given value
      *
      * @param string $column
-     * @param array<mixed>|bool|float|int|string $value
+     * @param mixed $value
      *
      * @return Condition
      */
-    public static function equal($column, $value)
+    public static function equal(string $column, mixed $value): Condition
     {
         return new Equal($column, $value);
     }
@@ -166,17 +157,8 @@ class Filter
      *
      * @return bool
      */
-    protected function matchEqual($rule, $row)
+    protected function matchEqual(Equal|Unequal $rule, object $row): bool
     {
-        if (! $rule instanceof Equal && ! $rule instanceof Unequal) {
-            throw new InvalidArgumentException(sprintf(
-                'Rule must be of type %s or %s, got %s instead',
-                Equal::class,
-                Unequal::class,
-                get_php_type($rule)
-            ));
-        }
-
         $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
         $this->normalizeTypes($rowValue, $value);
@@ -200,11 +182,11 @@ class Filter
      * Performs a wildcard search if the value contains asterisks.
      *
      * @param string $column
-     * @param string|string[] $value
+     * @param mixed $value
      *
      * @return Condition
      */
-    public static function like($column, $value)
+    public static function like(string $column, mixed $value): Condition
     {
         return new Like($column, $value);
     }
@@ -217,17 +199,8 @@ class Filter
      *
      * @return bool
      */
-    protected function matchSimilar($rule, $row)
+    protected function matchSimilar(Like|Unlike $rule, object $row): bool
     {
-        if (! $rule instanceof Like && ! $rule instanceof Unlike) {
-            throw new InvalidArgumentException(sprintf(
-                'Rule must be of type %s or %s, got %s instead',
-                Like::class,
-                Unlike::class,
-                get_php_type($rule)
-            ));
-        }
-
         $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
         $this->normalizeTypes($rowValue, $value);
@@ -254,7 +227,7 @@ class Filter
      *
      * @return bool
      */
-    protected function performEqualityMatch($value, $rowValue, $ignoreCase = false)
+    protected function performEqualityMatch(mixed $value, mixed $rowValue, bool $ignoreCase = false): bool
     {
         if ($ignoreCase && is_string($rowValue)) {
             $rowValue = strtolower($rowValue);
@@ -280,7 +253,7 @@ class Filter
      *
      * @return bool
      */
-    protected function performSimilarityMatch($value, $rowValue, $ignoreCase = false)
+    protected function performSimilarityMatch(mixed $value, mixed $rowValue, bool $ignoreCase = false): bool
     {
         if ($ignoreCase && is_string($rowValue)) {
             $rowValue = strtolower($rowValue);
@@ -319,11 +292,11 @@ class Filter
      * Create a rule that matches rows with a column that is **unequal** with the given value
      *
      * @param string $column
-     * @param array<mixed>|bool|float|int|string $value
+     * @param mixed $value
      *
      * @return Condition
      */
-    public static function unequal($column, $value)
+    public static function unequal(string $column, mixed $value): Condition
     {
         return new Unequal($column, $value);
     }
@@ -336,7 +309,7 @@ class Filter
      *
      * @return bool
      */
-    protected function matchUnequal(Unequal $rule, $row)
+    protected function matchUnequal(Unequal $rule, object $row): bool
     {
         return ! $this->matchEqual($rule, $row);
     }
@@ -347,11 +320,11 @@ class Filter
      * Performs a wildcard search if the value contains asterisks.
      *
      * @param string $column
-     * @param string|string[] $value
+     * @param mixed $value
      *
      * @return Condition
      */
-    public static function unlike($column, $value)
+    public static function unlike(string $column, mixed $value): Condition
     {
         return new Unlike($column, $value);
     }
@@ -364,7 +337,7 @@ class Filter
      *
      * @return bool
      */
-    protected function matchUnlike(Unlike $rule, $row)
+    protected function matchUnlike(Unlike $rule, object $row): bool
     {
         return ! $this->matchSimilar($rule, $row);
     }
@@ -373,11 +346,11 @@ class Filter
      * Create a rule that matches rows with a column that is **greater** than the given value
      *
      * @param string $column
-     * @param float|int|string $value
+     * @param mixed $value
      *
      * @return Condition
      */
-    public static function greaterThan($column, $value)
+    public static function greaterThan(string $column, mixed $value): Condition
     {
         return new GreaterThan($column, $value);
     }
@@ -390,7 +363,7 @@ class Filter
      *
      * @return bool
      */
-    protected function matchGreaterThan(GreaterThan $rule, $row)
+    protected function matchGreaterThan(GreaterThan $rule, object $row): bool
     {
         $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
@@ -402,11 +375,11 @@ class Filter
      * Create a rule that matches rows with a column that is **less** than the given value
      *
      * @param string $column
-     * @param float|int|string $value
+     * @param mixed $value
      *
      * @return Condition
      */
-    public static function lessThan($column, $value)
+    public static function lessThan(string $column, mixed $value): Condition
     {
         return new LessThan($column, $value);
     }
@@ -419,7 +392,7 @@ class Filter
      *
      * @return bool
      */
-    protected function matchLessThan(LessThan $rule, $row)
+    protected function matchLessThan(LessThan $rule, object $row): bool
     {
         $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
@@ -431,11 +404,11 @@ class Filter
      * Create a rule that matches rows with a column that is **greater** than or **equal** to the given value
      *
      * @param string $column
-     * @param float|int|string $value
+     * @param mixed $value
      *
      * @return Condition
      */
-    public static function greaterThanOrEqual($column, $value)
+    public static function greaterThanOrEqual(string $column, mixed $value): Condition
     {
         return new GreaterThanOrEqual($column, $value);
     }
@@ -448,7 +421,7 @@ class Filter
      *
      * @return bool
      */
-    protected function matchGreaterThanOrEqual(GreaterThanOrEqual $rule, $row)
+    protected function matchGreaterThanOrEqual(GreaterThanOrEqual $rule, object $row): bool
     {
         $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
@@ -460,11 +433,11 @@ class Filter
      * Create a rule that matches rows with a column that is **less** than or **equal** to the given value
      *
      * @param string $column
-     * @param float|int|string $value
+     * @param mixed $value
      *
      * @return Condition
      */
-    public static function lessThanOrEqual($column, $value)
+    public static function lessThanOrEqual(string $column, mixed $value): Condition
     {
         return new LessThanOrEqual($column, $value);
     }
@@ -477,7 +450,7 @@ class Filter
      *
      * @return bool
      */
-    protected function matchLessThanOrEqual(LessThanOrEqual $rule, $row)
+    protected function matchLessThanOrEqual(LessThanOrEqual $rule, object $row): bool
     {
         $rowValue = $this->extractValue($rule->getColumn(), $row);
         $value = $rule->getValue();
@@ -493,7 +466,7 @@ class Filter
      *
      * @return bool
      */
-    protected function performMatch(Rule $rule, $row)
+    protected function performMatch(Rule $rule, object $row): bool
     {
         switch (true) {
             case $rule instanceof All:
@@ -534,7 +507,7 @@ class Filter
      *
      * @return mixed
      */
-    protected function extractValue($column, $row)
+    protected function extractValue(string $column, object $row): mixed
     {
         return $row->$column ?? null;
     }
@@ -550,7 +523,7 @@ class Filter
      *
      * @return void
      */
-    protected function normalizeTypes($rowValue, &$value)
+    protected function normalizeTypes(mixed $rowValue, mixed &$value): void
     {
         if ($rowValue === null || $value === null) {
             return;

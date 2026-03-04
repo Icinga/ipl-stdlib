@@ -5,14 +5,14 @@ namespace ipl\Stdlib;
 trait Messages
 {
     /** @var array */
-    protected $messages = [];
+    protected array $messages = [];
 
     /**
      * Get whether there are any messages
      *
      * @return bool
      */
-    public function hasMessages()
+    public function hasMessages(): bool
     {
         return ! empty($this->messages);
     }
@@ -34,7 +34,7 @@ trait Messages
      *
      * @return $this
      */
-    public function setMessages(array $messages)
+    public function setMessages(array $messages): static
     {
         $this->clearMessages();
 
@@ -71,7 +71,7 @@ trait Messages
      *
      * @return $this
      */
-    public function addMessages(array $messages)
+    public function addMessages(array $messages): static
     {
         $this->messages = array_merge($this->messages, $messages);
 
@@ -83,7 +83,7 @@ trait Messages
      *
      * @return $this
      */
-    public function clearMessages()
+    public function clearMessages(): static
     {
         $this->messages = [];
 

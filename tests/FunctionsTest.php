@@ -4,9 +4,9 @@ namespace ipl\Tests\Stdlib;
 
 use ArrayIterator;
 use EmptyIterator;
-use InvalidArgumentException;
 use ipl\Stdlib;
 use stdClass;
+use TypeError;
 
 class FunctionsTest extends TestCase
 {
@@ -89,7 +89,7 @@ class FunctionsTest extends TestCase
 
     public function testArrayvalException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
 
         Stdlib\arrayval(null);
     }
