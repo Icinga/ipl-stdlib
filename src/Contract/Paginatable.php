@@ -4,6 +4,9 @@ namespace ipl\Stdlib\Contract;
 
 use Countable;
 
+/**
+ * Support limit and offset for paginated result sets
+ */
 interface Paginatable extends Countable
 {
     /**

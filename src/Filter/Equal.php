@@ -2,9 +2,11 @@
 
 namespace ipl\Stdlib\Filter;
 
+/**
+ * Match when the column value equals the filter value
+ */
 class Equal extends Condition
 {
-    /** @var bool */
     protected bool $ignoreCase = false;
 
     /**
@@ -20,10 +22,10 @@ class Equal extends Condition
     }
 
     /**
-    * Return whether this rule ignores case
-    *
-    * @return bool
-    */
+     * Return whether this rule ignores case
+     *
+     * @return bool
+     */
     public function ignoresCase(): bool
     {
         return $this->ignoreCase;

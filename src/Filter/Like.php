@@ -2,9 +2,11 @@
 
 namespace ipl\Stdlib\Filter;
 
+/**
+ * Match when the column value is similar to the filter value, supporting `*` wildcards
+ */
 class Like extends Condition
 {
-    /** @var bool */
     protected bool $ignoreCase = false;
 
     /**
@@ -20,10 +22,10 @@ class Like extends Condition
     }
 
     /**
-    * Return whether this rule ignores case
-    *
-    * @return bool
-    */
+     * Return whether this rule ignores case
+     *
+     * @return bool
+     */
     public function ignoresCase(): bool
     {
         return $this->ignoreCase;

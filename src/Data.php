@@ -2,6 +2,9 @@
 
 namespace ipl\Stdlib;
 
+/**
+ * Store and retrieve arbitrary key-value data
+ */
 class Data
 {
     /** @var array<string, mixed> */

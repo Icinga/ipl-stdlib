@@ -3,10 +3,9 @@
 namespace ipl\Stdlib\Contract;
 
 /**
- * Representation of plugin loaders
+ * Load plugin class names by plugin name
  *
- * Plugin loaders must implement the {@link load()} method in order to provide the fully qualified class name of a
- * plugin to load.
+ * Implementations must provide the fully qualified class name of a plugin via {@see load()}.
  */
 interface PluginLoader
 {

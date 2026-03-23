@@ -17,20 +17,25 @@ use ipl\Stdlib\Filter\Rule;
 use ipl\Stdlib\Filter\Unequal;
 use ipl\Stdlib\Filter\Unlike;
 
+/**
+ * Build filter rules and evaluate them against rows
+ */
 class Filter
 {
     /**
-     * protected - This is only a factory class
+     * Create a new Filter
+     *
+     * Intentionally protected; use the static factory methods instead.
      */
     protected function __construct()
     {
     }
 
     /**
-     * Return whether the given rule matches the given item
+     * Check whether the given rule matches the given item
      *
      * @param Rule $rule
-     * @param object|array<mixed> $row
+     * @param array|object $row
      *
      * @return bool
      */
@@ -500,7 +505,7 @@ class Filter
      * Normalize type of $value to the one of $rowValue
      *
      * For details on how this works please see the corresponding test
-     * {@see \ipl\Tests\Stdlib\FilterTest::testConditionsAreValueTypeAgnostic}
+     * {@see \ipl\Tests\Stdlib\FilterTest::testConditionsAreValueTypeAgnostic}.
      *
      * @param mixed $rowValue
      * @param mixed $value

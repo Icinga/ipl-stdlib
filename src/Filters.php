@@ -2,9 +2,11 @@
 
 namespace ipl\Stdlib;
 
+/**
+ * Add and compose filter rules on a query or collection
+ */
 trait Filters
 {
-    /** @var ?Filter\Chain */
     protected ?Filter\Chain $filter = null;
 
     public function getFilter(): Filter\Chain

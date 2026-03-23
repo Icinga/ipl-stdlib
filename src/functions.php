@@ -27,7 +27,7 @@ function get_php_type(mixed $subject): string
  *
  * @param iterable|stdClass $subject
  *
- * @return array<mixed>
+ * @return array
  */
 function arrayval(iterable|stdClass $subject): array
 {
@@ -46,7 +46,7 @@ function arrayval(iterable|stdClass $subject): array
 /**
  * Get the first key of an iterable
  *
- * @param iterable<mixed> $iterable
+ * @param iterable $iterable
  *
  * @return int|string|null The first key of the iterable if it is not empty, null otherwise
  */
@@ -62,9 +62,9 @@ function iterable_key_first(iterable $iterable): int|string|null
 /**
  * Get the first value of an iterable
  *
- * @param iterable<mixed> $iterable
+ * @param iterable $iterable
  *
- * @return ?mixed
+ * @return mixed|null The first value of the iterable if it is not empty, null otherwise
  */
 function iterable_value_first(iterable $iterable): mixed
 {
@@ -84,7 +84,7 @@ function iterable_value_first(iterable $iterable): mixed
  * @param Traversable<mixed, mixed> $traversable
  * @param callable(mixed $value, mixed $key): array{0: mixed, 1?: mixed, 2?: mixed} $groupBy
  *
- * @return Generator
+ * @return Generator<mixed, array>
  */
 function yield_groups(Traversable $traversable, callable $groupBy): Generator
 {

@@ -8,7 +8,11 @@ use IteratorAggregate;
 use OutOfBoundsException;
 use Traversable;
 
-/** @implements IteratorAggregate<int, Rule> */
+/**
+ * Abstract filter chain that holds an ordered list of rules
+ *
+ * @implements IteratorAggregate<int, Rule>
+ */
 abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Countable
 {
     use MetaData;
@@ -43,7 +47,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
     }
 
     /**
-     * Get an iterator this chain's rules
+     * Get an iterator for this chain's rules
      *
      * @return ArrayIterator<int, Rule>
      */
@@ -72,8 +76,9 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      * @param Rule $rule
      * @param Rule $before
      *
-     * @throws OutOfBoundsException In case no existing rule is found
      * @return $this
+     *
+     * @throws OutOfBoundsException If the reference rule is not found
      */
     public function insertBefore(Rule $rule, Rule $before): static
     {
@@ -93,8 +98,9 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      * @param Rule $rule
      * @param Rule $after
      *
-     * @throws OutOfBoundsException In case no existing rule is found
      * @return $this
+     *
+     * @throws OutOfBoundsException If the reference rule is not found
      */
     public function insertAfter(Rule $rule, Rule $after): static
     {
@@ -126,8 +132,9 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      * @param Rule $rule
      * @param Rule $replacement
      *
-     * @throws OutOfBoundsException In case no existing rule is found
      * @return $this
+     *
+     * @throws OutOfBoundsException If the rule to replace is not found
      */
     public function replace(Rule $rule, Rule $replacement): static
     {
@@ -168,11 +175,6 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
         return empty($this->rules);
     }
 
-    /**
-     * Count this chain's rules
-     *
-     * @return int
-     */
     public function count(): int
     {
         return count($this->rules);

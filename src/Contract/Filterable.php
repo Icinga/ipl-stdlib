@@ -4,6 +4,9 @@ namespace ipl\Stdlib\Contract;
 
 use ipl\Stdlib\Filter;
 
+/**
+ * Manage filters on a query or collection
+ */
 interface Filterable
 {
     /**
