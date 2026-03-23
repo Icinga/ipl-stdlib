@@ -37,7 +37,7 @@ class PriorityQueue extends SplPriorityQueue
      */
     public function yieldAll(): Generator
     {
-        // Clone queue because the SplPriorityQueue acts as a heap and thus items are removed upon iteration
+        // Clone the queue because SplPriorityQueue acts as a heap and removes items upon iteration.
         $queue = clone $this;
 
         $queue->setExtractFlags(static::EXTR_BOTH);

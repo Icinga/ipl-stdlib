@@ -239,7 +239,7 @@ class Filter
             /** @var string|string[] $value {@see self::normalizeTypes} ensures this is the case */
             $value = is_array($value)
                 ? array_map('strtolower', $value)
-                : ($value === null ? null : strtolower($value)); // phpstan is wrong here
+                : ($value === null ? null : strtolower($value)); // PHPStan incorrectly infers the type here.
         }
 
         if (is_array($value)) {
@@ -265,7 +265,7 @@ class Filter
             /** @var string|string[] $value {@see self::normalizeTypes} ensures this is the case */
             $value = is_array($value)
                 ? array_map('strtolower', $value)
-                : ($value === null ? null : strtolower($value)); // phpstan is wrong here
+                : ($value === null ? null : strtolower($value)); // PHPStan incorrectly infers the type here.
         }
 
         if (is_array($value)) {

@@ -39,7 +39,7 @@ function arrayval(iterable|stdClass $subject): array
         return (array) $subject;
     }
 
-    // Works for generators too
+    // Also works for generators.
     return iterator_to_array($subject);
 }
 
