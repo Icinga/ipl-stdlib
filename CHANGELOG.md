@@ -4,6 +4,8 @@ All notable changes to this library are documented in this file.
 
 ## [Unreleased]
 
+## [v0.15.0] — 2026-03-24
+
 - **Breaking** Raise minimum PHP version to 8.2 (#63)
 - Add strict type declarations (#63)
 - Support PHP 8.5 (#61)
@@ -103,7 +105,8 @@ All notable changes to this library are documented in this file.
 Initial release providing `AutoloadingPluginLoader`, `MessageContainer` trait,
 `ValidatorInterface`, and type/iterable utility functions.
 
-[Unreleased]: https://github.com/Icinga/ipl-stdlib/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/Icinga/ipl-stdlib/compare/v0.15.0...HEAD
+[v0.15.0]: https://github.com/Icinga/ipl-stdlib/releases/tag/v0.15.0
 [v0.14.0]: https://github.com/Icinga/ipl-stdlib/releases/tag/v0.14.0
 [v0.13.0]: https://github.com/Icinga/ipl-stdlib/releases/tag/v0.13.0
 [v0.12.1]: https://github.com/Icinga/ipl-stdlib/releases/tag/v0.12.1
