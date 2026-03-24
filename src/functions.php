@@ -17,25 +17,19 @@ use stdClass;
  *
  * @return string
  */
-function get_php_type($subject)
+function get_php_type(mixed $subject): string
 {
-    if (is_object($subject)) {
-        return get_class($subject);
-    } else {
-        return gettype($subject);
-    }
+    return is_object($subject) ? get_class($subject) : gettype($subject);
 }
 
 /**
  * Get the array value of the given subject
  *
- * @param array<mixed>|object|Traversable $subject
+ * @param iterable|stdClass $subject
  *
  * @return array<mixed>
- *
- * @throws InvalidArgumentException If subject type is invalid
  */
-function arrayval($subject)
+function arrayval(iterable|stdClass $subject): array
 {
     if (is_array($subject)) {
         return $subject;
@@ -45,15 +39,8 @@ function arrayval($subject)
         return (array) $subject;
     }
 
-    if ($subject instanceof Traversable) {
-        // Works for generators too
-        return iterator_to_array($subject);
-    }
-
-    throw new InvalidArgumentException(sprintf(
-        'arrayval expects arrays, objects or instances of Traversable. Got %s instead.',
-        get_php_type($subject)
-    ));
+    // Works for generators too
+    return iterator_to_array($subject);
 }
 
 /**
@@ -61,9 +48,9 @@ function arrayval($subject)
  *
  * @param iterable<mixed> $iterable
  *
- * @return mixed The first key of the iterable if it is not empty, null otherwise
+ * @return int|string|null The first key of the iterable if it is not empty, null otherwise
  */
-function iterable_key_first($iterable)
+function iterable_key_first(iterable $iterable): int|string|null
 {
     foreach ($iterable as $key => $_) {
         return $key;
@@ -79,9 +66,9 @@ function iterable_key_first($iterable)
  *
  * @return ?mixed
  */
-function iterable_value_first($iterable)
+function iterable_value_first(iterable $iterable): mixed
 {
-    foreach ($iterable as $_ => $value) {
+    foreach ($iterable as $value) {
         return $value;
     }
 
@@ -108,12 +95,12 @@ function yield_groups(Traversable $traversable, callable $groupBy): Generator
         return;
     }
 
-    list($criterion, $v, $k) = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
+    [$criterion, $v, $k] = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
     $group = [$k ?? $iterator->key() => $v ?? $iterator->current()];
 
     $iterator->next();
     for (; $iterator->valid(); $iterator->next()) {
-        list($c, $v, $k) = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
+        [$c, $v, $k] = array_pad((array) $groupBy($iterator->current(), $iterator->key()), 3, null);
         if ($c !== $criterion) {
             yield $criterion => $group;
 

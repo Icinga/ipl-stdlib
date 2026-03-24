@@ -11,14 +11,14 @@ use Traversable;
 trait Properties
 {
     /** @var array */
-    private $properties = [];
+    private array $properties = [];
 
     /**
      * Get whether this class has any properties
      *
      * @return bool
      */
-    public function hasProperties()
+    public function hasProperties(): bool
     {
         return ! empty($this->properties);
     }
@@ -30,7 +30,7 @@ trait Properties
      *
      * @return bool
      */
-    public function hasProperty($key)
+    public function hasProperty(string $key): bool
     {
         return array_key_exists($key, $this->properties);
     }
@@ -42,7 +42,7 @@ trait Properties
      *
      * @return $this
      */
-    public function setProperties(array $properties)
+    public function setProperties(array $properties): static
     {
         foreach ($properties as $key => $value) {
             $this->setProperty($key, $value);
@@ -60,7 +60,7 @@ trait Properties
      *
      * @throws OutOfBoundsException If the property by the given key does not exist
      */
-    protected function getProperty($key)
+    protected function getProperty(string $key): mixed
     {
         if (array_key_exists($key, $this->properties)) {
             return $this->properties[$key];
@@ -77,7 +77,7 @@ trait Properties
      *
      * @return $this
      */
-    protected function setProperty($key, $value)
+    protected function setProperty(string $key, mixed $value): static
     {
         $this->properties[$key] = $value;
 
@@ -103,7 +103,7 @@ trait Properties
      *
      * @return bool
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->properties[$offset]);
     }
@@ -115,8 +115,7 @@ trait Properties
      *
      * @return mixed
      */
-    #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->getProperty($offset);
     }
@@ -127,7 +126,7 @@ trait Properties
      * @param mixed $offset
      * @param mixed $value
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->setProperty($offset, $value);
     }
@@ -137,7 +136,7 @@ trait Properties
      *
      * @param mixed $offset
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->properties[$offset]);
     }
@@ -153,7 +152,7 @@ trait Properties
      *
      * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key): mixed
     {
         return $this->getProperty($key);
     }
@@ -168,7 +167,7 @@ trait Properties
      * @param string $key
      * @param mixed  $value
      */
-    public function __set($key, $value)
+    public function __set(string $key, mixed $value): void
     {
         $this->setProperty($key, $value);
     }
@@ -184,7 +183,7 @@ trait Properties
      *
      * @return bool
      */
-    public function __isset($key)
+    public function __isset(string $key): bool
     {
         return $this->offsetExists($key);
     }
@@ -198,7 +197,7 @@ trait Properties
      *
      * @param string $key
      */
-    public function __unset($key)
+    public function __unset(string $key): void
     {
         $this->offsetUnset($key);
     }

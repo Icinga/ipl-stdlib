@@ -11,7 +11,7 @@ interface Filterable
      *
      * @return Filter\Chain
      */
-    public function getFilter();
+    public function getFilter(): Filter\Chain;
 
     /**
      * Add a filter to the query
@@ -23,7 +23,7 @@ interface Filterable
      *
      * @return $this
      */
-    public function filter(Filter\Rule $filter);
+    public function filter(Filter\Rule $filter): static;
 
     /**
      * Add a filter to the query
@@ -35,7 +35,7 @@ interface Filterable
      *
      * @return $this
      */
-    public function orFilter(Filter\Rule $filter);
+    public function orFilter(Filter\Rule $filter): static;
 
     /**
      * Add a filter to the query
@@ -47,7 +47,7 @@ interface Filterable
      *
      * @return $this
      */
-    public function notFilter(Filter\Rule $filter);
+    public function notFilter(Filter\Rule $filter): static;
 
     /**
      * Add a filter to the query
@@ -59,5 +59,5 @@ interface Filterable
      *
      * @return $this
      */
-    public function orNotFilter(Filter\Rule $filter);
+    public function orNotFilter(Filter\Rule $filter): static;
 }

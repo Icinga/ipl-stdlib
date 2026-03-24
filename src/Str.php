@@ -16,7 +16,7 @@ class Str
      *
      * @return string
      */
-    public static function camel(?string $subject)
+    public static function camel(?string $subject): string
     {
         if ($subject === null) {
             return '';
@@ -36,14 +36,14 @@ class Str
      *
      * @return bool
      */
-    public static function startsWith(?string $subject, string $start, bool $caseSensitive = true)
+    public static function startsWith(?string $subject, string $start, bool $caseSensitive = true): bool
     {
         $subject = $subject ?? '';
         if (! $caseSensitive) {
             return strncasecmp($subject, $start, strlen($start)) === 0;
         }
 
-        return substr($subject, 0, strlen($start)) === $start;
+        return str_starts_with($subject, $start);
     }
 
     /**
@@ -58,8 +58,12 @@ class Str
      *
      * @return array<int, ?string>
      */
-    public static function symmetricSplit(?string $subject, string $delimiter, int $limit, ?string $default = null)
-    {
+    public static function symmetricSplit(
+        ?string $subject,
+        string $delimiter,
+        int $limit,
+        ?string $default = null
+    ): array {
         if ($subject === null || empty($delimiter)) {
             return array_pad([], $limit, $default);
         }
@@ -76,17 +80,13 @@ class Str
      *
      * @return array<string>
      */
-    public static function trimSplit(?string $subject, string $delimiter = ',', ?int $limit = null)
+    public static function trimSplit(?string $subject, string $delimiter = ',', ?int $limit = null): array
     {
         if ($subject === null || empty($delimiter)) {
             return [];
         }
 
-        if ($limit !== null) {
-            $exploded = explode($delimiter, $subject, $limit);
-        } else {
-            $exploded = explode($delimiter, $subject);
-        }
+        $exploded = $limit !== null ? explode($delimiter, $subject, $limit) : explode($delimiter, $subject);
 
         return array_map('trim', $exploded);
     }

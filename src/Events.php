@@ -12,13 +12,13 @@ trait Events
     }
 
     /** @var array */
-    protected $eventsEmittedOnce = [];
+    protected array $eventsEmittedOnce = [];
 
     /**
      * @param string $event
      * @param array $arguments
      */
-    protected function emitOnce($event, array $arguments = [])
+    protected function emitOnce(string $event, array $arguments = []): void
     {
         if (! isset($this->eventsEmittedOnce[$event])) {
             $this->eventsEmittedOnce[$event] = true;
@@ -31,7 +31,7 @@ trait Events
      * @param callable $listener
      * @return $this
      */
-    public function on($event, callable $listener)
+    public function on($event, callable $listener): static
     {
         $this->assertValidEvent($event);
         $this->evenementUnvalidatedOn($event, $listener);
@@ -39,7 +39,7 @@ trait Events
         return $this;
     }
 
-    protected function assertValidEvent($event)
+    protected function assertValidEvent(string $event): void
     {
         if (! $this->isValidEvent($event)) {
             throw new InvalidArgumentException("$event is not a valid event");
