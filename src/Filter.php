@@ -51,6 +51,8 @@ class Filter
     /**
      * Create a rule that matches if **all** of the given rules do
      *
+     * If no rules are given, the resulting rule always matches.
+     *
      * @param Rule ...$rules
      *
      * @return Chain
@@ -66,7 +68,7 @@ class Filter
      * @param All $rules
      * @param object $row
      *
-     * @return bool
+     * @return bool True if all rules match; always true if no rules are given
      */
     protected function matchAll(All $rules, object $row): bool
     {
@@ -81,6 +83,8 @@ class Filter
 
     /**
      * Create a rule that matches if **any** of the given rules do
+     *
+     * If no rules are given, the resulting rule never matches.
      *
      * @param Rule ...$rules
      *
@@ -97,7 +101,7 @@ class Filter
      * @param Any $rules
      * @param object $row
      *
-     * @return bool
+     * @return bool True if any rule matches; always false if no rules are given
      */
     protected function matchAny(Any $rules, object $row): bool
     {
@@ -112,6 +116,8 @@ class Filter
 
     /**
      * Create a rule that matches if **none** of the given rules do
+     *
+     * If no rules are given, the resulting rule always matches.
      *
      * @param Rule ...$rules
      *
@@ -128,7 +134,7 @@ class Filter
      * @param None $rules
      * @param object $row
      *
-     * @return bool
+     * @return bool True if no rules match; always true if no rules are given
      */
     protected function matchNone(None $rules, object $row): bool
     {
