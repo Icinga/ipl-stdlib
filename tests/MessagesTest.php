@@ -3,7 +3,6 @@
 namespace ipl\Tests\Stdlib;
 
 use ipl\Stdlib\Messages;
-use stdClass;
 
 class MessagesTest extends TestCase
 {

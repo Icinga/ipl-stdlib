@@ -3,10 +3,9 @@
 namespace ipl\Stdlib;
 
 use Generator;
-use InvalidArgumentException;
 use IteratorIterator;
-use Traversable;
 use stdClass;
+use Traversable;
 
 /**
  * Detect and return the PHP type of the given subject
