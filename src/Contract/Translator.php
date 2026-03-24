@@ -3,7 +3,7 @@
 namespace ipl\Stdlib\Contract;
 
 /**
- * Representation of translators
+ * Translate messages with optional context, domain scope, and plural forms
  */
 interface Translator
 {

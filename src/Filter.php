@@ -17,20 +17,25 @@ use ipl\Stdlib\Filter\Rule;
 use ipl\Stdlib\Filter\Unequal;
 use ipl\Stdlib\Filter\Unlike;
 
+/**
+ * Build filter rules and evaluate them against rows
+ */
 class Filter
 {
     /**
-     * protected - This is only a factory class
+     * Create a new Filter
+     *
+     * Intentionally protected; use the static factory methods instead.
      */
     protected function __construct()
     {
     }
 
     /**
-     * Return whether the given rule matches the given item
+     * Check whether the given rule matches the given item
      *
      * @param Rule $rule
-     * @param object|array<mixed> $row
+     * @param array|object $row
      *
      * @return bool
      */
@@ -45,6 +50,8 @@ class Filter
 
     /**
      * Create a rule that matches if **all** of the given rules do
+     *
+     * If no rules are given, the resulting rule always matches.
      *
      * @param Rule ...$rules
      *
@@ -61,7 +68,7 @@ class Filter
      * @param All $rules
      * @param object $row
      *
-     * @return bool
+     * @return bool True if all rules match; always true if no rules are given
      */
     protected function matchAll(All $rules, object $row): bool
     {
@@ -76,6 +83,8 @@ class Filter
 
     /**
      * Create a rule that matches if **any** of the given rules do
+     *
+     * If no rules are given, the resulting rule never matches.
      *
      * @param Rule ...$rules
      *
@@ -92,7 +101,7 @@ class Filter
      * @param Any $rules
      * @param object $row
      *
-     * @return bool
+     * @return bool True if any rule matches; always false if no rules are given
      */
     protected function matchAny(Any $rules, object $row): bool
     {
@@ -107,6 +116,8 @@ class Filter
 
     /**
      * Create a rule that matches if **none** of the given rules do
+     *
+     * If no rules are given, the resulting rule always matches.
      *
      * @param Rule ...$rules
      *
@@ -123,7 +134,7 @@ class Filter
      * @param None $rules
      * @param object $row
      *
-     * @return bool
+     * @return bool True if no rules match; always true if no rules are given
      */
     protected function matchNone(None $rules, object $row): bool
     {
@@ -234,7 +245,7 @@ class Filter
             /** @var string|string[] $value {@see self::normalizeTypes} ensures this is the case */
             $value = is_array($value)
                 ? array_map('strtolower', $value)
-                : ($value === null ? null : strtolower($value)); // phpstan is wrong here
+                : ($value === null ? null : strtolower($value)); // PHPStan incorrectly infers the type here.
         }
 
         if (is_array($value)) {
@@ -260,7 +271,7 @@ class Filter
             /** @var string|string[] $value {@see self::normalizeTypes} ensures this is the case */
             $value = is_array($value)
                 ? array_map('strtolower', $value)
-                : ($value === null ? null : strtolower($value)); // phpstan is wrong here
+                : ($value === null ? null : strtolower($value)); // PHPStan incorrectly infers the type here.
         }
 
         if (is_array($value)) {
@@ -500,7 +511,7 @@ class Filter
      * Normalize type of $value to the one of $rowValue
      *
      * For details on how this works please see the corresponding test
-     * {@see \ipl\Tests\Stdlib\FilterTest::testConditionsAreValueTypeAgnostic}
+     * {@see \ipl\Tests\Stdlib\FilterTest::testConditionsAreValueTypeAgnostic}.
      *
      * @param mixed $rowValue
      * @param mixed $value

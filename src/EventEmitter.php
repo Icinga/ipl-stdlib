@@ -2,7 +2,11 @@
 
 namespace ipl\Stdlib;
 
-/** @deprecated Use {@link Events} instead */
+/**
+ * Deprecated predecessor of {@see Events}
+ *
+ * @deprecated Use {@see Events} instead
+ */
 trait EventEmitter
 {
     use Events;

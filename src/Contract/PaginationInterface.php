@@ -2,7 +2,11 @@
 
 namespace ipl\Stdlib\Contract;
 
-/** @deprecated Use {@link Paginatable} instead */
+/**
+ * Deprecated predecessor of {@see Paginatable}
+ *
+ * @deprecated Use {@see Paginatable} instead
+ */
 interface PaginationInterface extends Paginatable
 {
 }

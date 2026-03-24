@@ -2,6 +2,9 @@
 
 namespace ipl\Stdlib\Filter;
 
+/**
+ * Abstract filter condition matching a column against a value
+ */
 abstract class Condition implements Rule, MetaDataProvider
 {
     use MetaData;
@@ -9,7 +12,6 @@ abstract class Condition implements Rule, MetaDataProvider
     /** @var string|string[] */
     protected string|array $column = [];
 
-    /** @var mixed */
     protected mixed $value = null;
 
     /**

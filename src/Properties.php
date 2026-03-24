@@ -2,15 +2,16 @@
 
 namespace ipl\Stdlib;
 
+use Generator;
 use OutOfBoundsException;
 use Traversable;
 
 /**
- * Trait for property access, mutation and array access.
+ * Trait for property access, mutation, and array access
  */
 trait Properties
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     private array $properties = [];
 
     /**
@@ -38,7 +39,7 @@ trait Properties
     /**
      * Set the given properties
      *
-     * @param array $properties
+     * @param array<string, mixed> $properties
      *
      * @return $this
      */
@@ -87,7 +88,7 @@ trait Properties
     /**
      * Iterate over all existing properties
      *
-     * @return Traversable
+     * @return Generator<string, mixed>
      */
     public function getIterator(): Traversable
     {
@@ -125,6 +126,8 @@ trait Properties
      *
      * @param mixed $offset
      * @param mixed $value
+     *
+     * @return void
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
@@ -135,6 +138,8 @@ trait Properties
      * Unset the value for an offset
      *
      * @param mixed $offset
+     *
+     * @return void
      */
     public function offsetUnset(mixed $offset): void
     {
@@ -148,7 +153,7 @@ trait Properties
      * e.g. `$value = $object->property;`.
      * Do not call this method directly.
      *
-     * @param mixed $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -166,6 +171,8 @@ trait Properties
      *
      * @param string $key
      * @param mixed  $value
+     *
+     * @return void
      */
     public function __set(string $key, mixed $value): void
     {
@@ -196,6 +203,8 @@ trait Properties
      * Do not call this method directly.
      *
      * @param string $key
+     *
+     * @return void
      */
     public function __unset(string $key): void
     {

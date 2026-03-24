@@ -2,7 +2,11 @@
 
 namespace ipl\Stdlib;
 
-/** @deprecated Use {@link Messages} instead */
+/**
+ * Deprecated predecessor of {@see Messages}
+ *
+ * @deprecated Use {@see Messages} instead
+ */
 trait MessageContainer
 {
     use Messages;

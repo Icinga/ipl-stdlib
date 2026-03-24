@@ -2,9 +2,12 @@
 
 namespace ipl\Stdlib;
 
+/**
+ * Store, retrieve, and manage a list of string messages
+ */
 trait Messages
 {
-    /** @var array */
+    /** @var string[] */
     protected array $messages = [];
 
     /**
@@ -20,7 +23,7 @@ trait Messages
     /**
      * Get all messages
      *
-     * @return array
+     * @return string[]
      */
     public function getMessages()
     {
@@ -67,7 +70,7 @@ trait Messages
     /**
      * Add the given messages
      *
-     * @param array $messages
+     * @param string[] $messages
      *
      * @return $this
      */

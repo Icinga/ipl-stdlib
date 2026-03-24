@@ -2,10 +2,13 @@
 
 namespace ipl\Stdlib\Contract;
 
+/**
+ * Validate values and collect error messages
+ */
 interface Validator
 {
     /**
-     * Get whether the given value is valid
+     * Check whether the given value is valid
      *
      * @param mixed $value
      *
@@ -16,7 +19,7 @@ interface Validator
     /**
      * Get the validation error messages
      *
-     * @return array<string>
+     * @return string[]
      */
     public function getMessages();
 }

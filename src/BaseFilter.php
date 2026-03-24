@@ -4,9 +4,11 @@ namespace ipl\Stdlib;
 
 use ipl\Stdlib\Filter\Rule;
 
+/**
+ * Store and expose a base filter rule
+ */
 trait BaseFilter
 {
-    /** @var ?Rule Base filter */
     private ?Rule $baseFilter = null;
 
     /**

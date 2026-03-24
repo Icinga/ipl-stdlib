@@ -5,9 +5,12 @@ namespace ipl\Stdlib;
 use ipl\Stdlib\Contract\PluginLoader;
 use ipl\Stdlib\Loader\AutoloadingPluginLoader;
 
+/**
+ * Register plugin loaders by type and resolve plugin class names
+ */
 trait Plugins
 {
-    /** @var array Registered plugin loaders by type */
+    /** @var array<string, PluginLoader[]> Registered plugin loaders by type */
     protected array $pluginLoaders = [];
 
     /**
@@ -75,7 +78,6 @@ trait Plugins
     public function loadPlugin(string $type, string $name): string|false
     {
         if ($this->hasPluginLoader($type)) {
-            /** @var PluginLoader $loader */
             foreach ($this->pluginLoaders[$type] as $loader) {
                 $class = $loader->load($name);
                 if ($class) {
@@ -87,6 +89,17 @@ trait Plugins
         return false;
     }
 
+    /**
+     * Add a default plugin loader for the given type
+     *
+     * Default loaders are appended after any loaders added via {@see addPluginLoader()}.
+     *
+     * @param string $type
+     * @param PluginLoader|string $loaderOrNamespace
+     * @param string $postfix
+     *
+     * @return $this
+     */
     protected function addDefaultPluginLoader(
         string $type,
         PluginLoader|string $loaderOrNamespace,

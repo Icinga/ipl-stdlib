@@ -14,13 +14,11 @@ use SplPriorityQueue;
  */
 class PriorityQueue extends SplPriorityQueue
 {
-    /** @var int */
+    /** @var int Decreasing insertion counter for stable ordering at equal priorities */
     protected int $serial = PHP_INT_MAX;
 
     /**
-     * Inserts an element in the queue by sifting it up.
-     *
-     * Maintains insertion order for items with the same priority.
+     * Insert an element in the queue, maintaining insertion order for equal priorities
      *
      * @param TValue $value
      * @param TPriority $priority
@@ -35,11 +33,11 @@ class PriorityQueue extends SplPriorityQueue
     /**
      * Yield all items as priority-value pairs
      *
-     * @return Generator
+     * @return Generator<TPriority, TValue>
      */
     public function yieldAll(): Generator
     {
-        // Clone queue because the SplPriorityQueue acts as a heap and thus items are removed upon iteration
+        // Clone the queue because SplPriorityQueue acts as a heap and removes items upon iteration.
         $queue = clone $this;
 
         $queue->setExtractFlags(static::EXTR_BOTH);

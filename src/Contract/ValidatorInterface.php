@@ -2,7 +2,11 @@
 
 namespace ipl\Stdlib\Contract;
 
-/** @deprecated Use {@link Validator} instead */
+/**
+ * Deprecated predecessor of {@see Validator}
+ *
+ * @deprecated Use {@see Validator} instead
+ */
 interface ValidatorInterface extends Validator
 {
 }
