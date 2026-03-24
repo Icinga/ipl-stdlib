@@ -90,7 +90,7 @@ class Seq
     {
         $usesCallback = $needle instanceof Closure;
         if (! $usesCallback && $caseSensitive && is_array($traversable)) {
-            return isset($traversable[$needle]) ? $traversable[$needle] : null;
+            return $traversable[$needle] ?? null;
         }
 
         if (! $caseSensitive && is_string($needle) && ! $usesCallback) {

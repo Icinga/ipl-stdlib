@@ -19,11 +19,7 @@ use stdClass;
  */
 function get_php_type(mixed $subject): string
 {
-    if (is_object($subject)) {
-        return get_class($subject);
-    } else {
-        return gettype($subject);
-    }
+    return is_object($subject) ? get_class($subject) : gettype($subject);
 }
 
 /**
@@ -72,7 +68,7 @@ function iterable_key_first(iterable $iterable): int|string|null
  */
 function iterable_value_first(iterable $iterable): mixed
 {
-    foreach ($iterable as $_ => $value) {
+    foreach ($iterable as $value) {
         return $value;
     }
 

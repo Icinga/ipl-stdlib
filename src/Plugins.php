@@ -22,13 +22,9 @@ trait Plugins
         PluginLoader|string $loaderOrNamespace,
         ?string $postfix = null
     ): PluginLoader {
-        if ($loaderOrNamespace instanceof PluginLoader) {
-            $loader = $loaderOrNamespace;
-        } else {
-            $loader = new AutoloadingPluginLoader($loaderOrNamespace, $postfix);
-        }
-
-        return $loader;
+        return $loaderOrNamespace instanceof PluginLoader
+            ? $loaderOrNamespace
+            : new AutoloadingPluginLoader($loaderOrNamespace, $postfix);
     }
 
     /**

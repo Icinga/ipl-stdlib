@@ -11,10 +11,6 @@ trait MetaData
 
     public function metaData(): Data
     {
-        if ($this->metaData === null) {
-            $this->metaData = new Data();
-        }
-
-        return $this->metaData;
+        return $this->metaData ??= new Data();
     }
 }

@@ -117,7 +117,7 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
      */
     public function has(Rule $rule): bool
     {
-        return array_search($rule, $this->rules, true) !== false;
+        return in_array($rule, $this->rules, true);
     }
 
     /**
