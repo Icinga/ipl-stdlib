@@ -43,7 +43,7 @@ trait Events
      *
      * @throws InvalidArgumentException If the event name is not valid
      */
-    public function on($event, callable $listener): static
+    public function on($event, callable $listener)
     {
         $this->assertValidEvent($event);
         $this->evenementUnvalidatedOn($event, $listener);
