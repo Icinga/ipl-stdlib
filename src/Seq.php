@@ -129,4 +129,31 @@ class Seq
             yield $key => $callback($value);
         }
     }
+
+    /**
+     * Yield every unique value of the given traversable with its original key
+     *
+     * @param iterable $traversable
+     * @param bool $caseSensitive
+     *
+     * @return Generator
+     */
+    public static function unique(iterable $traversable, bool $caseSensitive = true): Generator
+    {
+        $seen = [];
+        foreach ($traversable as $key => $value) {
+            if (is_string($value)) {
+                $needle = $caseSensitive ? $value : strtolower($value);
+            } elseif (is_object($value)) {
+                $needle = spl_object_hash($value);
+            } else {
+                $needle = $value;
+            }
+
+            if (! array_key_exists($needle, $seen)) {
+                $seen[$needle] = true;
+                yield $key => $value;
+            }
+        }
+    }
 }
