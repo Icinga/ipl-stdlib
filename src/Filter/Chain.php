@@ -4,6 +4,7 @@ namespace ipl\Stdlib\Filter;
 
 use ArrayIterator;
 use Countable;
+use Generator;
 use IteratorAggregate;
 use OutOfBoundsException;
 use Traversable;
@@ -54,6 +55,22 @@ abstract class Chain implements Rule, MetaDataProvider, IteratorAggregate, Count
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->rules);
+    }
+
+    /**
+     * Yield all rules of this and nested chains in a flat sequence
+     *
+     * @return Generator<Rule>
+     */
+    public function yieldRules(): Generator
+    {
+        foreach ($this->rules as $rule) {
+            if ($rule instanceof self) {
+                yield from $rule->yieldRules();
+            } else {
+                yield $rule;
+            }
+        }
     }
 
     /**
