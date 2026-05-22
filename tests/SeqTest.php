@@ -4,6 +4,7 @@ namespace ipl\Tests\Stdlib;
 
 use ArrayIterator;
 use ipl\Stdlib\Seq;
+use stdClass;
 
 class SeqTest extends TestCase
 {
@@ -211,6 +212,84 @@ class SeqTest extends TestCase
                 'two' => 3,
                 'three' => 4
             ],
+            $result
+        );
+    }
+
+    public function testUniqueWithArray()
+    {
+        $object1 = new stdClass();
+        $object2 = new stdClass();
+        $arr = [1, 2, 2, 3, '3', $object1, $object1, $object2];
+        $result = iterator_to_array(Seq::unique($arr));
+
+        $this->assertSame(
+            [0 => 1, 1 => 2, 3 => 3, 5 => $object1, 7 => $object2],
+            $result
+        );
+    }
+
+    public function testUniqueWithKeyedArray()
+    {
+        $object1 = new stdClass();
+        $object2 = new stdClass();
+        $arr = ['a' => 1, 'b' => 2, 0 => 2, -1 => 3, 1 => '3', 2 => $object1, 3 => $object1, 4 => $object2];
+        $result = iterator_to_array(Seq::unique($arr));
+
+        $this->assertSame(
+            ['a' => 1, 'b' => 2, -1 => 3, 2 => $object1, 4 => $object2],
+            $result
+        );
+    }
+
+    public function testUniqueWithGenerator()
+    {
+        $object1 = new stdClass();
+        $object2 = new stdClass();
+        $generator = function () use ($object1, $object2) {
+            yield from [1, 2, 2, 3, '3', $object1, $object1, $object2];
+        };
+        $result = iterator_to_array(Seq::unique($generator()));
+
+        $this->assertSame(
+            [0 => 1, 1 => 2, 3 => 3, 5 => $object1, 7 => $object2],
+            $result
+        );
+    }
+
+    public function testUniqueWithKeyedGenerator()
+    {
+        $object1 = new stdClass();
+        $object2 = new stdClass();
+        $generator = function () use ($object1, $object2) {
+            yield from ['a' => 1, 'b' => 2, 0 => 2, -1 => 3, 1 => '3', 2 => $object1, 3 => $object1, 4 => $object2];
+        };
+        $result = iterator_to_array(Seq::unique($generator()));
+
+        $this->assertSame(
+            ['a' => 1, 'b' => 2, -1 => 3, 2 => $object1, 4 => $object2],
+            $result
+        );
+    }
+
+    public function testUniqueWithStringsIsCaseSensitiveByDefault()
+    {
+        $arr = ['foo', 'bar', 'FOO', 'BAR', 'foo'];
+        $result = iterator_to_array(Seq::unique($arr));
+
+        $this->assertSame(
+            [0 => 'foo', 1 => 'bar', 2 => 'FOO', 3 => 'BAR'],
+            $result
+        );
+    }
+
+    public function testUniqueWithStringsCaseInsensitive()
+    {
+        $arr = ['foo', 'bar', 'FOO', 'BAR', 'foo'];
+        $result = iterator_to_array(Seq::unique($arr, false));
+
+        $this->assertSame(
+            [0 => 'foo', 1 => 'bar'],
             $result
         );
     }
