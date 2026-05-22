@@ -3,6 +3,7 @@
 namespace ipl\Stdlib;
 
 use Closure;
+use Generator;
 
 /**
  * Collection of utilities for traversables
@@ -112,5 +113,20 @@ class Seq
         }
 
         return null;
+    }
+
+    /**
+     * Apply the callback to all elements of the given traversable, while preserving keys
+     *
+     * @param iterable $traversable
+     * @param callable $callback
+     *
+     * @return Generator
+     */
+    public static function map(iterable $traversable, callable $callback): Generator
+    {
+        foreach ($traversable as $key => $value) {
+            yield $key => $callback($value);
+        }
     }
 }
