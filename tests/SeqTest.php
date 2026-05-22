@@ -129,4 +129,89 @@ class SeqTest extends TestCase
             )
         );
     }
+
+    public function testMapWithSequencedArray()
+    {
+        $arr = [1, 2, 3];
+
+        $result = [];
+        foreach (Seq::map($arr, fn ($v) => $v + 1) as $k => $v) {
+            $result[$k] = $v;
+        }
+
+        $this->assertSame(
+            [2, 3, 4],
+            $result
+        );
+    }
+
+    public function testMapWithKeyedArray()
+    {
+        $arr = [
+            'one' => 1,
+            'two' => 2,
+            'three' => 3
+        ];
+
+        $result = [];
+        foreach (Seq::map($arr, fn ($v) => $v + 1) as $k => $v) {
+            $result[$k] = $v;
+        }
+
+        $this->assertSame(
+            [
+                'one' => 2,
+                'two' => 3,
+                'three' => 4
+            ],
+            $result
+        );
+    }
+
+    public function testMapWithGenerators()
+    {
+        $generator = function () {
+            foreach ([1, 2, 3] as $v) {
+                yield $v;
+            }
+        };
+
+        $result = [];
+        foreach (Seq::map($generator(), fn ($v) => $v + 1) as $k => $v) {
+            $result[$k] = $v;
+        }
+
+        $this->assertSame(
+            [2, 3, 4],
+            $result
+        );
+    }
+
+    public function testMapWithKeyedGenerators()
+    {
+        $generator = function () {
+            $arr = [
+                'one' => 1,
+                'two' => 2,
+                'three' => 3
+            ];
+            foreach ($arr as $k => $v) {
+                yield $k => $v;
+            }
+        };
+
+        $result = [];
+        foreach (Seq::map($generator(), fn ($v) => $v + 1) as $k => $v) {
+            $result[$k] = $v;
+        }
+
+        $this->assertSame(
+            [
+                'one' => 2,
+                'two' => 3,
+                'three' => 4
+            ],
+            $result
+        );
+    }
 }
