@@ -47,6 +47,80 @@ class StrTest extends TestCase
         $this->assertFalse(Str::startsWith('FOOBAR', 'foo', true));
     }
 
+    public function testIsEmptyReturnsTrueForNull()
+    {
+        $this->assertTrue(Str::isEmpty(null));
+    }
+
+    public function testIsEmptyReturnsTrueForEmptyString()
+    {
+        $this->assertTrue(Str::isEmpty(''));
+    }
+
+    public function testIsEmptyReturnsTrueForStringWithLeadingAndTrailingWhitespace()
+    {
+        $this->assertTrue(Str::isEmpty('   '));
+    }
+
+    public function testIsEmptyReturnsTrueForStringWithOnlyWhitespace()
+    {
+        $this->assertTrue(Str::isEmpty("\t\n"));
+    }
+
+    public function testIsEmptyReturnsFalseForZero()
+    {
+        $this->assertFalse(Str::isEmpty('0'));
+    }
+
+    public function testIsEmptyReturnsFalseForNonEmptyString()
+    {
+        $this->assertFalse(Str::isEmpty('Warning'));
+    }
+
+    public function testIsEmptyReturnsFalseForStringWithContentAndSurroundingWhitespace()
+    {
+        $this->assertFalse(Str::isEmpty('  Warning  '));
+    }
+
+    public function testIsEmptyReturnsFalseForUtf8String()
+    {
+        $this->assertFalse(Str::isEmpty('接続エラー'));
+    }
+
+    public function testIsEmptyReturnsFalseForUtf8StringWithSurroundingWhitespace()
+    {
+        $this->assertFalse(Str::isEmpty('  接続エラー  '));
+    }
+
+    public function testIsEmptyReturnsTrueForVisuallyEmptyUtf8String()
+    {
+        $this->assertTrue(Str::isEmpty("\u{3164}\u{1160}"));
+    }
+
+    public function testIsEmptyReturnsFalseForStringable()
+    {
+        $subject = new class {
+            public function __toString(): string
+            {
+                return 'Warning';
+            }
+        };
+
+        $this->assertFalse(Str::isEmpty($subject));
+    }
+
+    public function testIsEmptyReturnsTrueForStringableWithWhitespaceOnly()
+    {
+        $subject = new class {
+            public function __toString(): string
+            {
+                return '   ';
+            }
+        };
+
+        $this->assertTrue(Str::isEmpty($subject));
+    }
+
     public function testSymmetricSplitReturnsArrayPaddedToTheSizeSpecifiedByLimitUsingNullAsValueByDefault()
     {
         $this->assertSame(['foo', 'bar', null, null], Str::symmetricSplit('foo,bar', ',', 4));

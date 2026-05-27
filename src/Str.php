@@ -2,6 +2,8 @@
 
 namespace ipl\Stdlib;
 
+use Stringable;
+
 /**
  * Collection of string manipulation functions
  */
@@ -89,5 +91,20 @@ class Str
         $exploded = $limit !== null ? explode($delimiter, $subject, $limit) : explode($delimiter, $subject);
 
         return array_map('trim', $exploded);
+    }
+
+    /**
+     * Check if the given string is empty
+     *
+     * Null is considered empty, and strings consisting only of whitespace or visually
+     * empty characters are considered empty.
+     *
+     * @param string|Stringable|null $subject
+     *
+     * @return bool
+     */
+    public static function isEmpty(string|Stringable|null $subject): bool
+    {
+        return $subject === null || preg_match('/^[\s\x{3164}\x{1160}]*$/u', $subject) === 1;
     }
 }
