@@ -2,6 +2,8 @@
 
 namespace ipl\Stdlib;
 
+use Stringable;
+
 /**
  * Collection of string manipulation functions
  */
@@ -89,5 +91,19 @@ class Str
         $exploded = $limit !== null ? explode($delimiter, $subject, $limit) : explode($delimiter, $subject);
 
         return array_map('trim', $exploded);
+    }
+
+    /**
+     * Check if the given string is empty
+     *
+     * Null is considered empty and strings are trimmed before checking.
+     *
+     * @param Stringable|string|null $subject
+     *
+     * @return bool
+     */
+    public static function isEmpty(Stringable|string|null $subject): bool
+    {
+        return $subject === null || trim((string) $subject) === '';
     }
 }
