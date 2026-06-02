@@ -47,6 +47,16 @@ class StrTest extends TestCase
         $this->assertFalse(Str::startsWith('FOOBAR', 'foo', true));
     }
 
+    public function testStartsWithReturnsTrueForUtf8String()
+    {
+        $this->assertTrue(Str::startsWith('接続エラーが発生しました', '接続エラー'));
+    }
+
+    public function testStartsWithReturnsFalseForUtf8StringWithWrongPrefix()
+    {
+        $this->assertFalse(Str::startsWith('接続エラーが発生しました', 'エラーが'));
+    }
+
     public function testEndsWithReturnsTrueIfStringEndsWithTheSpecifiedSubstring()
     {
         $this->assertTrue(Str::endsWith('config.ini', '.ini'));
