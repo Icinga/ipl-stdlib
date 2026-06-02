@@ -92,6 +92,44 @@ class StrTest extends TestCase
         $this->assertTrue(Str::endsWith('Der Schlüssel ist ungültig', 'UNGÜLTIG', false));
     }
 
+    public function testContainsReturnsTrueIfStringContainsTheSpecifiedSubstring()
+    {
+        $this->assertTrue(Str::contains('MySQL server has gone away', 'server has gone away'));
+    }
+
+    public function testContainsReturnsFalseIfStringDoesNotContainTheSpecifiedSubstring()
+    {
+        $this->assertFalse(Str::contains('Query executed successfully', 'server has gone away'));
+    }
+
+    public function testContainsReturnsTrueIfStringContainsTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertTrue(Str::contains(
+            'Lost connection to MySQL server during query',
+            'Lost connection',
+            true,
+        ));
+    }
+
+    public function testContainsReturnsFalseIfStringDoesNotContainTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertFalse(Str::contains(
+            'lost connection to MySQL server during query',
+            'Lost connection',
+            true,
+        ));
+    }
+
+    public function testContainsReturnsTrueForUtf8String()
+    {
+        $this->assertTrue(Str::contains('データベースへの接続に失敗しました', '接続に失敗'));
+    }
+
+    public function testContainsReturnsFalseForUtf8StringWithWrongNeedle()
+    {
+        $this->assertFalse(Str::contains('データベースへの接続に失敗しました', '接続に成功'));
+    }
+
     public function testIsEmptyReturnsTrueForNull()
     {
         $this->assertTrue(Str::isEmpty(null));

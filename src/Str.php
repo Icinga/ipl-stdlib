@@ -68,6 +68,25 @@ class Str
     }
 
     /**
+     * Check if the given string contains the specified substring
+     *
+     * @param ?string $subject
+     * @param Stringable|string $needle
+     * @param bool $caseSensitive
+     *
+     * @return bool
+     */
+    public static function contains(?string $subject, Stringable|string $needle, bool $caseSensitive = true): bool
+    {
+        $subject ??= '';
+        if (! $caseSensitive) {
+            return str_contains(strtolower($subject), strtolower((string) $needle));
+        }
+
+        return str_contains($subject, (string) $needle);
+    }
+
+    /**
      * Split string into an array padded to the size specified by limit
      *
      * This method is a perfect fit if you need default values for symmetric array destructuring.
