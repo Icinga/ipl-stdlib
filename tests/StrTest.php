@@ -47,6 +47,187 @@ class StrTest extends TestCase
         $this->assertFalse(Str::startsWith('FOOBAR', 'foo', true));
     }
 
+    public function testStartsWithReturnsTrueForUtf8String()
+    {
+        $this->assertTrue(Str::startsWith('接続エラーが発生しました', '接続エラー'));
+    }
+
+    public function testStartsWithReturnsFalseForUtf8StringWithWrongPrefix()
+    {
+        $this->assertFalse(Str::startsWith('接続エラーが発生しました', 'エラーが'));
+    }
+
+    public function testEndsWithReturnsTrueIfStringEndsWithTheSpecifiedSubstring()
+    {
+        $this->assertTrue(Str::endsWith('config.ini', '.ini'));
+    }
+
+    public function testEndsWithReturnsFalseIfStringDoesNotEndWithTheSpecifiedSubstring()
+    {
+        $this->assertFalse(Str::endsWith('config.ini', '.php'));
+    }
+
+    public function testEndsWithReturnsTrueIfStringEndsWithTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertTrue(Str::endsWith('config.INI', '.INI', true));
+    }
+
+    public function testEndsWithReturnsFalseIfStringDoesNotEndWithTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertFalse(Str::endsWith('config.INI', '.ini', true));
+    }
+
+    public function testEndsWithReturnsTrueIfStringEndsWithTheSpecifiedSubstringCaseInsensitively()
+    {
+        $this->assertTrue(Str::endsWith('config.ini', '.INI', false));
+    }
+
+    public function testEndsWithReturnsFalseIfStringDoesNotEndWithTheSpecifiedSubstringCaseInsensitively()
+    {
+        $this->assertFalse(Str::endsWith('config.ini', '.PHP', false));
+    }
+
+    public function testEndsWithReturnsTrueForUtf8String()
+    {
+        $this->assertTrue(Str::endsWith('データベースへの接続に失敗しました', '失敗しました'));
+    }
+
+    public function testEndsWithReturnsFalseForUtf8StringWithWrongSuffix()
+    {
+        $this->assertFalse(Str::endsWith('データベースへの接続に失敗しました', '成功しました'));
+    }
+
+    public function testEndsWithReturnsTrueForUtf8StringCaseInsensitively()
+    {
+        $this->assertTrue(Str::endsWith('Der Schlüssel ist ungültig', 'UNGÜLTIG', false));
+    }
+
+    public function testContainsReturnsTrueIfStringContainsTheSpecifiedSubstring()
+    {
+        $this->assertTrue(Str::contains('MySQL server has gone away', 'server has gone away'));
+    }
+
+    public function testContainsReturnsFalseIfStringDoesNotContainTheSpecifiedSubstring()
+    {
+        $this->assertFalse(Str::contains('Query executed successfully', 'server has gone away'));
+    }
+
+    public function testContainsReturnsTrueIfStringContainsTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertTrue(Str::contains(
+            'Lost connection to MySQL server during query',
+            'Lost connection',
+            true,
+        ));
+    }
+
+    public function testContainsReturnsFalseIfStringDoesNotContainTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertFalse(Str::contains(
+            'lost connection to MySQL server during query',
+            'Lost connection',
+            true,
+        ));
+    }
+
+    public function testContainsReturnsTrueForUtf8String()
+    {
+        $this->assertTrue(Str::contains('データベースへの接続に失敗しました', '接続に失敗'));
+    }
+
+    public function testContainsReturnsFalseForUtf8StringWithWrongNeedle()
+    {
+        $this->assertFalse(Str::contains('データベースへの接続に失敗しました', '接続に成功'));
+    }
+
+    public function testContainsAnyReturnsTrueIfStringContainsOneOfTheSpecifiedSubstrings()
+    {
+        $this->assertTrue(Str::containsAny('MySQL server has gone away', [
+            'server has gone away',
+            'Lost connection',
+            'Connection refused',
+        ]));
+    }
+
+    public function testContainsAnyReturnsFalseIfStringContainsNoneOfTheSpecifiedSubstrings()
+    {
+        $this->assertFalse(Str::containsAny('Query executed successfully', [
+            'server has gone away',
+            'Lost connection',
+            'Connection refused',
+        ]));
+    }
+
+    public function testContainsAnyReturnsTrueIfStringContainsOneOfTheSpecifiedSubstringsCaseInsensitively()
+    {
+        $this->assertTrue(Str::containsAny('LOST CONNECTION to MySQL server', [
+            'server has gone away',
+            'Lost connection',
+        ], false));
+    }
+
+    public function testContainsAnyReturnsFalseIfStringContainsNoneOfTheSpecifiedSubstringsAndCaseIsStrict()
+    {
+        $this->assertFalse(Str::containsAny('lost connection to MySQL server', [
+            'server has gone away',
+            'Lost connection',
+        ], true));
+    }
+
+    public function testContainsAnyReturnsTrueForUtf8String()
+    {
+        $this->assertTrue(Str::containsAny('データベースへの接続に失敗しました', ['タイムアウト', '接続に失敗']));
+    }
+
+    public function testContainsAnyReturnsFalseForUtf8StringWithWrongNeedles()
+    {
+        $this->assertFalse(Str::containsAny('データベースへの接続に失敗しました', ['タイムアウト', '接続に成功']));
+    }
+
+    public function testContainsAllReturnsTrueIfStringContainsAllSpecifiedSubstrings()
+    {
+        $this->assertTrue(Str::containsAll(
+            'host=db1.example.com;dbname=icingaweb2;charset=utf8',
+            ['host=', 'dbname=', 'charset='],
+        ));
+    }
+
+    public function testContainsAllReturnsFalseIfStringIsMissingOneOfTheSpecifiedSubstrings()
+    {
+        $this->assertFalse(Str::containsAll(
+            'host=db1.example.com;charset=utf8',
+            ['host=', 'dbname=', 'charset='],
+        ));
+    }
+
+    public function testContainsAllReturnsTrueIfStringContainsAllSpecifiedSubstringsCaseInsensitively()
+    {
+        $this->assertTrue(Str::containsAll(
+            'HOST=db1.example.com;DBNAME=icingaweb2',
+            ['host=', 'dbname='],
+            false,
+        ));
+    }
+
+    public function testContainsAllReturnsFalseIfStringIsMissingOneOfTheSpecifiedSubstringsAndCaseIsStrict()
+    {
+        $this->assertFalse(Str::containsAll(
+            'HOST=db1.example.com;DBNAME=icingaweb2',
+            ['host=', 'dbname='],
+            true,
+        ));
+    }
+
+    public function testContainsAllReturnsTrueForUtf8String()
+    {
+        $this->assertTrue(Str::containsAll('データベースへの接続に失敗しました', ['接続', '失敗']));
+    }
+
+    public function testContainsAllReturnsFalseForUtf8StringWithMissingNeedle()
+    {
+        $this->assertFalse(Str::containsAll('データベースへの接続に失敗しました', ['接続', '成功']));
+    }
+
     public function testIsEmptyReturnsTrueForNull()
     {
         $this->assertTrue(Str::isEmpty(null));

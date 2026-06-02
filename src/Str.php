@@ -49,6 +49,84 @@ class Str
     }
 
     /**
+     * Check if the given string ends with the specified substring
+     *
+     * @param ?string $subject
+     * @param string $end
+     * @param bool $caseSensitive
+     *
+     * @return bool
+     */
+    public static function endsWith(?string $subject, string $end, bool $caseSensitive = true): bool
+    {
+        $subject ??= '';
+        if (! $caseSensitive) {
+            return mb_strtolower(mb_substr($subject, -mb_strlen($end))) === mb_strtolower($end);
+        }
+
+        return str_ends_with($subject, $end);
+    }
+
+    /**
+     * Check if the given string contains the specified substring
+     *
+     * @param ?string $subject
+     * @param Stringable|string $needle
+     * @param bool $caseSensitive
+     *
+     * @return bool
+     */
+    public static function contains(?string $subject, Stringable|string $needle, bool $caseSensitive = true): bool
+    {
+        $subject ??= '';
+        if (! $caseSensitive) {
+            return str_contains(strtolower($subject), strtolower((string) $needle));
+        }
+
+        return str_contains($subject, (string) $needle);
+    }
+
+    /**
+     * Check if the given string contains any of the specified substrings
+     *
+     * @param ?string $haystack
+     * @param iterable<Stringable|string> $needles
+     * @param bool $caseSensitive
+     *
+     * @return bool
+     */
+    public static function containsAny(?string $haystack, iterable $needles, bool $caseSensitive = true): bool
+    {
+        foreach ($needles as $needle) {
+            if (self::contains($haystack, $needle, $caseSensitive)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the given string contains all the specified substrings
+     *
+     * @param ?string $haystack
+     * @param iterable<Stringable|string>[] $needles
+     * @param bool $caseSensitive
+     *
+     * @return bool
+     */
+    public static function containsAll(?string $haystack, iterable $needles, bool $caseSensitive = true): bool
+    {
+        foreach ($needles as $needle) {
+            if (! self::contains($haystack, $needle, $caseSensitive)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Split string into an array padded to the size specified by limit
      *
      * This method is a perfect fit if you need default values for symmetric array destructuring.
