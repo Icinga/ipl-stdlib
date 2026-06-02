@@ -87,6 +87,46 @@ class Str
     }
 
     /**
+     * Check if the given string contains any of the specified substrings
+     *
+     * @param ?string $haystack
+     * @param iterable<Stringable|string> $needles
+     * @param bool $caseSensitive
+     *
+     * @return bool
+     */
+    public static function containsAny(?string $haystack, iterable $needles, bool $caseSensitive = true): bool
+    {
+        foreach ($needles as $needle) {
+            if (self::contains($haystack, $needle, $caseSensitive)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the given string contains all the specified substrings
+     *
+     * @param ?string $haystack
+     * @param iterable<Stringable|string>[] $needles
+     * @param bool $caseSensitive
+     *
+     * @return bool
+     */
+    public static function containsAll(?string $haystack, iterable $needles, bool $caseSensitive = true): bool
+    {
+        foreach ($needles as $needle) {
+            if (! self::contains($haystack, $needle, $caseSensitive)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Split string into an array padded to the size specified by limit
      *
      * This method is a perfect fit if you need default values for symmetric array destructuring.
