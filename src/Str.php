@@ -49,6 +49,25 @@ class Str
     }
 
     /**
+     * Check if the given string ends with the specified substring
+     *
+     * @param ?string $subject
+     * @param string $end
+     * @param bool $caseSensitive
+     *
+     * @return bool
+     */
+    public static function endsWith(?string $subject, string $end, bool $caseSensitive = true): bool
+    {
+        $subject ??= '';
+        if (! $caseSensitive) {
+            return mb_strtolower(mb_substr($subject, -mb_strlen($end))) === mb_strtolower($end);
+        }
+
+        return str_ends_with($subject, $end);
+    }
+
+    /**
      * Split string into an array padded to the size specified by limit
      *
      * This method is a perfect fit if you need default values for symmetric array destructuring.

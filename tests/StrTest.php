@@ -47,6 +47,51 @@ class StrTest extends TestCase
         $this->assertFalse(Str::startsWith('FOOBAR', 'foo', true));
     }
 
+    public function testEndsWithReturnsTrueIfStringEndsWithTheSpecifiedSubstring()
+    {
+        $this->assertTrue(Str::endsWith('config.ini', '.ini'));
+    }
+
+    public function testEndsWithReturnsFalseIfStringDoesNotEndWithTheSpecifiedSubstring()
+    {
+        $this->assertFalse(Str::endsWith('config.ini', '.php'));
+    }
+
+    public function testEndsWithReturnsTrueIfStringEndsWithTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertTrue(Str::endsWith('config.INI', '.INI', true));
+    }
+
+    public function testEndsWithReturnsFalseIfStringDoesNotEndWithTheSpecifiedSubstringAndCaseIsStrict()
+    {
+        $this->assertFalse(Str::endsWith('config.INI', '.ini', true));
+    }
+
+    public function testEndsWithReturnsTrueIfStringEndsWithTheSpecifiedSubstringCaseInsensitively()
+    {
+        $this->assertTrue(Str::endsWith('config.ini', '.INI', false));
+    }
+
+    public function testEndsWithReturnsFalseIfStringDoesNotEndWithTheSpecifiedSubstringCaseInsensitively()
+    {
+        $this->assertFalse(Str::endsWith('config.ini', '.PHP', false));
+    }
+
+    public function testEndsWithReturnsTrueForUtf8String()
+    {
+        $this->assertTrue(Str::endsWith('データベースへの接続に失敗しました', '失敗しました'));
+    }
+
+    public function testEndsWithReturnsFalseForUtf8StringWithWrongSuffix()
+    {
+        $this->assertFalse(Str::endsWith('データベースへの接続に失敗しました', '成功しました'));
+    }
+
+    public function testEndsWithReturnsTrueForUtf8StringCaseInsensitively()
+    {
+        $this->assertTrue(Str::endsWith('Der Schlüssel ist ungültig', 'UNGÜLTIG', false));
+    }
+
     public function testIsEmptyReturnsTrueForNull()
     {
         $this->assertTrue(Str::isEmpty(null));
