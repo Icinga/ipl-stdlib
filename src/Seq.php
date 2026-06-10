@@ -37,7 +37,12 @@ class Seq
     {
         $usesCallback = $needle instanceof Closure;
         if (! $usesCallback && $caseSensitive && is_array($traversable)) {
-            return [array_search($needle, $traversable, true), $needle];
+            $result = array_search($needle, $traversable, true);
+
+            return match ($result) {
+                false   => [null, null],
+                default => [$result, $needle]
+            };
         }
 
         if (! $caseSensitive && is_string($needle) && ! $usesCallback) {
