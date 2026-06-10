@@ -18,6 +18,10 @@ class SeqTest extends TestCase
             ['foo', 'bar'],
             Seq::find(['foo' => 'bar', 'oof' => 'BAR'], 'BAR', false)
         );
+        $this->assertSame(
+            [null, null],
+            Seq::find(['foo' => 'bar', 'oof' => 'BAR'], 'missing')
+        );
     }
 
     public function testFindWithGenerators()
