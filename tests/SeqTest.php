@@ -220,81 +220,263 @@ class SeqTest extends TestCase
         );
     }
 
-    public function testUniqueWithArray()
+    public function testUniqueWithArray(): void
     {
-        $object1 = new stdClass();
-        $object2 = new stdClass();
-        $arr = [1, 2, 2, 3, '3', $object1, $object1, $object2];
-        $result = iterator_to_array(Seq::unique($arr));
+        $firstObject = new stdClass();
+        $secondObject = new stdClass();
+        $values = [1, 2, 2, 3, '3', $firstObject, $firstObject, $secondObject];
+        $result = iterator_to_array(Seq::unique($values));
 
         $this->assertSame(
-            [0 => 1, 1 => 2, 3 => 3, 5 => $object1, 7 => $object2],
-            $result
+            [0 => 1, 1 => 2, 3 => 3, 4 => '3', 5 => $firstObject, 7 => $secondObject],
+            $result,
         );
     }
 
-    public function testUniqueWithKeyedArray()
+    public function testUniqueWithKeyedArray(): void
     {
-        $object1 = new stdClass();
-        $object2 = new stdClass();
-        $arr = ['a' => 1, 'b' => 2, 0 => 2, -1 => 3, 1 => '3', 2 => $object1, 3 => $object1, 4 => $object2];
-        $result = iterator_to_array(Seq::unique($arr));
+        $firstObject = new stdClass();
+        $secondObject = new stdClass();
+        $values = [
+            'first-int'        => 1,
+            'second-int'       => 2,
+            'duplicate-int'    => 2,
+            'different-int'    => 3,
+            'string-int'       => '3',
+            'first-object'     => $firstObject,
+            'duplicate-object' => $firstObject,
+            'second-object'    => $secondObject,
+        ];
+        $result = iterator_to_array(Seq::unique($values));
 
         $this->assertSame(
-            ['a' => 1, 'b' => 2, -1 => 3, 2 => $object1, 4 => $object2],
-            $result
+            [
+                'first-int'     => 1,
+                'second-int'    => 2,
+                'different-int' => 3,
+                'string-int'    => '3',
+                'first-object'  => $firstObject,
+                'second-object' => $secondObject,
+            ],
+            $result,
         );
     }
 
-    public function testUniqueWithGenerator()
+    public function testUniqueWithGenerator(): void
     {
-        $object1 = new stdClass();
-        $object2 = new stdClass();
-        $generator = function () use ($object1, $object2) {
-            yield from [1, 2, 2, 3, '3', $object1, $object1, $object2];
+        $firstObject = new stdClass();
+        $secondObject = new stdClass();
+        $generator = function () use ($firstObject, $secondObject) {
+            yield from [1, 2, 2, 3, '3', $firstObject, $firstObject, $secondObject];
         };
         $result = iterator_to_array(Seq::unique($generator()));
 
         $this->assertSame(
-            [0 => 1, 1 => 2, 3 => 3, 5 => $object1, 7 => $object2],
-            $result
+            [0 => 1, 1 => 2, 3 => 3, 4 => '3', 5 => $firstObject, 7 => $secondObject],
+            $result,
         );
     }
 
-    public function testUniqueWithKeyedGenerator()
+    public function testUniqueWithKeyedGenerator(): void
     {
-        $object1 = new stdClass();
-        $object2 = new stdClass();
-        $generator = function () use ($object1, $object2) {
-            yield from ['a' => 1, 'b' => 2, 0 => 2, -1 => 3, 1 => '3', 2 => $object1, 3 => $object1, 4 => $object2];
+        $firstObject = new stdClass();
+        $secondObject = new stdClass();
+        $generator = function () use ($firstObject, $secondObject) {
+            yield from [
+                'first-int'        => 1,
+                'second-int'       => 2,
+                'duplicate-int'    => 2,
+                'different-int'    => 3,
+                'string-int'       => '3',
+                'first-object'     => $firstObject,
+                'duplicate-object' => $firstObject,
+                'second-object'    => $secondObject,
+            ];
         };
         $result = iterator_to_array(Seq::unique($generator()));
 
         $this->assertSame(
-            ['a' => 1, 'b' => 2, -1 => 3, 2 => $object1, 4 => $object2],
-            $result
+            [
+                'first-int'     => 1,
+                'second-int'    => 2,
+                'different-int' => 3,
+                'string-int'    => '3',
+                'first-object'  => $firstObject,
+                'second-object' => $secondObject,
+            ],
+            $result,
         );
     }
 
-    public function testUniqueWithStringsIsCaseSensitiveByDefault()
+    public function testUniqueWithStringsIsCaseSensitiveByDefault(): void
     {
-        $arr = ['foo', 'bar', 'FOO', 'BAR', 'foo'];
-        $result = iterator_to_array(Seq::unique($arr));
+        $values = ['icinga.com', 'host.name', 'ICINGA.COM', 'HOST.NAME', 'icinga.com'];
+        $result = iterator_to_array(Seq::unique($values));
 
         $this->assertSame(
-            [0 => 'foo', 1 => 'bar', 2 => 'FOO', 3 => 'BAR'],
-            $result
+            [0 => 'icinga.com', 1 => 'host.name', 2 => 'ICINGA.COM', 3 => 'HOST.NAME'],
+            $result,
         );
     }
 
-    public function testUniqueWithStringsCaseInsensitive()
+    public function testUniqueWithStringsCaseInsensitive(): void
     {
-        $arr = ['foo', 'bar', 'FOO', 'BAR', 'foo'];
-        $result = iterator_to_array(Seq::unique($arr, false));
+        $values = ['icinga.com', 'host.name', 'ICINGA.COM', 'HOST.NAME', 'icinga.com'];
+        $result = iterator_to_array(Seq::unique($values, false));
 
         $this->assertSame(
-            [0 => 'foo', 1 => 'bar'],
-            $result
+            [0 => 'icinga.com', 1 => 'host.name'],
+            $result,
         );
+    }
+
+    public function testUniqueKeepsDifferentScalarTypesDistinct(): void
+    {
+        $values = [
+            'int-zero'        => 0,
+            'string-zero'     => '0',
+            'false'           => false,
+            'null'            => null,
+            'empty-string'    => '',
+            'int-one'         => 1,
+            'string-one'      => '1',
+            'true'            => true,
+            'float-one'       => 1.0,
+            'float-fraction'  => 1.2,
+            'string-fraction' => '1.2',
+        ];
+
+        $this->assertSame(
+            $values,
+            iterator_to_array(Seq::unique($values)),
+        );
+    }
+
+    public function testUniqueRemovesOnlySameTypedScalarDuplicates(): void
+    {
+        $values = [
+            'first-int-zero'      => 0,
+            'second-int-zero'     => 0,
+            'first-string-zero'   => '0',
+            'second-string-zero'  => '0',
+            'first-false'         => false,
+            'second-false'        => false,
+            'first-null'          => null,
+            'second-null'         => null,
+            'first-empty-string'  => '',
+            'second-empty-string' => '',
+            'first-float-one'     => 1.0,
+            'second-float-one'    => 1.0,
+        ];
+
+        $this->assertSame(
+            [
+                'first-int-zero'     => 0,
+                'first-string-zero'  => '0',
+                'first-false'        => false,
+                'first-null'         => null,
+                'first-empty-string' => '',
+                'first-float-one'    => 1.0,
+            ],
+            iterator_to_array(Seq::unique($values)),
+        );
+    }
+
+    public function testUniqueAcceptsArraysAsValues(): void
+    {
+        $values = [
+            'first-list'             => [0],
+            'second-list'            => [0],
+            'string-zero-list'       => ['0'],
+            'false-list'             => [false],
+            'null-list'              => [null],
+            'empty-string-list'      => [''],
+            'nested-int'             => [['value' => 0]],
+            'nested-string'          => [['value' => '0']],
+            'keyed-array'            => ['a' => 1, 'b' => 2],
+            'same-order-keyed-array' => ['a' => 1, 'b' => 2],
+            'reordered-keyed-array'  => ['b' => 2, 'a' => 1],
+        ];
+
+        $this->assertSame(
+            [
+                'first-list'            => [0],
+                'string-zero-list'      => ['0'],
+                'false-list'            => [false],
+                'null-list'             => [null],
+                'empty-string-list'     => [''],
+                'nested-int'            => [['value' => 0]],
+                'nested-string'         => [['value' => '0']],
+                'keyed-array'           => ['a' => 1, 'b' => 2],
+                'reordered-keyed-array' => ['b' => 2, 'a' => 1],
+            ],
+            iterator_to_array(Seq::unique($values)),
+        );
+    }
+
+    public function testUniqueCaseInsensitiveComparisonOnlyAppliesToDirectStrings(): void
+    {
+        $values = [
+            'direct-string'                    => 'icinga.com',
+            'direct-string-duplicate'          => 'ICINGA.COM',
+            'array-string'                     => ['icinga.com'],
+            'array-string-with-different-case' => ['ICINGA.COM'],
+        ];
+
+        $this->assertSame(
+            [
+                'direct-string'                    => 'icinga.com',
+                'array-string'                     => ['icinga.com'],
+                'array-string-with-different-case' => ['ICINGA.COM'],
+            ],
+            iterator_to_array(Seq::unique($values, false)),
+        );
+    }
+
+    public function testUniqueKeepsObjectDistinctFromStringMatchingItsHash(): void
+    {
+        $object = new stdClass();
+        $otherObject = new stdClass();
+        $values = [
+            'object'             => $object,
+            'object-hash-string' => spl_object_hash($object),
+            'same-object'        => $object,
+            'other-object'       => $otherObject,
+        ];
+
+        $this->assertSame(
+            [
+                'object'             => $object,
+                'object-hash-string' => spl_object_hash($object),
+                'other-object'       => $otherObject,
+            ],
+            iterator_to_array(Seq::unique($values)),
+        );
+    }
+
+    public function testUniqueAcceptsResourcesAsValues(): void
+    {
+        $stream = fopen('php://memory', 'rb');
+        if ($stream === false) {
+            $this->fail('Failed to open a memory stream');
+        }
+
+        $values = [
+            'resource'           => $stream,
+            'resource-id-as-int' => get_resource_id($stream),
+            'same-resource'      => $stream,
+        ];
+
+        try {
+            $this->assertSame(
+                [
+                    'resource'           => $stream,
+                    'resource-id-as-int' => get_resource_id($stream),
+                ],
+                iterator_to_array(Seq::unique($values)),
+            );
+        } finally {
+            fclose($stream);
+        }
     }
 }

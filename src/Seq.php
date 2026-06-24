@@ -4,6 +4,7 @@ namespace ipl\Stdlib;
 
 use Closure;
 use Generator;
+use SplObjectStorage;
 
 /**
  * Collection of utilities for traversables
@@ -138,27 +139,40 @@ class Seq
     /**
      * Yield every unique value of the given traversable with its original key
      *
-     * @param iterable $traversable
+     * Values are compared type-sensitively. Objects are compared by instance
+     * identity. Arrays are compared using strict equality, so the same key/value pairs
+     * in a different order are treated as different values. Case-insensitive
+     * comparison applies only to direct string values, not to strings nested
+     * inside arrays.
+     *
+     * @param iterable<mixed, mixed> $traversable
      * @param bool $caseSensitive
      *
      * @return Generator
      */
     public static function unique(iterable $traversable, bool $caseSensitive = true): Generator
     {
-        $seen = [];
+        $seenObjects = new SplObjectStorage();
+        $seenValues = [];
+
         foreach ($traversable as $key => $value) {
-            if (is_string($value)) {
-                $needle = $caseSensitive ? $value : strtolower($value);
-            } elseif (is_object($value)) {
-                $needle = spl_object_hash($value);
-            } else {
-                $needle = $value;
+            if (is_object($value)) {
+                if ($seenObjects->offsetExists($value)) {
+                    continue;
+                }
+
+                $seenObjects->offsetSet($value);
+                yield $key => $value;
+                continue;
             }
 
-            if (! array_key_exists($needle, $seen)) {
-                $seen[$needle] = true;
-                yield $key => $value;
+            $seenValue = ! $caseSensitive && is_string($value) ? strtolower($value) : $value;
+            if (in_array($seenValue, $seenValues, true)) {
+                continue;
             }
+
+            $seenValues[] = $seenValue;
+            yield $key => $value;
         }
     }
 }
