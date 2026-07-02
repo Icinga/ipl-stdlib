@@ -47,6 +47,14 @@ Available condition factories: `equal`, `unequal`, `like`, `unlike`,
 `greaterThan`, `greaterThanOrEqual`, `lessThan`, `lessThanOrEqual`.
 Available logical factories: `all`, `any`, `none`, `not`.
 
+Flatten nested chains when you need to inspect individual rules:
+
+```php
+foreach ($filter->yieldRules() as $rule) {
+    // Inspect each leaf rule.
+}
+```
+
 ### Build Filters Incrementally
 
 When an object needs to collect filter conditions over time, use the `Filters`
@@ -145,6 +153,11 @@ Str::trimSplit('root:secret', ':');  // ['root', 'secret']
 // Case-insensitive prefix check:
 Str::startsWith('Foobar', 'foo', caseSensitive: false); // true
 Str::startsWith('foobar', 'foo');                       // true
+
+// Empty-string check:
+Str::isEmpty(null);  // true
+Str::isEmpty('   '); // true
+Str::isEmpty('0');   // false
 ```
 
 ### Seq
@@ -166,8 +179,17 @@ Seq::contains($users, 'viewer'); // true
 
 [$key, $value] = Seq::find($users, 'admin'); // ['alice', 'admin']
 
-// Match by predicate — returns as soon as a result is found:
-[$key, $value] = Seq::find($users, fn(string $role): bool => $role !== 'admin'); // ['bob', 'viewer']
+// Match by predicate. Returns as soon as a result is found:
+[$key, $value] = Seq::find(
+    $users,
+    fn(string $role): bool => $role !== 'admin'
+); // ['bob', 'viewer']
+
+// Transform values while preserving keys:
+$roles = Seq::map($users, fn(string $role): string => strtoupper($role));
+
+// Yield unique values while preserving their first keys:
+$roles = Seq::unique(['first' => 'admin', 'second' => 'admin', 'third' => 1]);
 ```
 
 ### Iterable Helpers
@@ -184,7 +206,7 @@ $map = [
 iterable_key_first($map);   // 'id'
 iterable_value_first($map); // 42
 
-// Works with generators and iterators — does not require an array:
+// Works with generators and iterators. Does not require an array:
 iterable_key_first(new ArrayIterator(['a' => 1])); // 'a'
 iterable_key_first([]);                            // null
 ```
@@ -207,10 +229,10 @@ foreach (yield_groups($rows, fn(object $row): string => $row->category) as $cate
 
 ### Other Utility Classes
 
-- `Data` — mutable key/value store
-- `Messages` — collects user-facing messages and supports `sprintf`-style
+- `Data`: mutable key/value store
+- `Messages`: collects user-facing messages and supports `sprintf`-style
   placeholders
-- `PriorityQueue` — extends `SplPriorityQueue` with stable insertion-order for
+- `PriorityQueue`: extends `SplPriorityQueue` with stable insertion-order for
   items at equal priority; iterate non-destructively with `yieldAll()`
 
 ## Changelog
