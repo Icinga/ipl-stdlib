@@ -67,6 +67,16 @@ class StrTest extends TestCase
         $this->assertTrue(Str::isEmpty("\t\n"));
     }
 
+    public function testIsEmptyReturnsTrueForNulByte()
+    {
+        $this->assertTrue(Str::isEmpty("\0"));
+    }
+
+    public function testIsEmptyReturnsTrueForNulByteCombinedWithWhitespace()
+    {
+        $this->assertTrue(Str::isEmpty("\0 "));
+    }
+
     public function testIsEmptyReturnsFalseForZero()
     {
         $this->assertFalse(Str::isEmpty('0'));
