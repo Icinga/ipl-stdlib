@@ -74,7 +74,7 @@ trait Events
      *
      * @return bool
      */
-    public function isValidEvent($event)
+    public function isValidEvent(string $event): bool
     {
         return true;
     }
